@@ -1,0 +1,170 @@
+version: '3.8'
+
+services:
+  # Redis for Streams & Sessions
+  redis:
+    image: redis:7-alpine
+    container_name: hover-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # PostgreSQL for metadata
+  postgres:
+    image: postgres:16-alpine
+    container_name: hover-postgres
+    environment:
+      POSTGRES_DB: hover
+      POSTGRES_USER: hover
+      POSTGRES_PASSWORD: hover_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hover"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ClickHouse for Analytics
+  clickhouse:
+    image: clickhouse/clickhouse-server:24-alpine
+    container_name: hover-clickhouse
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    environment:
+      CLICKHOUSE_DB: hover
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8123/ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # Ingestion API (BE1)
+  ingestion-api:
+    build:
+      context: ./packages/ingestion-api
+      dockerfile: Dockerfile
+    container_name: hover-ingestion-api
+    ports:
+      - "4000:4000"
+    environment:
+      NODE_ENV: development
+      REDIS_URL: redis://redis:6379
+      POSTGRES_URL: postgresql://hover:hover_dev@postgres:5432/hover
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # Stream Worker (BE2)
+  stream-worker:
+    build:
+      context: ./packages/stream-worker
+      dockerfile: Dockerfile
+    container_name: hover-stream-worker
+    environment:
+      NODE_ENV: development
+      REDIS_URL: redis://redis:6379
+      POSTGRES_URL: postgresql://hover:hover_dev@postgres:5432/hover
+      CLICKHOUSE_URL: http://clickhouse:8123
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      clickhouse:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # Decision API (BE2)
+  decision-api:
+    build:
+      context: ./packages/decision-api
+      dockerfile: Dockerfile
+    container_name: hover-decision-api
+    ports:
+      - "4001:4001"
+    environment:
+      NODE_ENV: development
+      REDIS_URL: redis://redis:6379
+      POSTGRES_URL: postgresql://hover:hover_dev@postgres:5432/hover
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # Dashboard API (BE3)
+  dashboard-api:
+    build:
+      context: ./packages/dashboard-api
+      dockerfile: Dockerfile
+    container_name: hover-dashboard-api
+    ports:
+      - "4002:4002"
+    environment:
+      NODE_ENV: development
+      REDIS_URL: redis://redis:6379
+      POSTGRES_URL: postgresql://hover:hover_dev@postgres:5432/hover
+      CLICKHOUSE_URL: http://clickhouse:8123
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      clickhouse:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # Demo Hotel Site (FE1)
+  demo-hotel-site:
+    build:
+      context: ./packages/demo-hotel-site
+      dockerfile: Dockerfile
+    container_name: hover-demo-hotel-site
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_INGESTION_API: http://localhost:4000
+      NEXT_PUBLIC_DECISION_API: http://localhost:4001
+    depends_on:
+      - ingestion-api
+      - decision-api
+    restart: unless-stopped
+
+  # Admin Dashboard (FE2)
+  admin-dashboard:
+    build:
+      context: ./packages/admin-dashboard
+      dockerfile: Dockerfile
+    container_name: hover-admin-dashboard
+    ports:
+      - "3001:3001"
+    environment:
+      NEXT_PUBLIC_DASHBOARD_API: http://localhost:4002
+    depends_on:
+      - dashboard-api
+    restart: unless-stopped
+
+volumes:
+  redis_data:
+  postgres_data:
+  clickhouse_data:
+
+networks:
+  default:
+    name: hover-network
