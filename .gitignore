@@ -21,3 +21,7 @@ out/
 postgres_data/
 redis_data/
 clickhouse_data/
+notebooks/data/
+notebooks/.ipynb_checkpoints/
+.venv/
+__pycache__/
