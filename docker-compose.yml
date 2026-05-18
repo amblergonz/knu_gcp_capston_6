@@ -160,6 +160,16 @@ services:
       - dashboard-api
     restart: unless-stopped
 
+  # Data Science Model API (BE-A)
+  model-api:
+    build:
+      context: ./packages/data-science
+      dockerfile: Dockerfile
+    container_name: hover-model-api
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
 volumes:
   redis_data:
   postgres_data:

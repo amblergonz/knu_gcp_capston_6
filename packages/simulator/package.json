@@ -2,21 +2,14 @@
   "name": "@hover/simulator",
   "version": "1.0.0",
   "description": "Synthetic traffic simulator for demo and load testing",
-  "main": "dist/simulator.js",
-  "type": "module",
+  "main": "src/simulator.js",
   "scripts": {
-    "dev": "node --loader ts-node/esm src/simulator.ts",
-    "build": "tsc",
-    "start": "node dist/simulator.js",
-    "type-check": "tsc --noEmit",
-    "lint": "eslint src --ext ts"
+    "start": "node src/simulator.js",
+    "dev": "node src/simulator.js"
   },
   "dependencies": {
-    "axios": "^1.6.0"
-  },
-  "devDependencies": {
-    "@types/node": "^20.0.0",
-    "typescript": "^5.3.0",
-    "ts-node": "^10.9.0"
+    "axios": "^1.6.7",
+    "hover": "file:../..",
+    "uuid": "^9.0.0"
   }
 }
