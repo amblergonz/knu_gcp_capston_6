@@ -23,5 +23,7 @@ redis_data/
 clickhouse_data/
 notebooks/data/
 notebooks/.ipynb_checkpoints/
+notebooks/outputs/session_features.csv
+notebooks/ab_analysis_script.py
 .venv/
 __pycache__/
