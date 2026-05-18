@@ -1,0 +1,92 @@
+### Hover Backend Test Scenarios
+### VS Code REST Client 또는 JetBrains HTTP Client에서 실행 가능
+
+# ----- 1. Ingestion API (port 4000) -----
+
+### 이벤트 수집 — 탭 숨김(이탈 신호) 발송
+POST http://localhost:4000/events
+Content-Type: application/json
+
+{
+  "session_id": "test-session-001",
+  "events": [
+    {
+      "event_id": "e1",
+      "ts": 1683456000000,
+      "type": "page_view",
+      "payload": {},
+      "page_url": "https://demo-hotel.local/room/101"
+    },
+    {
+      "event_id": "e2",
+      "ts": 1683456010000,
+      "type": "visibility_change",
+      "payload": { "hidden": true },
+      "page_url": "https://demo-hotel.local/room/101"
+    }
+  ],
+  "device": "desktop"
+}
+
+###
+
+### Ingestion 헬스체크
+GET http://localhost:4000/health
+
+###
+
+# ----- 2. Decision API (port 4001) -----
+# Ingestion 이후 Worker 처리 시간(1~2초) 대기 후 실행
+
+### 개입 조회 — 준비된 쿠폰 정보 가져오기 (200 또는 204)
+GET http://localhost:4001/decision/test-session-001
+
+###
+
+### Decision 헬스체크
+GET http://localhost:4001/health
+
+###
+
+# ----- 3. Dashboard API (port 4002) -----
+
+### 대시보드 헬스체크
+GET http://localhost:4002/health
+
+###
+
+### 신호 커버리지 (16개 신호별 카운트)
+GET http://localhost:4002/signals/coverage
+
+###
+
+### 시나리오 발화 통계
+GET http://localhost:4002/scenarios/firings?from=2026-05-01&to=2026-05-18
+
+###
+
+# SSE는 브라우저에서 직접: http://localhost:4002/stream/live
+
+# ----- 4. Model API (port 8000) -----
+
+### Model API 헬스체크
+GET http://localhost:8000/health
+
+###
+
+### 현재 thresholds.yml 조회
+GET http://localhost:8000/thresholds
+
+###
+
+### 의도 예측 (stub — W5 이후 XGBoost 실제 추론)
+POST http://localhost:8000/predict
+Content-Type: application/json
+
+{
+  "session_duration_sec": 320,
+  "view_count": 8,
+  "cart_count": 1,
+  "item_revisit_count": 3,
+  "avg_event_interval_sec": 12.5
+}
