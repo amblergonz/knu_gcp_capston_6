@@ -6,8 +6,42 @@ const PORT = parseInt(process.env.PORT || '4001', 10);
 
 fastify.register(require('@fastify/cors'), { origin: '*' });
 
-// GET /decision/:session_id — 준비된 개입 조회 (1회 전달 후 삭제)
-fastify.get('/decision/:session_id', async (request, reply) => {
+const decisionParamsSchema = {
+  params: {
+    type: 'object',
+    required: ['session_id'],
+    properties: {
+      session_id: { type: 'string', minLength: 1, maxLength: 128 },
+    },
+  },
+};
+
+function sanitizeDecisionPayload(payload, session_id) {
+  return {
+    intervention_id: String(payload.intervention_id),
+    session_id,
+    scenario_id: payload.scenario_id,
+    ab_group: payload.ab_group,
+    component: payload.component,
+    copy: payload.copy,
+    context: payload.context || {},
+    ttl_seconds: Number(payload.ttl_seconds || 600),
+    intent_score: payload.intent_score,
+    active_boosters: payload.active_boosters || [],
+    copy_source: payload.copy_source || 'fallback',
+  };
+}
+
+fastify.setErrorHandler((err, request, reply) => {
+  if (err.validation) {
+    return reply.status(400).send({ error: 'Invalid session_id' });
+  }
+
+  request.log.error(err);
+  return reply.status(500).send({ error: 'Internal server error' });
+});
+
+fastify.get('/decision/:session_id', { schema: decisionParamsSchema }, async (request, reply) => {
   const { session_id } = request.params;
   const raw = await redis.get(`pending:${session_id}`);
 
@@ -15,8 +49,17 @@ fastify.get('/decision/:session_id', async (request, reply) => {
     return reply.status(204).send();
   }
 
+  let payload;
+  try {
+    payload = JSON.parse(raw);
+  } catch (err) {
+    request.log.error({ err, session_id }, 'Invalid pending intervention payload');
+    await redis.del(`pending:${session_id}`);
+    return reply.status(500).send({ error: 'Invalid pending intervention payload' });
+  }
+
   await redis.del(`pending:${session_id}`);
-  return reply.status(200).send(JSON.parse(raw));
+  return reply.status(200).send(sanitizeDecisionPayload(payload, session_id));
 });
 
 fastify.get('/health', async () => ({ status: 'ok' }));

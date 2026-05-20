@@ -5,7 +5,8 @@
   "main": "src/worker.js",
   "scripts": {
     "start": "node src/worker.js",
-    "dev": "node src/worker.js"
+    "dev": "node src/worker.js",
+    "smoke:be-c": "node scripts/smoke-be-c.js"
   },
   "dependencies": {
     "hover": "file:../..",
