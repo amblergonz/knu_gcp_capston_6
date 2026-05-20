@@ -1,21 +1,29 @@
-# Hover 실시간 개입 시스템 — 임계값 설정
-# CHANGELOG:
-# 2026-05-13 init: BE-C 초기값 설정 (임시)
-# 2026-05-15 W2:   tab_hidden_seconds 30→10 (Retailrocket §1.3 전환율 곡선 변곡점)
-# 2026-05-15 W3:   session_length_5min 0.1→0.4 (lift=32.19x)
-#                  hidden_repeated 0.1→0.4 (lift=8.76x)
+# Hover real-time intervention thresholds.
+# BE-A owns analytical updates; BE-C consumes this file at worker runtime.
 
 scenarios:
   S1:
     base_match:
       cart_min_count: 1
-      tab_hidden_seconds: 10   # Retailrocket §1.3 전환율 곡선 변곡점 (30→10)
-    intent_score_min: 0.6      # ← W4 PR #2에서 갱신
+      tab_hidden_seconds: 10
+    intent_score_min: 0.6
+    cooldown_seconds: 86400
+  S2:
+    base_match_any:
+      - clipboard_copy_match: true
+      - broadcast_channel_multi_tab: true
+    intent_score_min: 0.5
     cooldown_seconds: 86400
 
 booster_weights:
-  clipboard_copy_match: 0.4        # 도메인 직관 (데이터 없음)
-  broadcast_channel_multi_tab: 0.4 # 도메인 직관 (데이터 없음)
-  referrer_price_compare: 0.2      # 도메인 직관 (GA4 분석 예정)
-  session_length_5min: 0.4         # Retailrocket lift=32.19x, cap 0.4 적용
-  hidden_repeated: 0.4             # Retailrocket lift=8.76x, cap 0.4 적용
+  clipboard_copy_match: 0.4
+  broadcast_channel_multi_tab: 0.4
+  referrer_price_compare: 0.2
+  session_length_5min: 0.4
+  hidden_repeated: 0.4
+  xgboost_intent_proba: 0.0
+
+global:
+  intervention_per_session_max: 2
+  decision_api_timeout_ms: 800
+  pending_intervention_ttl_seconds: 300
