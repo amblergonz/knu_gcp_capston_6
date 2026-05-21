@@ -81,6 +81,9 @@ services:
       POSTGRES_URL: postgresql://hover:hover_dev@postgres:5432/hover
       CLICKHOUSE_URL: http://clickhouse:8123
       THRESHOLDS_PATH: /app/config/thresholds.yml
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-1.5-flash}
+      GEMINI_TIMEOUT_MS: ${GEMINI_TIMEOUT_MS:-1200}
     volumes:
       - ./packages/shared/config:/app/config:ro
     depends_on:
