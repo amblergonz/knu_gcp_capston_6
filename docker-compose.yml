@@ -82,8 +82,8 @@ services:
       CLICKHOUSE_URL: http://clickhouse:8123
       THRESHOLDS_PATH: /app/config/thresholds.yml
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
-      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-1.5-flash}
-      GEMINI_TIMEOUT_MS: ${GEMINI_TIMEOUT_MS:-1200}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.5-flash}
+      GEMINI_TIMEOUT_MS: ${GEMINI_TIMEOUT_MS:-10000}
     volumes:
       - ./packages/shared/config:/app/config:ro
     depends_on:

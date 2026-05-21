@@ -111,6 +111,25 @@ docker compose up -d --build --force-recreate redis postgres clickhouse ingestio
 - `interventions_stream` 기록
 - Redis, Postgres, ClickHouse, ingestion-api, decision-api, stream-worker compose 기동
 - `GEMINI_API_KEY` 미설정 시 fallback 경로 정상 동작
+- `GEMINI_API_KEY` 설정 후 Gemini 실호출 성공
+- Decision API 응답에서 `copy_source: gemini` 확인
+
+Gemini 실호출 확인 결과:
+
+```text
+Scenario S2
+CopySource gemini
+```
+
+응답 예시:
+
+```json
+{
+  "title": "신라호텔, 최저가 놓치지 마세요!",
+  "body": "다른 곳에서 본 가격과 비교해보세요. 추가 혜택이 있을 수 있어요.",
+  "cta": "가격 비교하기"
+}
+```
 
 ## 6. 남은 이슈
 
@@ -126,11 +145,13 @@ Gemini 호출은 `GEMINI_API_KEY` 환경변수가 있을 때만 활성화된다.
 
 ```bash
 GEMINI_API_KEY=your_key_here
-GEMINI_MODEL=gemini-1.5-flash
-GEMINI_TIMEOUT_MS=1200
+GEMINI_MODEL=gemini-2.5-flash
+GEMINI_TIMEOUT_MS=10000
 ```
 
 API 실패, key 없음, timeout, 응답 파싱 실패 시 fallback 문구를 유지한다.
+
+현재 사용 가능한 모델 목록 기준으로 `gemini-2.5-flash`를 사용한다. `gemini-1.5-flash`는 현재 키에서 404가 발생했고, `gemini-2.5-flash`는 출력 토큰을 충분히 확보해야 JSON 응답이 잘리지 않는다.
 
 ### ClickHouse 적재
 
@@ -148,6 +169,7 @@ Based on #2 / be-a/thresholds-pr-2.
 - Added BE-C smoke test and work summary document.
 - Fixed BE-C compose path by using ClickHouse query healthcheck and mounting thresholds.yml into stream-worker.
 - Added Gemini copy generation when GEMINI_API_KEY is set, with fallback on missing key, timeout, or invalid response.
+- Updated Gemini runtime config to use gemini-2.5-flash with enough output tokens for JSON copy generation.
 
 ## Verified
 - node --check for ingestion-api, decision-api, stream-worker, smoke script
@@ -155,6 +177,7 @@ Based on #2 / be-a/thresholds-pr-2.
 - docker compose up -d --build --force-recreate redis postgres clickhouse ingestion-api stream-worker decision-api
 - compose S1/S2 E2E through localhost:4000 and localhost:4001
 - fallback copy path verified without GEMINI_API_KEY
+- live Gemini copy generation verified with GEMINI_API_KEY; Decision API returned copy_source=gemini
 
 ## Notes
 - Frontend popup rendering is not included; FE should consume GET /decision/:session_id.

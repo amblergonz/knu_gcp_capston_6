@@ -9,8 +9,8 @@ const SESSION_TTL_SECONDS = parseInt(process.env.SESSION_TTL_SECONDS || '1800', 
 const STREAM_KEY = process.env.EVENT_STREAM_KEY || 'events_stream';
 const INTERVENTION_STREAM_KEY = process.env.INTERVENTION_STREAM_KEY || 'interventions_stream';
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
-const GEMINI_TIMEOUT_MS = parseInt(process.env.GEMINI_TIMEOUT_MS || '1200', 10);
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+const GEMINI_TIMEOUT_MS = parseInt(process.env.GEMINI_TIMEOUT_MS || '10000', 10);
 
 const defaultThresholds = {
   scenarios: {
@@ -424,9 +424,12 @@ async function generateCopyWithGemini(scenarioId, state) {
             },
           ],
           generationConfig: {
-            temperature: 0.7,
-            maxOutputTokens: 160,
+            temperature: 0.3,
+            maxOutputTokens: 1024,
             responseMimeType: 'application/json',
+            thinkingConfig: {
+              thinkingBudget: 0,
+            },
           },
         }),
       }
