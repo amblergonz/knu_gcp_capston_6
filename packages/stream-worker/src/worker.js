@@ -14,7 +14,7 @@ const defaultThresholds = {
     S1: {
       base_match: {
         cart_min_count: 1,
-        tab_hidden_seconds: 30,
+        tab_hidden_seconds: 10,
       },
       intent_score_min: 0.6,
       cooldown_seconds: 86400,
@@ -28,8 +28,8 @@ const defaultThresholds = {
     clipboard_copy_match: 0.4,
     broadcast_channel_multi_tab: 0.4,
     referrer_price_compare: 0.2,
-    session_length_5min: 0.1,
-    hidden_repeated: 0.1,
+    session_length_5min: 0.4,
+    hidden_repeated: 0.4,
     xgboost_intent_proba: 0,
   },
   global: {

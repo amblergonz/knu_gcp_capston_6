@@ -1,6 +1,6 @@
 # BE-C 작업 요약
 
-작성일: 2026-05-20  
+작성일: 2026-05-21  
 브랜치: `be-c/worker`
 
 ## 1. 작업 범위
@@ -13,27 +13,38 @@
 - `GET /decision/:session_id` 1회성 응답 처리
 - 개입 결과를 `interventions_stream`에 기록
 - `thresholds.yml` 구조 정리
+- Docker compose 환경에서 worker가 `thresholds.yml`을 읽도록 설정
 - BE-C 스모크 테스트 자동화
 
-프론트엔드 팝업 UI, Gemini API 실호출, 모델 학습, ClickHouse 적재는 이번 작업 범위에 포함하지 않는다.
+프론트엔드 팝업 UI, Gemini API 실호출, 모델 학습, ClickHouse 직접 적재는 이번 작업 범위에 포함하지 않는다.
 
-## 2. 변경 파일
+## 2. 변경 사항
 
-PR에 포함해야 하는 BE-C 관련 파일은 아래만 선별한다.
+| 항목 | 기존 | 변경 | 근거 |
+|---|---|---|---|
+| Ingestion API | payload 최소 검증 | `POST /events` schema 검증 추가 | PRD/API_SPEC 기준 이벤트 수집 안정화 |
+| Redis Stream | event data 중심 적재 | `session_id`, `device`, `user_id`, `data` 필드 적재 | Worker 세션 상태 계산에 필요 |
+| Stream Worker | `visibility_change hidden=true` 단일 룰 | S1/S2 룰 평가, intent score, booster, cooldown, pending decision 생성 | BE-C 실시간 개입 파이프라인 요구사항 |
+| `thresholds.yml` | S1 중심 threshold | S1/S2 threshold + global config 정리 | PR #2 threshold 값 반영 및 S2 처리 준비 |
+| Decision API | pending JSON 단순 반환 | `session_id` 검증, 1회 반환 후 삭제, payload sanitizing | FE Widget 연동 안정화 |
+| Intervention 기록 | pending key만 생성 | `interventions_stream`에도 개입 결과 기록 | BE-B/Dashboard 연동용 |
+| Docker compose | ClickHouse HTTP healthcheck, worker threshold 파일 미마운트 | ClickHouse query healthcheck, worker threshold read-only mount 추가 | compose 환경에서 BE-C 경로 정상 기동 |
+| 테스트 | 수동 `test.http` 중심 | `smoke:be-c` 자동 스모크 테스트 추가 | S1/S2 E2E 검증 자동화 |
+
+## 3. 포함 파일
 
 ```text
+docker-compose.yml
+docs/BE-C_WORK.md
 packages/ingestion-api/src/index.js
 packages/decision-api/src/index.js
 packages/stream-worker/src/worker.js
 packages/stream-worker/package.json
 packages/stream-worker/scripts/smoke-be-c.js
 packages/shared/config/thresholds.yml
-docs/BE-C_WORK_SUMMARY.md
 ```
 
-현재 작업트리에 `admin-dashboard`, `pnpm-workspace.yaml`, `pnpm-lock.yaml`, `.pnpm-store` 등 BE-C와 무관한 변경이 섞여 있을 수 있다. 해당 파일은 이번 PR에 포함하지 않는다.
-
-## 3. 구현 상태
+## 4. 구현 상태
 
 ### Ingestion API
 
@@ -73,7 +84,7 @@ docs/BE-C_WORK_SUMMARY.md
 - pending intervention이 없으면 `204 No Content`
 - 깨진 pending JSON은 삭제 후 `500` 반환
 
-## 4. 검증 결과
+## 5. 검증 결과
 
 아래 검증은 통과했다.
 
@@ -83,24 +94,23 @@ node --check packages/decision-api/src/index.js
 node --check packages/stream-worker/src/worker.js
 node --check packages/stream-worker/scripts/smoke-be-c.js
 pnpm --filter @hover/stream-worker run smoke:be-c
-docker compose build stream-worker
+docker compose up -d --build --force-recreate redis postgres clickhouse ingestion-api stream-worker decision-api
 ```
 
-스모크 테스트 확인 범위:
+검증 범위:
 
 - invalid payload `400`
 - S1 `coupon_modal` 생성
 - S2 `price_match_banner` 생성
 - decision API 1회 반환 후 두 번째 요청 `204`
 - `interventions_stream` 기록
+- Redis, Postgres, ClickHouse, ingestion-api, decision-api, stream-worker compose 기동
 
-## 5. 남은 이슈
+## 6. 남은 이슈
 
-### Docker compose 전체 기동
+### Frontend
 
-`docker compose up` 전체 기동 검증은 로컬 Redis `6379` 포트 충돌로 실패했다.
-
-이는 코드 오류가 아니라 로컬 실행 환경에서 이미 `6379` 포트를 사용 중이어서 Redis 컨테이너가 바인딩하지 못한 문제다. 전체 compose 검증을 하려면 기존 Redis 프로세스를 종료하거나 팀 합의 후 compose의 Redis host port를 변경해야 한다.
+백엔드는 decision JSON을 제공하는 상태다. 실제 브라우저 팝업 표시는 FE Widget SDK에서 처리해야 한다.
 
 ### Gemini API
 
@@ -113,26 +123,30 @@ Gemini를 추가할 경우 필요한 작업:
 - timeout 설정
 - 호출 비용과 빈도 제한 정책 합의
 
-### Frontend
+### ClickHouse 적재
 
-백엔드는 decision JSON을 제공하는 상태다. 실제 브라우저 팝업 표시는 FE Widget SDK에서 처리해야 한다.
+이번 작업에서는 ClickHouse에 직접 적재하지 않는다. 대신 `interventions_stream`에 개입 결과를 기록하므로, BE-B/Dashboard 쪽에서 해당 stream을 소비해 저장소와 연결하면 된다.
 
-## 6. PR 설명 예시
+## 7. PR 설명 예시
 
 ```text
 ## Summary
+Based on #2 / be-a/thresholds-pr-2.
+
 - Added validation to ingestion-api POST /events.
 - Implemented BE-C stream-worker S1/S2 rule evaluation, session state, cooldown, pending intervention, and intervention stream output.
 - Hardened decision-api GET /decision/:session_id one-shot delivery.
-- Added BE-C smoke test.
+- Added BE-C smoke test and work summary document.
+- Fixed BE-C compose path by using ClickHouse query healthcheck and mounting thresholds.yml into stream-worker.
 
 ## Verified
 - node --check for ingestion-api, decision-api, stream-worker, smoke script
 - pnpm --filter @hover/stream-worker run smoke:be-c
-- docker compose build stream-worker
+- docker compose up -d --build --force-recreate redis postgres clickhouse ingestion-api stream-worker decision-api
+- compose S1/S2 E2E through localhost:4000 and localhost:4001
 
 ## Notes
-- Full docker compose up is blocked locally by Redis 6379 port conflict.
 - Frontend popup rendering is not included; FE should consume GET /decision/:session_id.
 - Gemini API call is not implemented yet; current copy_source is fallback.
+- ClickHouse direct persistence is not included; worker emits intervention records to interventions_stream.
 ```
