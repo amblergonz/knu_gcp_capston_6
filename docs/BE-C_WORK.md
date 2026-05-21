@@ -14,9 +14,10 @@
 - 개입 결과를 `interventions_stream`에 기록
 - `thresholds.yml` 구조 정리
 - Docker compose 환경에서 worker가 `thresholds.yml`을 읽도록 설정
+- `GEMINI_API_KEY`가 있을 때 Gemini 기반 팝업 문구 생성
 - BE-C 스모크 테스트 자동화
 
-프론트엔드 팝업 UI, Gemini API 실호출, 모델 학습, ClickHouse 직접 적재는 이번 작업 범위에 포함하지 않는다.
+프론트엔드 팝업 UI, 모델 학습, ClickHouse 직접 적재는 이번 작업 범위에 포함하지 않는다.
 
 ## 2. 변경 사항
 
@@ -29,6 +30,7 @@
 | Decision API | pending JSON 단순 반환 | `session_id` 검증, 1회 반환 후 삭제, payload sanitizing | FE Widget 연동 안정화 |
 | Intervention 기록 | pending key만 생성 | `interventions_stream`에도 개입 결과 기록 | BE-B/Dashboard 연동용 |
 | Docker compose | ClickHouse HTTP healthcheck, worker threshold 파일 미마운트 | ClickHouse query healthcheck, worker threshold read-only mount 추가 | compose 환경에서 BE-C 경로 정상 기동 |
+| Gemini copy | fallback 문구만 사용 | `GEMINI_API_KEY`가 있으면 Gemini 호출, 실패 시 fallback 유지 | FE 없이도 Decision API JSON으로 생성 문구 검증 가능 |
 | 테스트 | 수동 `test.http` 중심 | `smoke:be-c` 자동 스모크 테스트 추가 | S1/S2 E2E 검증 자동화 |
 
 ## 3. 포함 파일
@@ -75,6 +77,9 @@ packages/shared/config/thresholds.yml
   - Redis `pending:{session_id}` 저장
   - Redis `cooldown:{session_id}:{scenario_id}` 저장
   - Redis `interventions_stream` 기록
+- `GEMINI_API_KEY`가 설정되어 있으면 개입 문구를 Gemini로 생성한다.
+- Gemini API key가 없거나 호출 실패/timeout/응답 파싱 실패 시 fallback 문구를 사용한다.
+- `copy_source`는 `gemini` 또는 `fallback`으로 내려간다.
 
 ### Decision API
 
@@ -105,6 +110,7 @@ docker compose up -d --build --force-recreate redis postgres clickhouse ingestio
 - decision API 1회 반환 후 두 번째 요청 `204`
 - `interventions_stream` 기록
 - Redis, Postgres, ClickHouse, ingestion-api, decision-api, stream-worker compose 기동
+- `GEMINI_API_KEY` 미설정 시 fallback 경로 정상 동작
 
 ## 6. 남은 이슈
 
@@ -114,14 +120,17 @@ docker compose up -d --build --force-recreate redis postgres clickhouse ingestio
 
 ### Gemini API
 
-현재는 Gemini API 실호출이 없다. `copy_source`는 `fallback`으로 내려간다.
+Gemini 호출은 `GEMINI_API_KEY` 환경변수가 있을 때만 활성화된다. 키는 Git에 올리지 않는다.
 
-Gemini를 추가할 경우 필요한 작업:
+설정 예시:
 
-- `GEMINI_API_KEY` 환경변수 사용
-- API 실패 또는 key 없음이면 fallback 유지
-- timeout 설정
-- 호출 비용과 빈도 제한 정책 합의
+```bash
+GEMINI_API_KEY=your_key_here
+GEMINI_MODEL=gemini-1.5-flash
+GEMINI_TIMEOUT_MS=1200
+```
+
+API 실패, key 없음, timeout, 응답 파싱 실패 시 fallback 문구를 유지한다.
 
 ### ClickHouse 적재
 
@@ -138,15 +147,17 @@ Based on #2 / be-a/thresholds-pr-2.
 - Hardened decision-api GET /decision/:session_id one-shot delivery.
 - Added BE-C smoke test and work summary document.
 - Fixed BE-C compose path by using ClickHouse query healthcheck and mounting thresholds.yml into stream-worker.
+- Added Gemini copy generation when GEMINI_API_KEY is set, with fallback on missing key, timeout, or invalid response.
 
 ## Verified
 - node --check for ingestion-api, decision-api, stream-worker, smoke script
 - pnpm --filter @hover/stream-worker run smoke:be-c
 - docker compose up -d --build --force-recreate redis postgres clickhouse ingestion-api stream-worker decision-api
 - compose S1/S2 E2E through localhost:4000 and localhost:4001
+- fallback copy path verified without GEMINI_API_KEY
 
 ## Notes
 - Frontend popup rendering is not included; FE should consume GET /decision/:session_id.
-- Gemini API call is not implemented yet; current copy_source is fallback.
+- Gemini API key is not committed; set GEMINI_API_KEY in the runtime environment.
 - ClickHouse direct persistence is not included; worker emits intervention records to interventions_stream.
 ```

@@ -8,6 +8,9 @@ const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
 const SESSION_TTL_SECONDS = parseInt(process.env.SESSION_TTL_SECONDS || '1800', 10);
 const STREAM_KEY = process.env.EVENT_STREAM_KEY || 'events_stream';
 const INTERVENTION_STREAM_KEY = process.env.INTERVENTION_STREAM_KEY || 'interventions_stream';
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+const GEMINI_TIMEOUT_MS = parseInt(process.env.GEMINI_TIMEOUT_MS || '1200', 10);
 
 const defaultThresholds = {
   scenarios: {
@@ -358,6 +361,100 @@ function fallbackCopy(scenarioId) {
   };
 }
 
+function safeGeminiText(value, maxLength) {
+  if (typeof value !== 'string') return '';
+  return value.replace(/\s+/g, ' ').trim().slice(0, maxLength);
+}
+
+function parseGeminiCopy(text) {
+  if (!text) return null;
+
+  const jsonText = text.match(/\{[\s\S]*\}/)?.[0] || text;
+  try {
+    const parsed = JSON.parse(jsonText);
+    const title = safeGeminiText(parsed.title, 40);
+    const body = safeGeminiText(parsed.body, 120);
+    const cta = safeGeminiText(parsed.cta, 24);
+
+    if (!title || !body || !cta) return null;
+    return { title, body, cta };
+  } catch (_) {
+    return null;
+  }
+}
+
+function geminiPrompt(scenarioId, state) {
+  const scenarioName = scenarioId === 'S2' ? 'price comparison intent' : 'cart abandonment intent';
+  const hotelName = state.hotel_name || 'the selected hotel';
+
+  return [
+    'You generate short Korean ecommerce popup copy for a hotel booking service.',
+    'Return only strict JSON with keys title, body, cta. Do not include markdown.',
+    'Constraints: title <= 24 Korean chars, body <= 70 Korean chars, cta <= 10 Korean chars.',
+    'Do not invent exact prices, inventory counts, or unsupported benefits.',
+    `Scenario: ${scenarioName}.`,
+    `Hotel context: ${hotelName}.`,
+    `Active signals: ${state.active_boosters.join(', ') || 'none'}.`,
+    scenarioId === 'S1'
+      ? 'Goal: encourage the user to complete the booking before leaving. Mention a limited 10% coupon benefit.'
+      : 'Goal: encourage the user to compare benefits inside this service before leaving.',
+  ].join('\n');
+}
+
+async function generateCopyWithGemini(scenarioId, state) {
+  if (!GEMINI_API_KEY) {
+    return { copy: fallbackCopy(scenarioId), source: 'fallback' };
+  }
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), GEMINI_TIMEOUT_MS);
+
+  try {
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        signal: controller.signal,
+        body: JSON.stringify({
+          contents: [
+            {
+              role: 'user',
+              parts: [{ text: geminiPrompt(scenarioId, state) }],
+            },
+          ],
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 160,
+            responseMimeType: 'application/json',
+          },
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      console.warn(`[Worker] Gemini request failed with status ${response.status}. Using fallback copy.`);
+      return { copy: fallbackCopy(scenarioId), source: 'fallback' };
+    }
+
+    const payload = await response.json();
+    const text = payload.candidates?.[0]?.content?.parts?.map((part) => part.text || '').join('') || '';
+    const copy = parseGeminiCopy(text);
+
+    if (!copy) {
+      console.warn('[Worker] Gemini returned invalid copy. Using fallback copy.');
+      return { copy: fallbackCopy(scenarioId), source: 'fallback' };
+    }
+
+    return { copy, source: 'gemini' };
+  } catch (err) {
+    console.warn(`[Worker] Gemini copy generation skipped: ${err.message}. Using fallback copy.`);
+    return { copy: fallbackCopy(scenarioId), source: 'fallback' };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 async function createIntervention(sessionId, state, decision) {
   const existing = await redis.get(`pending:${sessionId}`);
   if (existing) return;
@@ -370,13 +467,15 @@ async function createIntervention(sessionId, state, decision) {
   const isCoolingDown = await redis.exists(cooldownKey(sessionId, decision.scenario_id));
   if (isCoolingDown) return;
 
+  const generatedCopy = await generateCopyWithGemini(decision.scenario_id, state);
+
   const intervention = {
     intervention_id: crypto.randomUUID(),
     session_id: sessionId,
     scenario_id: decision.scenario_id,
     ab_group: hashAbGroup(sessionId),
     component: decision.component,
-    copy: fallbackCopy(decision.scenario_id),
+    copy: generatedCopy.copy,
     context: {
       hotel_name: state.hotel_name || undefined,
       discount_percent: decision.scenario_id === 'S1' ? 10 : undefined,
@@ -384,7 +483,7 @@ async function createIntervention(sessionId, state, decision) {
     ttl_seconds: 600,
     intent_score: Number(decision.score.toFixed(3)),
     active_boosters: state.active_boosters,
-    copy_source: 'fallback',
+    copy_source: generatedCopy.source,
   };
 
   await redis
