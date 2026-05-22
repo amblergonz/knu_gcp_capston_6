@@ -348,16 +348,16 @@ async function evaluateScenario(state, now) {
 function fallbackCopy(scenarioId) {
   if (scenarioId === 'S2') {
     return {
-      title: 'Compare before you leave',
-      body: 'We found a limited room benefit for this stay.',
-      cta: 'See offer',
+      title: '떠나기 전에 비교해보세요',
+      body: '이 서비스에서 더 나은 혜택을 찾아드릴게요.',
+      cta: '혜택 확인하기',
     };
   }
 
   return {
-    title: 'Before you go',
-    body: 'Complete this booking now and keep the current benefit.',
-    cta: 'Get coupon',
+    title: '떠나기 전 잠깐!',
+    body: '지금 구매하시면 10% 추가 할인 쿠폰을 드려요.',
+    cta: '쿠폰 받기',
   };
 }
 
@@ -483,7 +483,7 @@ async function createIntervention(sessionId, state, decision) {
       hotel_name: state.hotel_name || undefined,
       discount_percent: decision.scenario_id === 'S1' ? 10 : undefined,
     },
-    ttl_seconds: 600,
+    ttl_seconds: thresholds.global.pending_intervention_ttl_seconds,
     intent_score: Number(decision.score.toFixed(3)),
     active_boosters: state.active_boosters,
     copy_source: generatedCopy.source,
