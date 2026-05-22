@@ -46,19 +46,26 @@ fastify.get('/stream/live', (request, reply) => {
   });
 });
 
-// 16개 신호별 수집 카운트 (stub — ClickHouse 연동 전 mock)
+// 16개 신호별 수집 카운트 (stub — ClickHouse 연동 전 mock, 고정값)
 fastify.get('/signals/coverage', async () => {
-  const signals = [
-    'visibility_change', 'clipboard_copy', 'scroll_depth', 'mouse_leave',
-    'session_duration', 'referrer_price_compare', 'broadcast_multi_tab',
-    'add_to_cart', 'page_view', 'click', 'form_focus', 'idle_timeout',
-    'back_button', 'external_link', 'search_query', 'wishlist_add',
-  ];
-  const coverage = {};
-  for (const sig of signals) {
-    coverage[sig] = Math.floor(Math.random() * 500);
-  }
-  return coverage;
+  return {
+    page_view:               2847,
+    visibility_change:       1923,
+    click:                   1654,
+    scroll_depth:            1432,
+    idle_timeout:             891,
+    session_duration:        1203,
+    add_to_cart:              743,
+    form_focus:               612,
+    referrer_price_compare:   387,
+    external_link:            431,
+    search_query:             512,
+    mouse_leave:              934,
+    back_button:              289,
+    clipboard_copy:           264,
+    broadcast_multi_tab:      198,
+    wishlist_add:             178,
+  };
 });
 
 // 시나리오별 발화 통계 (stub — ClickHouse 연동 전 mock)
