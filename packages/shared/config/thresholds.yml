@@ -16,7 +16,7 @@ scenarios:
     cooldown_seconds: 86400
 
 booster_weights:
-  clipboard_copy_match: 0.4
+  clipboard_copy_match: 0.5
   broadcast_channel_multi_tab: 0.4
   referrer_price_compare: 0.2
   session_length_5min: 0.4
