@@ -214,7 +214,7 @@ function addBooster(state, name) {
 
 function looksLikeHotelText(text) {
   if (!text) return false;
-  return /(hotel|room|resort|suite|inn|호텔|객실|리조트|신라|롯데|숙소)/i.test(text);
+  return /(hotel|room|resort|suite|inn|motel|hostel|펜션|호텔|객실|리조트|신라|롯데|숙소|힐튼|하얏트|메리어트|인터컨티넨탈|노보텔|쉐라톤|웨스틴|포시즌|JW|그랜드)/i.test(text);
 }
 
 function isPriceCompareReferrer(referrer) {
