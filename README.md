@@ -249,6 +249,8 @@ cd packages/demo-hotel-site && pnpm type-check && pnpm build
 | BE3 | 집계 · Dashboard API · 시뮬레이터 |
 | BE4 | 데이터 분석 · 임계치 도출 |
 
+테크리드 BE1 · 데이터 담당 BE4. 논의는 GitHub Issues와 주간 미팅에서 진행합니다.
+
 ---
 
 ## 한계
