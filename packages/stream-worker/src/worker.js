@@ -12,27 +12,30 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 const GEMINI_TIMEOUT_MS = parseInt(process.env.GEMINI_TIMEOUT_MS || '10000', 10);
 
+// thresholds.yml 을 못 찾았을 때만 쓰인다.
+// 값이 어긋나 있으면 파일이 없는 환경에서 조용히 더 헐거운 규칙으로 돌게 되므로
+// shared/config/thresholds.yml 과 항상 같이 갱신한다.
 const defaultThresholds = {
   scenarios: {
     S1: {
       base_match: {
-        cart_min_count: 1,
-        tab_hidden_seconds: 10,
+        cart_min_count: 2,
+        tab_hidden_seconds: 20,
       },
-      intent_score_min: 0.6,
+      intent_score_min: 0.65,
       cooldown_seconds: 86400,
     },
     S2: {
-      intent_score_min: 0.5,
+      intent_score_min: 0.55,
       cooldown_seconds: 86400,
     },
   },
   booster_weights: {
-    clipboard_copy_match: 0.4,
-    broadcast_channel_multi_tab: 0.4,
-    referrer_price_compare: 0.2,
-    session_length_5min: 0.4,
-    hidden_repeated: 0.4,
+    clipboard_copy_match: 0.35,
+    broadcast_channel_multi_tab: 0.35,
+    referrer_price_compare: 0.15,
+    session_length_5min: 0.25,
+    hidden_repeated: 0.35,
     xgboost_intent_proba: 0,
   },
   global: {
@@ -214,7 +217,7 @@ function addBooster(state, name) {
 
 function looksLikeHotelText(text) {
   if (!text) return false;
-  return /(hotel|room|resort|suite|inn|motel|hostel|펜션|호텔|객실|리조트|신라|롯데|숙소|힐튼|하얏트|메리어트|인터컨티넨탈|노보텔|쉐라톤|웨스틴|포시즌|JW|그랜드)/i.test(text);
+  return /(\bhotel\b|\broom\b|\bresort\b|\bsuite\b|\binn\b|\bmotel\b|\bhostel\b|펜션|호텔|객실|리조트|신라|롯데|숙소|힐튼|하얏트|메리어트|인터컨티넨탈|노보텔|쉐라톤|웨스틴|포시즌|그랜드 (호텔|리조트|하얏트))/i.test(text);
 }
 
 function isPriceCompareReferrer(referrer) {
@@ -557,10 +560,20 @@ async function handleEvent(sessionId, event) {
   const rawState = await redis.hgetall(sessionKey(sessionId));
   const state = normalizeState(rawState, now);
 
+  // S1 checks hidden_for_seconds, which is cleared when the tab becomes visible.
+  // Evaluate before updateStateFromEvent clears hidden_at, then save, then intervene.
+  // This order ensures saveState always runs before createIntervention (prevents
+  // intervention_count from being overwritten by hset after hincrby).
+  const isVisibleReturn =
+    (event.type === 'visibility_change' || event.type === 'page_lifecycle') &&
+    (event.payload?.hidden === false || event.payload?.phase === 'show');
+
+  const preUpdateDecision = isVisibleReturn ? await evaluateScenario(state, now) : null;
+
   updateStateFromEvent(state, event, now);
   await saveState(sessionId, state);
 
-  const decision = await evaluateScenario(state, now);
+  const decision = preUpdateDecision ?? await evaluateScenario(state, now);
   if (decision) {
     await createIntervention(sessionId, state, decision);
   }

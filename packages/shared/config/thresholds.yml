@@ -1,26 +1,40 @@
 # Hover real-time intervention thresholds.
 # BE-A owns analytical updates; BE-C consumes this file at worker runtime.
+#
+# 설계 원칙 - 단일 신호로는 어떤 시나리오도 발화하지 않는다.
+# 부스터 하나(최대 0.35)가 어느 임계치도 넘지 못하도록 가중치를 잡았고,
+# 서로 독립적인 행동 신호가 최소 두 개 모여야 개입이 나간다.
+#
+# 도달 가능한 점수 조합
+#   0.15 유입만
+#   0.35 복사만 / 멀티탭만 / 탭 반복 이탈만
+#   0.50 복사 + 유입
+#   0.60 복사 + 5분 체류
+#   0.70 복사 + 멀티탭  또는  복사 + 탭 반복 이탈
+#   0.75 유입 + 5분 체류 + 탭 반복 이탈
+#   0.85 유입 + 복사 + 탭 반복 이탈
+# 임계치는 조합 사이의 빈 구간(폭 0.05)에 두어 부동소수점 오차로 뒤집히지 않게 한다.
 
 scenarios:
   S1:
     base_match:
-      cart_min_count: 1
-      tab_hidden_seconds: 10
-    intent_score_min: 0.6
+      cart_min_count: 2
+      tab_hidden_seconds: 20
+    intent_score_min: 0.65
     cooldown_seconds: 86400
   S2:
     base_match_any:
       - clipboard_copy_match: true
       - broadcast_channel_multi_tab: true
-    intent_score_min: 0.5
+    intent_score_min: 0.55
     cooldown_seconds: 86400
 
 booster_weights:
-  clipboard_copy_match: 0.5
-  broadcast_channel_multi_tab: 0.4
-  referrer_price_compare: 0.2
-  session_length_5min: 0.4
-  hidden_repeated: 0.4
+  clipboard_copy_match: 0.35
+  broadcast_channel_multi_tab: 0.35
+  referrer_price_compare: 0.15
+  session_length_5min: 0.25
+  hidden_repeated: 0.35
   xgboost_intent_proba: 0.0
 
 global:
