@@ -239,13 +239,6 @@ git commit -m "✨ Implement Visibility API tracking"
 # Push & Pull Request
 git push origin fe1/sdk-visibility
 # → GitHub에서 PR 생성 (최소 1명 리뷰)
-```
-
-### 매주 의식
-- **월 09:00** — 스탠드업 (15분)
-- **수** — 인터페이스 체크인 (필요 시, 30분)
-- **금 17:00** — 통합일 (전원, 마일스톤 검증)
-- **금 18:00** — 회고 (15분)
 
 ---
 
@@ -294,21 +287,6 @@ git push origin fe1/sdk-visibility
 
 ---
 
-## 🔄 팀 간 협업 체크리스트
-
-### W1 Kickoff 전
-- [ ] 모든 팀원이 이 README 읽음
-- [ ] PRD v1.0 정독, 질문은 GitHub Issues에
-- [ ] 개발 환경 설정 완료 (Node 20, Docker)
-- [ ] GitHub 계정 준비
-
-### 매주 토요일 밤 (다음주 준비)
-- [ ] 다음주 담당 작업 예측
-- [ ] 블로커 미리 식별
-- [ ] 인터페이스 변경 필요시 이슈 등록
-
----
-
 ## 📞 연락처 & 리소스
 
 | 역할 | 담당자 | 채널 |
@@ -322,7 +300,7 @@ git push origin fe1/sdk-visibility
 ## 📄 라이센스
 
 이 프로젝트는 학기 캡스톤 프로젝트입니다. 
-- 코드: MIT
+- 코드: 강원대학교
 - 데이터: Kaggle 데이터셋 원 라이센스 준수
 
 ---
