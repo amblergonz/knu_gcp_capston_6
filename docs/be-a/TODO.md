@@ -1,11 +1,11 @@
 # BE-A — 직접 해야 할 일 목록
 
-> Claude가 대신 할 수 없는 것들 (브라우저 로그인, 로컬 터미널 실행, 파일 다운로드)  
-> 각 항목 완료하면 ☐ → ✅ 로 바꿔 두세요
+>Claude가 대신 할 수 없는 것들 (브라우저 로그인, 로컬 터미널 실행, 파일 다운로드)
+>각 항목 완료하면 [ ] → [x] 로 바꿔 두세요
 
 ---
 
-## 🔴 지금 당장 (W1 시작 전)
+## [높음] 지금 당장 (W1 시작 전)
 
 ### 1. 가상환경 만들기
 
@@ -59,7 +59,7 @@ kaggle datasets download -d retailrocket/ecommerce-dataset
 tar -xf ecommerce-dataset.zip
 ```
 
-> Windows에서 `tar`가 안 되면 파일 탐색기에서 우클릭 → 압축 풀기
+>Windows에서 `tar`가 안 되면 파일 탐색기에서 우클릭 → 압축 풀기
 
 확인해야 할 파일:
 - `events.csv` (약 2.7M 행)
@@ -84,7 +84,7 @@ jupyter notebook
 
 ---
 
-## 🟡 W1 끝날 때 (5/13 전)
+## [보통] W1 끝날 때 (5/13 전)
 
 ### 6. 노트북 결론 셀 채워넣기
 
@@ -111,7 +111,7 @@ git push
 
 ---
 
-## 🟡 W2 (5/15 전)
+## [보통] W2 (5/15 전)
 
 ### 8. thresholds.yml 갱신 + PR
 
@@ -131,13 +131,13 @@ git push
    ```
 4. GitHub에서 PR 생성 → BE-C에게 리뷰 요청
 
-> PR 본문 템플릿은 체크리스트 문서 §2.2 참고
+>PR 본문 템플릿은 체크리스트 문서 §2.2 참고
 
 - [ ] 완료
 
 ---
 
-## 🟡 W4 (5/29 전)
+## [보통] W4 (5/29 전)
 
 ### 9. OTTO 데이터 다운로드 (~12GB)
 
@@ -146,14 +146,14 @@ cd c:\Users\super\Desktop\claude_cap\notebooks\data
 kaggle competitions download -c otto-recommender-system
 ```
 
-> 너무 크면 다운로드만 해두고 subset으로 분석해도 됨.  
-> W2까지는 Retailrocket만으로도 충분.
+>너무 크면 다운로드만 해두고 subset으로 분석해도 됨.
+>W2까지는 Retailrocket만으로도 충분.
 
 - [ ] 완료
 
 ---
 
-## 🔵 W5 (6/5 전)
+## [낮음] W5 (6/5 전)
 
 ### 10. BE-B에게 시뮬레이터 출력 데이터 요청
 

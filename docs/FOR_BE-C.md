@@ -1,8 +1,8 @@
 # BE-C 기술 인수인계 문서
 
-> 작성: BE-A (2026-05-18)  
-> 대상: BE-C (Real-time Core 담당)  
-> PR 링크: https://github.com/amblergonz/knu_gcp_capston_6/pull/2
+>작성: BE-A (2026-05-18)
+>대상: BE-C (Real-time Core 담당)
+>PR 링크: https://github.com/amblergonz/knu_gcp_capston_6/pull/2
 
 ---
 
@@ -68,7 +68,7 @@ BE-A가 현재 thresholds.yml 값으로 A/B 시뮬레이션 돌린 결과:
 
 | 지표 | 수치 | 목표 |
 |---|---|---|
-| FP Rate | **0.0%** | < 15% ✅ |
+| FP Rate | **0.0%** | < 15% [x] |
 | Precision | 100.0% | — |
 | Treatment 전환율 | 0.786% | — |
 | Control 전환율 | 0.722% | — |
@@ -84,11 +84,11 @@ BE-A가 현재 thresholds.yml 값으로 A/B 시뮬레이션 돌린 결과:
 
 | 서비스 | 포트 | 엔드포인트 | 상태 |
 |---|---|---|---|
-| Dashboard API | **4002** | `GET /health` | ✅ |
-| Dashboard API | 4002 | `GET /stream/live` (SSE) | ✅ |
-| Dashboard API | 4002 | `GET /signals/coverage` | ✅ (mock) |
-| Dashboard API | 4002 | `GET /scenarios/firings` | ✅ (mock) |
-| Simulator | — | `node packages/simulator/src/simulator.js` | ✅ |
+| Dashboard API | **4002** | `GET /health` | [x] |
+| Dashboard API | 4002 | `GET /stream/live` (SSE) | [x] |
+| Dashboard API | 4002 | `GET /signals/coverage` | [x] (mock) |
+| Dashboard API | 4002 | `GET /scenarios/firings` | [x] (mock) |
+| Simulator | — | `node packages/simulator/src/simulator.js` | [x] |
 
 ### Simulator 사용법
 
@@ -195,10 +195,10 @@ node packages/dashboard-api/src/index.js
 ```
 
 오늘 실제 테스트 결과:
-- `POST /events` → `202 Accepted` ✅
-- Worker 로그: `[Worker] Intervention created for session test-session-001` ✅
-- `GET /decision/test-session-001` → 쿠폰 JSON 200 OK ✅
-- 전달 후 Redis key 자동 삭제 ✅
+- `POST /events` → `202 Accepted` [x]
+- Worker 로그: `[Worker] Intervention created for session test-session-001` [x]
+- `GET /decision/test-session-001` → 쿠폰 JSON 200 OK [x]
+- 전달 후 Redis key 자동 삭제 [x]
 
 ---
 

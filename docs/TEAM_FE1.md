@@ -1,12 +1,12 @@
-# 🎨 FE1 — Tracking SDK + 데모 호텔 사이트
+# FE1 — Tracking SDK + 데모 호텔 사이트
 
-## 📌 당신의 미션
+## 당신의 미션
 
 **호텔 예약을 "실제로" 하는 것처럼 보이는 사이트를 만들고, 그 사이트에서 마우스 좌표 없이 행동 신호를 수집해야 합니다.**
 
 ---
 
-## 🎯 W1 — Kickoff (4/29 ~ 5/3)
+## W1 — Kickoff (4/29 ~ 5/3)
 
 ### 할 일
 - [ ] PRD v1.0 정독 + 질문/이슈 등록
@@ -27,11 +27,11 @@ pnpm install
 pnpm dev
 ```
 
-> 📌 **중요:** 이벤트 스키마는 BE1이 Ingestion API를 만들 때 필요합니다. W2 첫날까지 조인해야 합니다.
+> **중요:** 이벤트 스키마는 BE1이 Ingestion API를 만들 때 필요합니다. W2 첫날까지 조인해야 합니다.
 
 ---
 
-## 🎯 W2 — 골격 구축 (5/6 ~ 5/10)
+## W2 — 골격 구축 (5/6 ~ 5/10)
 
 ### Tracking SDK
 - [ ] P0 신호 4개 수집 모듈 구현:
@@ -85,7 +85,7 @@ packages/demo-hotel-site/
 
 ---
 
-## 🎯 W3 — 핵심 신호 완성 (5/13 ~ 5/17)
+## W3 — 핵심 신호 완성 (5/13 ~ 5/17)
 
 ### Tracking SDK - P0 신호 나머지 4개
 - [ ] #4 스크롤 깊이 (scroll %)
@@ -107,7 +107,7 @@ npm run lighthouse
 
 ---
 
-## 🎯 W4 ~ W8 — 안정화 & 완성
+## W4 ~ W8 — 안정화 & 완성
 
 ### W4 Go/No-Go 회의
 - [ ] A안(호텔) 유지 여부 결정 (호텔 도메인 진척도 > 50%)
@@ -127,7 +127,7 @@ npm run lighthouse
 
 ---
 
-## 📋 주요 파일 & 타입
+## 주요 파일 & 타입
 
 ### 이벤트 스키마 (`docs/event-schema.md`)
 ```typescript
@@ -136,14 +136,14 @@ interface TrackingEvent {
   session_id: string;
   ts: number;             // milliseconds
   event_type:
-    | 'visibility_change'
-    | 'focus_change'
-    | 'idle'
-    | 'scroll'
-    | 'form_input'
-    | 'clipboard_copy'
-    | 'broadcast_channel'
-    | 'page_unload';
+ | 'visibility_change'
+ | 'focus_change'
+ | 'idle'
+ | 'scroll'
+ | 'form_input'
+ | 'clipboard_copy'
+ | 'broadcast_channel'
+ | 'page_unload';
   payload: Record<string, any>;  // 이벤트 타입별 세부 정보
 }
 ```
@@ -162,7 +162,7 @@ interface TrackingEvent {
 
 ---
 
-## 🔗 의존성 & 협업
+## 의존성 & 협업
 
 ### BE1과 협력
 - **이벤트 스키마 정의** (W1 동결)
@@ -174,9 +174,9 @@ interface TrackingEvent {
 
 ---
 
-## 💡 팁
+## 팁
 
-1. **마우스 추적 금지** ❌
+1. **마우스 추적 금지**
    - 멘토의 핵심 피드백
    - 절대 `mousemove`, `mousedown`, `mouseup` 수집 금지
 
@@ -198,13 +198,13 @@ interface TrackingEvent {
    # Demo 사이트로 테스트
    cd packages/demo-hotel-site
    pnpm dev
-   
+
    # 콜롬 개발자 도구에서 이벤트 전송 확인
    ```
 
 ---
 
-## 📞 블로커 발생 시
+## 블로커 발생 시
 
 - **이벤트 스키마 합의 안 됨?** → BE1에 즉시 연락 (W1 중 해결)
 - **Ingestion API 안 뜸?** → BE1에 확인 (W2 수요일까지)
@@ -212,4 +212,4 @@ interface TrackingEvent {
 
 ---
 
-**Remember:** 우리가 하는 일은 "호텔 손님이 다른 탭을 깐다"는 **행동**을 감지하는 것입니다. 😊
+**Remember:** 우리가 하는 일은 "호텔 손님이 다른 탭을 깐다"는 **행동**을 감지하는 것입니다.

@@ -163,7 +163,6 @@ export default function Dashboard() {
             <div ref={feedRef} style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 6 }}>
               {liveEvents.length === 0 ? (
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: C.dim, fontSize: 13, gap: 8 }}>
-                  <span style={{ fontSize: 24 }}>📡</span>
                   <span>이벤트 대기 중</span>
                   <span style={{ fontSize: 11, color: C.dim }}>Ingestion API로 이벤트를 전송하면 여기 표시됩니다</span>
                 </div>

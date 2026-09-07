@@ -1,12 +1,12 @@
-# ⚙️ BE1 — Ingestion API + 인프라 (테크리드)
+# BE1 — Ingestion API + 인프라 (테크리드)
 
-## 📌 당신의 미션
+## 당신의 미션
 
 **SDK가 보낸 이벤트를 안정적으로 받아 큐에 흘리고, 전체 팀이 `docker compose up` 한 번으로 데모까지 띄울 수 있게 만들어야 합니다.**
 
 ---
 
-## 🎯 W1 — Kickoff + 모노레포 셋업 (4/29 ~ 5/3)
+## W1 — Kickoff + 모노레포 셋업 (4/29 ~ 5/3)
 
 ### 할 일 (테크리드로서)
 - [ ] 모노레포 구조 생성 (pnpm workspaces)
@@ -31,15 +31,15 @@
 ### 산출물
 ```
 hover/
-├── pnpm-workspace.yaml      ✅
-├── package.json             ✅
-├── tsconfig.json            ✅
-├── docker-compose.yml       ✅ (골격)
+├── pnpm-workspace.yaml      [x]
+├── package.json             [x]
+├── tsconfig.json            [x]
+├── docker-compose.yml       [x] (골격)
 ├── .github/workflows/
-│   └── ci.yml               ✅ (lint + test)
-├── README.md                ✅
+│   └── ci.yml               [x] (lint + test)
+├── README.md                [x]
 ├── docs/
-│   ├── event-schema.md      🔗 (FE1과 협력)
+│   ├── event-schema.md       (FE1과 협력)
 │   ├── TEAM_FE1.md
 │   ├── TEAM_BE1.md (이 파일)
 │   └── ...
@@ -62,11 +62,11 @@ cd packages/ingestion-api
 pnpm dev
 ```
 
-> 📌 **중요:** 이번 주에 모든 팀원이 로컬에서 `docker compose up`을 시도하는 것이 목표. 모두 실패해도 괜찮습니다. 구조가 명확하면 됩니다.
+> **중요:** 이번 주에 모든 팀원이 로컬에서 `docker compose up`을 시도하는 것이 목표. 모두 실패해도 괜찮습니다. 구조가 명확하면 됩니다.
 
 ---
 
-## 🎯 W2 — Ingestion API 구축 (5/6 ~ 5/10)
+## W2 — Ingestion API 구축 (5/6 ~ 5/10)
 
 ### Ingestion API (Fastify)
 - [ ] 프로젝트 구조
@@ -100,7 +100,7 @@ pnpm dev
   ```bash
   # Redis에 이벤트 스트림 생성
   XADD hover:events * event_id=uuid session_id=xxx event_type=visibility_change ...
-  
+
   # 확인
   XRANGE hover:events - + COUNT 10
   ```
@@ -144,7 +144,7 @@ pnpm dev
   ```bash
   curl -X POST http://localhost:4000/events \
     -H "Content-Type: application/json" \
-    -d '[{ 
+    -d '[{
       "event_id":"uuid",
       "session_id":"abc",
       "ts":1234567890,
@@ -155,14 +155,14 @@ pnpm dev
 
 ---
 
-## 🎯 W3 — 모든 서비스 연결 (5/13 ~ 5/17)
+## W3 — 모든 서비스 연결 (5/13 ~ 5/17)
 
 ### docker-compose.yml 완성
 - [ ] 모든 백엔드 서비스 추가
-  - Redis ✅
+  - Redis [x]
   - PostgreSQL
   - ClickHouse
-  - ingestion-api ✅
+  - ingestion-api [x]
   - stream-worker (BE2)
   - decision-api (BE2)
   - dashboard-api (BE3)
@@ -197,7 +197,7 @@ docker compose ps
 
 ---
 
-## 🎯 W4 ~ W6 — 안정화 & 모니터링
+## W4 ~ W6 — 안정화 & 모니터링
 
 ### W4 ~ W5
 - [ ] 로깅 추가 (각 마이크로서비스)
@@ -205,7 +205,7 @@ docker compose ps
   - 에러 로깅
 - [ ] 모니터링 대시보드 (선택)
   - prometheus + grafana (Stretch)
-  
+
 ### W5 ~ W6
 - [ ] 시뮬레이터 통합 테스트
   - 1,000명 가상 사용자 트래픽 → Ingestion API → Redis
@@ -219,7 +219,7 @@ docker compose ps
 
 ---
 
-## 📋 주요 파일 & 타입
+## 주요 파일 & 타입
 
 ### Shared Types (`packages/shared/src/index.ts`)
 ```typescript
@@ -233,14 +233,14 @@ export interface TrackingEvent {
 }
 
 export type EventType =
-  | 'visibility_change'
-  | 'focus_change'
-  | 'idle'
-  | 'scroll'
-  | 'form_input'
-  | 'clipboard_copy'
-  | 'broadcast_channel'
-  | 'page_unload';
+ | 'visibility_change'
+ | 'focus_change'
+ | 'idle'
+ | 'scroll'
+ | 'form_input'
+ | 'clipboard_copy'
+ | 'broadcast_channel'
+ | 'page_unload';
 ```
 
 ### Ingestion API 구조
@@ -248,10 +248,10 @@ export type EventType =
 // src/routes/events.ts
 fastify.post<{ Body: TrackingEvent[] }>('/events', async (req, reply) => {
   const events = req.body;
-  
+
   // 1. 스키마 검증
   const validated = eventSchema.array().parse(events);
-  
+
   // 2. Redis Streams에 저장
   for (const event of validated) {
     await redis.xadd(
@@ -264,7 +264,7 @@ fastify.post<{ Body: TrackingEvent[] }>('/events', async (req, reply) => {
       'payload', JSON.stringify(event.payload)
     );
   }
-  
+
   // 3. 세션 통계 업데이트
   for (const event of validated) {
     await redis.hset(
@@ -274,14 +274,14 @@ fastify.post<{ Body: TrackingEvent[] }>('/events', async (req, reply) => {
     );
     await redis.expire(`session:${event.session_id}`, 1800); // 30분
   }
-  
+
   return { success: true, count: events.length };
 });
 ```
 
 ---
 
-## 🔗 팀 조율 (테크리드 역할)
+## 팀 조율 (테크리드 역할)
 
 ### 매주 인터페이스 미팅
 - **월요일 스탠드업:** 각 팀원이 주간 목표 공유
@@ -297,7 +297,7 @@ fastify.post<{ Body: TrackingEvent[] }>('/events', async (req, reply) => {
 ```bash
 # 구조 변경은 반드시 PR + 전원 리뷰
 git checkout -b be1/docker-update
-git commit -m "♻️ Update docker-compose for W3"
+git commit -m " Update docker-compose for W3"
 git push origin be1/docker-update
 # → PR 생성, 최소 1명 리뷰 필요
 # → 통합일에 final check
@@ -305,7 +305,7 @@ git push origin be1/docker-update
 
 ---
 
-## 💡 팁
+## 팁
 
 1. **Redis 스트림 vs 큐**
    - Stream: 영구 저장 + 여러 컨슈머 (BE2, BE3)
@@ -338,14 +338,14 @@ git push origin be1/docker-update
    NODE_ENV=development
    REDIS_URL=redis://localhost:6379
    POSTGRES_URL=postgresql://hover:hover_dev@localhost:5432/hover
-   
+
    # .env.local (git 무시)
    # 로컬에서 필요한 오버라이드
    ```
 
 ---
 
-## 📞 블로커 발생 시
+## 블로커 발생 시
 
 - **모노레포 구조 모르겠어?** → 일단 `packages/` 만들고 시작
 - **docker-compose 난해?** → 각 팀원의 `Dockerfile` 먼저 만들고 통합
@@ -353,4 +353,4 @@ git push origin be1/docker-update
 
 ---
 
-**Remember:** 당신이 infrastructure를 튼튼하게 파면, 6명의 팀원들이 각자의 영역에만 집중할 수 있습니다. 🏗️
+**Remember:** 당신이 infrastructure를 튼튼하게 파면, 6명의 팀원들이 각자의 영역에만 집중할 수 있습니다.
