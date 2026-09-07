@@ -28,6 +28,10 @@ function sanitizeDecisionPayload(payload, session_id) {
     ttl_seconds: Number(payload.ttl_seconds || 600),
     intent_score: payload.intent_score,
     active_boosters: payload.active_boosters || [],
+    // 꺼진 신호를 뺀 실제 채점 대상. 이게 없으면 패널의 서버-클라 비교가
+    // 영구히 "불일치"로 표시된다.
+    scored_boosters: payload.scored_boosters || payload.active_boosters || [],
+    config_version: payload.config_version ?? 0,
     copy_source: payload.copy_source || 'fallback',
   };
 }

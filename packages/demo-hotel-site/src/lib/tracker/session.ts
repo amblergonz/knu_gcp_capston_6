@@ -1,6 +1,9 @@
 import { TRACKER_CONFIG } from './config';
 import { abGroupFor, generateSessionIdForGroup } from './abGroup';
-import { PRICE_COMPARE_RE } from './rules';
+import { DEFAULT_CONFIG } from './runtimeConfig';
+
+// 유입 판정은 세션 발급 시점(설정 fetch 이전)에도 필요하므로 기준값 패턴을 쓴다.
+const PRICE_COMPARE_RE = new RegExp(DEFAULT_CONFIG.matchers.price_compare, 'i');
 import type { Device } from './types';
 
 const KEY = 'hover_demo_session';

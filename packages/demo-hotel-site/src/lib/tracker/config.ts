@@ -2,6 +2,7 @@
 export const TRACKER_CONFIG = {
   ingestionUrl: process.env.NEXT_PUBLIC_INGESTION_URL || 'http://localhost:4000',
   decisionUrl: process.env.NEXT_PUBLIC_DECISION_URL || 'http://localhost:4001',
+  dashboardUrl: process.env.NEXT_PUBLIC_DASHBOARD_API || 'http://localhost:4002',
   enabled: process.env.NEXT_PUBLIC_TRACKING_ENABLED !== 'false',
 
   // 배치
@@ -23,6 +24,10 @@ export const TRACKER_CONFIG = {
 
   // 세션 — 워커의 SESSION_TTL_SECONDS(1800) 와 맞춘다
   sessionMaxAgeMs: 30 * 60 * 1000,
+
+  // 설정 콘솔
+  configPollMs: 1000,
+  configSyncTimeoutMs: 8000,
 
   // 로그
   maxLogEntries: 200,

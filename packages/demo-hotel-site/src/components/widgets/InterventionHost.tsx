@@ -85,10 +85,12 @@ export function InterventionHost() {
     emitInterventionEvent('intervention_cta', current);
 
     if (current.component === 'coupon_modal') {
+      // 할인율과 코드는 워커가 intent 구간에 따라 정해 내려보낸다.
       const percent = current.context.discount_percent ?? 10;
+      const code = current.context.coupon_code ?? `HOVER${percent}`;
       // 쿠폰란이 이미 떠 있으면 즉시 적용되고, 아니면 이동 후 마운트 시점에 적용된다.
       const apply = () =>
-        window.dispatchEvent(new CustomEvent(COUPON_EVENT, { detail: { code: 'HOVER10', percent } }));
+        window.dispatchEvent(new CustomEvent(COUPON_EVENT, { detail: { code, percent } }));
       apply();
       router.push('/checkout');
       setTimeout(apply, 600);

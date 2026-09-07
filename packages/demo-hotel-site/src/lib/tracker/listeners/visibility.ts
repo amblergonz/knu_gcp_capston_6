@@ -2,7 +2,7 @@ import { track, enqueueRaw } from '../track';
 import { flush, flushWithBeacon } from '../queue';
 import { requestPoll, startHeartbeat, stopHeartbeat, stopPolling } from '../decisionPoller';
 import { pushLog } from '../store';
-import { S1 } from '../rules';
+import { getSnapshot } from '../store';
 import type { TrackedEvent } from '../types';
 
 // 이 레이어에서 가장 하중이 큰 파일. S1 시나리오 전체가 여기 타이밍에 달려 있다.
@@ -41,7 +41,8 @@ export function installVisibility(): () => void {
     // - beacon 이 도착했었다면: worker.js:250 의 `if (hidden && !state.hidden_at)` 때문에 no-op.
     // - 유실됐다면: 과거 ts 로 hidden_at 이 잡혀 워커가 이 이벤트 자체에서 S1 을 발화한다
     //   (smoke-be-c.js:127-160 이 쓰는 바로 그 경로).
-    if (lastHideEvent && hiddenMs >= S1.tabHiddenSeconds * 1000) {
+    const hideThresholdMs = getSnapshot().config.scenarios.S1.tab_hidden_seconds * 1000;
+    if (lastHideEvent && hiddenMs >= hideThresholdMs) {
       enqueueRaw(lastHideEvent);
       pushLog('info', 'visibility_change', `hide 구제 재전송 (${Math.round(hiddenMs / 1000)}초)`);
     }

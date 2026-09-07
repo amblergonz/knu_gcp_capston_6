@@ -31,18 +31,64 @@ const defaultThresholds = {
     },
   },
   booster_weights: {
-    clipboard_copy_match: 0.35,
-    broadcast_channel_multi_tab: 0.35,
+    clipboard_copy_match: 0.3,
+    broadcast_channel_multi_tab: 0.3,
+    external_compare: 0.3,
+    hidden_repeated: 0.25,
+    checkout_form_dwell: 0.2,
     referrer_price_compare: 0.15,
-    session_length_5min: 0.25,
-    hidden_repeated: 0.35,
+    search_repeated: 0.15,
+    wishlist_added: 0.15,
+    session_length_5min: 0.1,
+    scroll_depth_deep: 0.05,
+    idle_entered: 0.05,
+    focus_lost: 0.05,
     xgboost_intent_proba: 0,
+  },
+  discount: {
+    tier1_percent: 5,
+    tier2_min_score: 0.63,
+    tier2_percent: 10,
+    tier3_min_score: 0.78,
+    tier3_percent: 15,
   },
   global: {
     intervention_per_session_max: 2,
+    decision_api_timeout_ms: 800,
     pending_intervention_ttl_seconds: 300,
   },
 };
+
+// 부스터 정규 목록. 이 배열이 가중치 로딩·오버라이드 검증·effective 발행의
+// 단일 출처다. YAML 파서가 콜론 든 주석 줄을 키로 오인하는 문제가 있어서
+// 파싱 결과를 딥카피하지 않고 반드시 이 목록을 순회한다.
+const BOOSTERS = {
+  clipboard_copy_match:        { label: '호텔명 복사',          tier: 'high',     event_type: 'clipboard_copy',    s2_base: true },
+  broadcast_channel_multi_tab: { label: '멀티탭 비교',           tier: 'high',     event_type: 'broadcast_channel', s2_base: true },
+  external_compare:            { label: '외부 예약사이트 비교',   tier: 'high',     event_type: 'external_link',     s2_base: true },
+  hidden_repeated:             { label: '탭 반복 이탈',          tier: 'high',     event_type: 'visibility_change' },
+  checkout_form_dwell:         { label: '결제 폼 체류 이상',      tier: 'mid',      event_type: 'form_field' },
+  referrer_price_compare:      { label: '가격비교 유입',          tier: 'mid',      event_type: '*' },
+  search_repeated:             { label: '반복 검색',             tier: 'mid',      event_type: 'search_query' },
+  wishlist_added:              { label: '찜하기',                tier: 'mid',      event_type: 'wishlist_add' },
+  session_length_5min:         { label: '5분 이상 체류',          tier: 'ambient',  event_type: '*' },
+  scroll_depth_deep:           { label: '깊은 스크롤',            tier: 'ambient',  event_type: 'scroll_depth' },
+  idle_entered:                { label: '유휴 진입',             tier: 'ambient',  event_type: 'idle' },
+  focus_lost:                  { label: '포커스 이탈',            tier: 'ambient',  event_type: 'window_focus' },
+  xgboost_intent_proba:        { label: '모델 예측 (미사용)',     tier: 'reserved', event_type: null, reserved: true },
+};
+const BOOSTER_NAMES = Object.keys(BOOSTERS);
+const S2_BASE_BOOSTERS = BOOSTER_NAMES.filter((name) => BOOSTERS[name].s2_base);
+
+// 부스터 발동 임계값. event_type 이 '*' 인 두 개는 이벤트 종류와 무관하게 평가된다.
+const BOOSTER_TRIGGERS = {
+  form_dwell_ms: 8000,
+  scroll_depth_percent: 75,
+  search_query_count: 3,
+};
+
+const RUNTIME_CONFIG_KEY = 'hover:config:runtime';
+const EFFECTIVE_CONFIG_KEY = 'hover:config:effective';
 
 function stripComment(value) {
   return value.split('#')[0].trim();
@@ -87,6 +133,218 @@ function parseThresholdYaml(content) {
   return root;
 }
 
+
+// ─────────────────────────────────────────────────────────────
+// 런타임 오버라이드
+//
+// thresholds.yml 은 BE-A 가 데이터로 도출한 기준값이고, Redis 의
+// hover:config:runtime 이 운영자가 콘솔에서 조정한 값이다. 워커는 매 루프
+// 둘을 병합하고, 그 결과를 hover:config:effective 로 다시 발행한다.
+// 부스터 정규 목록과 정규식을 아는 건 워커뿐이므로, API 가 자기 사본으로
+// 검증하면 드리프트 지점이 하나 더 생긴다.
+// ─────────────────────────────────────────────────────────────
+
+function clampWeight(value) {
+  const w = Number(value);
+  if (!Number.isFinite(w) || w < 0 || w > 1) return null;
+  return Math.round(w * 100) / 100;
+}
+
+function clampNumber(value, min, max, integer) {
+  const v = Number(value);
+  if (!Number.isFinite(v) || v < min || v > max) return null;
+  return integer ? Math.round(v) : Math.round(v * 100) / 100;
+}
+
+function mergeOverrides(baseline, override) {
+  const rejected = [];
+  const ov = override && typeof override === 'object' && !Array.isArray(override) ? override : null;
+  const ovBoosters = (ov && ov.boosters && typeof ov.boosters === 'object') ? ov.boosters : {};
+
+  const boosters = {};
+  for (const name of BOOSTER_NAMES) {
+    const meta = BOOSTERS[name];
+    const defaultWeight = baseline.booster_weights[name] ?? 0;
+    let enabled = !meta.reserved;
+    let weight = defaultWeight;
+    let source = 'baseline';
+
+    const entry = ovBoosters[name];
+    if (entry && typeof entry === 'object') {
+      if (typeof entry.enabled === 'boolean') {
+        enabled = entry.enabled;
+        source = 'override';
+      }
+      if (entry.weight !== undefined) {
+        const w = clampWeight(entry.weight);
+        if (w === null) {
+          rejected.push({ path: `boosters.${name}.weight`, reason: 'out_of_range', value: entry.weight });
+        } else {
+          weight = w;
+          source = 'override';
+        }
+      }
+    }
+
+    boosters[name] = {
+      label: meta.label,
+      tier: meta.tier,
+      event_type: meta.event_type,
+      s2_base: meta.s2_base === true,
+      reserved: meta.reserved === true,
+      enabled,
+      weight,
+      default_weight: defaultWeight,
+      source,
+    };
+  }
+
+  for (const name of Object.keys(ovBoosters)) {
+    if (!BOOSTERS[name]) {
+      rejected.push({ path: `boosters.${name}`, reason: 'unknown_booster' });
+    }
+  }
+
+  const ovScenarios = (ov && ov.scenarios && typeof ov.scenarios === 'object') ? ov.scenarios : {};
+  const scenarios = JSON.parse(JSON.stringify(baseline.scenarios));
+  scenarios.S1.enabled = true;
+  scenarios.S2.enabled = true;
+
+  const scenarioFields = {
+    S1: [
+      ['cart_min_count', 1, 10, true],
+      ['tab_hidden_seconds', 3, 300, true],
+      ['intent_score_min', 0.01, 2.05, false],
+    ],
+    S2: [['intent_score_min', 0.01, 2.05, false]],
+  };
+
+  for (const id of ['S1', 'S2']) {
+    const src = ovScenarios[id];
+    if (!src || typeof src !== 'object') continue;
+    if (typeof src.enabled === 'boolean') scenarios[id].enabled = src.enabled;
+    for (const [field, min, max, integer] of scenarioFields[id]) {
+      if (src[field] === undefined) continue;
+      const v = clampNumber(src[field], min, max, integer);
+      if (v === null) {
+        rejected.push({ path: `scenarios.${id}.${field}`, reason: 'out_of_range', value: src[field] });
+        continue;
+      }
+      if (field === 'intent_score_min') scenarios[id].intent_score_min = v;
+      else scenarios[id].base_match[field] = v;
+    }
+  }
+
+  const discount = { ...baseline.discount };
+  const ovDiscount = (ov && ov.discount && typeof ov.discount === 'object') ? ov.discount : {};
+  const discountFields = [
+    ['tier1_percent', 0, 90, true],
+    ['tier2_min_score', 0.01, 2.05, false],
+    ['tier2_percent', 0, 90, true],
+    ['tier3_min_score', 0.01, 2.05, false],
+    ['tier3_percent', 0, 90, true],
+  ];
+  for (const [field, min, max, integer] of discountFields) {
+    if (ovDiscount[field] === undefined) continue;
+    const v = clampNumber(ovDiscount[field], min, max, integer);
+    if (v === null) {
+      rejected.push({ path: `discount.${field}`, reason: 'out_of_range', value: ovDiscount[field] });
+      continue;
+    }
+    discount[field] = v;
+  }
+  if (discount.tier3_min_score < discount.tier2_min_score) {
+    rejected.push({ path: 'discount.tier3_min_score', reason: 'below_tier2', value: discount.tier3_min_score });
+    discount.tier3_min_score = baseline.discount.tier3_min_score;
+    discount.tier2_min_score = baseline.discount.tier2_min_score;
+  }
+
+  const config = {
+    version: Number(ov?.version) || 0,
+    scenarios,
+    boosters,
+    discount,
+    // intentScore 는 boosters 만 보지만, 하위 호환을 위해 평평한 맵도 남긴다.
+    booster_weights: Object.fromEntries(BOOSTER_NAMES.map((nm) => [nm, boosters[nm].weight])),
+    global: baseline.global,
+  };
+
+  return { config, rejected };
+}
+
+function buildEffectiveDoc(config, rejected, overridePresent, baselineSource) {
+  return {
+    version: config.version,
+    worker_loaded_at: Date.now(),
+    baseline_source: baselineSource,
+    override_present: overridePresent,
+    boosters: config.boosters,
+    scenarios: {
+      S1: {
+        enabled: config.scenarios.S1.enabled,
+        cart_min_count: config.scenarios.S1.base_match.cart_min_count,
+        tab_hidden_seconds: config.scenarios.S1.base_match.tab_hidden_seconds,
+        intent_score_min: config.scenarios.S1.intent_score_min,
+      },
+      S2: {
+        enabled: config.scenarios.S2.enabled,
+        intent_score_min: config.scenarios.S2.intent_score_min,
+        base_boosters: S2_BASE_BOOSTERS,
+      },
+    },
+    discount: config.discount,
+    triggers: BOOSTER_TRIGGERS,
+    matchers: {
+      hotel_text: HOTEL_TEXT_SOURCE,
+      price_compare: PRICE_COMPARE_SOURCE,
+    },
+    rejected,
+  };
+}
+
+let lastOverrideRaw = null;
+let lastPublishedDoc = '';
+let lastWarnedRaw = null;
+
+async function refreshConfig() {
+  const baseline = loadThresholds();
+  let overrideRaw = lastOverrideRaw;
+
+  if (process.env.CONFIG_OVERRIDE_ENABLED === 'false') {
+    overrideRaw = null;
+  } else {
+    try {
+      overrideRaw = await redis.get(RUNTIME_CONFIG_KEY);
+      lastOverrideRaw = overrideRaw;
+    } catch (err) {
+      // 기준값으로 폴백하면 방금 끈 신호가 조용히 다시 켜진다. 직전 값을 유지한다.
+      console.warn(`[Worker] runtime config read failed: ${err.message}. Reusing last known override.`);
+    }
+  }
+
+  let parsedOverride = null;
+  if (overrideRaw) {
+    parsedOverride = parseJson(overrideRaw, null);
+    if (!parsedOverride && overrideRaw !== lastWarnedRaw) {
+      lastWarnedRaw = overrideRaw;
+      console.warn('[Worker] runtime config is not valid JSON. Ignoring.');
+    }
+  }
+
+  const { config, rejected } = mergeOverrides(baseline, parsedOverride);
+  thresholds = config;
+
+  const doc = JSON.stringify(buildEffectiveDoc(config, rejected, !!parsedOverride, baseline.source || ''));
+  if (doc !== lastPublishedDoc) {
+    lastPublishedDoc = doc;
+    try {
+      await redis.set(EFFECTIVE_CONFIG_KEY, doc);
+    } catch (err) {
+      console.warn(`[Worker] effective config publish failed: ${err.message}`);
+    }
+  }
+}
+
 function numberValue(value, fallback) {
   const number = Number(value);
   return Number.isFinite(number) ? number : fallback;
@@ -106,13 +364,16 @@ function loadThresholds() {
   }
 
   const content = fs.readFileSync(filePath, 'utf8');
+  const source = filePath;
   const parsed = parseThresholdYaml(content);
   const s1 = parsed.scenarios?.S1 || {};
   const s2 = parsed.scenarios?.S2 || {};
   const boosterWeights = parsed.booster_weights || {};
+  const discount = parsed.discount || {};
   const global = parsed.global || {};
 
   return {
+    source,
     scenarios: {
       S1: {
         ...defaultThresholds.scenarios.S1,
@@ -135,33 +396,28 @@ function loadThresholds() {
         cooldown_seconds: numberValue(s2.cooldown_seconds, defaultThresholds.scenarios.S2.cooldown_seconds),
       },
     },
-    booster_weights: {
-      clipboard_copy_match: numberValue(
-        boosterWeights.clipboard_copy_match,
-        defaultThresholds.booster_weights.clipboard_copy_match
-      ),
-      broadcast_channel_multi_tab: numberValue(
-        boosterWeights.broadcast_channel_multi_tab,
-        defaultThresholds.booster_weights.broadcast_channel_multi_tab
-      ),
-      referrer_price_compare: numberValue(
-        boosterWeights.referrer_price_compare,
-        defaultThresholds.booster_weights.referrer_price_compare
-      ),
-      session_length_5min: numberValue(
-        boosterWeights.session_length_5min,
-        defaultThresholds.booster_weights.session_length_5min
-      ),
-      hidden_repeated: numberValue(boosterWeights.hidden_repeated, defaultThresholds.booster_weights.hidden_repeated),
-      xgboost_intent_proba: numberValue(
-        boosterWeights.xgboost_intent_proba,
-        defaultThresholds.booster_weights.xgboost_intent_proba
-      ),
+    // 정규 목록 순회. 여기에 없는 키는 의도적으로 버린다.
+    booster_weights: Object.fromEntries(
+      BOOSTER_NAMES.map((name) => [
+        name,
+        numberValue(boosterWeights[name], defaultThresholds.booster_weights[name] ?? 0),
+      ])
+    ),
+    discount: {
+      tier1_percent: numberValue(discount.tier1_percent, defaultThresholds.discount.tier1_percent),
+      tier2_min_score: numberValue(discount.tier2_min_score, defaultThresholds.discount.tier2_min_score),
+      tier2_percent: numberValue(discount.tier2_percent, defaultThresholds.discount.tier2_percent),
+      tier3_min_score: numberValue(discount.tier3_min_score, defaultThresholds.discount.tier3_min_score),
+      tier3_percent: numberValue(discount.tier3_percent, defaultThresholds.discount.tier3_percent),
     },
     global: {
       intervention_per_session_max: numberValue(
         global.intervention_per_session_max,
         defaultThresholds.global.intervention_per_session_max
+      ),
+      decision_api_timeout_ms: numberValue(
+        global.decision_api_timeout_ms,
+        defaultThresholds.global.decision_api_timeout_ms
       ),
       pending_intervention_ttl_seconds: numberValue(
         global.pending_intervention_ttl_seconds,
@@ -171,7 +427,9 @@ function loadThresholds() {
   };
 }
 
-let thresholds = loadThresholds();
+// 최초 1회는 오버라이드 없이 병합만 해 둔다. thresholds.boosters 가 없으면
+// scoredBoosters 가 전부 걸러내므로 이 초기화는 생략할 수 없다.
+let thresholds = mergeOverrides(loadThresholds(), null).config;
 
 function parseJson(value, fallback) {
   if (!value) return fallback;
@@ -204,6 +462,7 @@ function normalizeState(raw, now) {
     last_page_url: raw.last_page_url || '',
     last_referrer: raw.last_referrer || '',
     hotel_name: raw.hotel_name || '',
+    search_count: Number(raw.search_count || 0),
     active_boosters: parseJson(raw.active_boosters, []),
     intervention_count: Number(raw.intervention_count || 0),
   };
@@ -215,14 +474,19 @@ function addBooster(state, name) {
   }
 }
 
+const HOTEL_TEXT_RE = /(\bhotel\b|\broom\b|\bresort\b|\bsuite\b|\binn\b|\bmotel\b|\bhostel\b|펜션|호텔|객실|리조트|신라|롯데|숙소|힐튼|하얏트|메리어트|인터컨티넨탈|노보텔|쉐라톤|웨스틴|포시즌|그랜드 (호텔|리조트|하얏트))/i;
+const PRICE_COMPARE_RE = /(google|naver|trivago|booking|agoda|hotels|kayak|skyscanner)/i;
+const HOTEL_TEXT_SOURCE = HOTEL_TEXT_RE.source;
+const PRICE_COMPARE_SOURCE = PRICE_COMPARE_RE.source;
+
 function looksLikeHotelText(text) {
   if (!text) return false;
-  return /(\bhotel\b|\broom\b|\bresort\b|\bsuite\b|\binn\b|\bmotel\b|\bhostel\b|펜션|호텔|객실|리조트|신라|롯데|숙소|힐튼|하얏트|메리어트|인터컨티넨탈|노보텔|쉐라톤|웨스틴|포시즌|그랜드 (호텔|리조트|하얏트))/i.test(text);
+  return HOTEL_TEXT_RE.test(text);
 }
 
 function isPriceCompareReferrer(referrer) {
   if (!referrer) return false;
-  return /(google|naver|trivago|booking|agoda|hotels|kayak|skyscanner)/i.test(referrer);
+  return PRICE_COMPARE_RE.test(referrer);
 }
 
 function updateStateFromEvent(state, event, now) {
@@ -277,12 +541,73 @@ function updateStateFromEvent(state, event, now) {
       addBooster(state, 'broadcast_channel_multi_tab');
     }
   }
+
+  // ── 아래 7개는 데모 사이트의 applyEventToMirror 와 같은 순서·조건을 유지해야 한다.
+  //    (packages/demo-hotel-site/src/lib/tracker/rules.ts)
+
+  if (event.type === 'form_field') {
+    // 결제 폼에서만 센다. 정렬 드롭다운 같은 일반 입력은 form 이 'unknown' 이다.
+    const dwell = Number(event.payload?.dwell_ms || 0);
+    if (event.payload?.form === 'checkout' && dwell >= BOOSTER_TRIGGERS.form_dwell_ms) {
+      addBooster(state, 'checkout_form_dwell');
+    }
+  }
+
+  if (event.type === 'scroll_depth') {
+    if (Number(event.payload?.percent || 0) >= BOOSTER_TRIGGERS.scroll_depth_percent) {
+      addBooster(state, 'scroll_depth_deep');
+    }
+  }
+
+  if (event.type === 'idle' && event.payload?.idle === true) {
+    addBooster(state, 'idle_entered');
+  }
+
+  if (event.type === 'window_focus' && event.payload?.focused === false) {
+    addBooster(state, 'focus_lost');
+  }
+
+  if (event.type === 'external_link') {
+    // 유입 판정과 같은 정규식을 쓴다. 클라이언트 미러의 패턴을 하나로 유지하기 위함.
+    const host = String(event.payload?.hostname || event.payload?.href || '');
+    if (isPriceCompareReferrer(host)) {
+      addBooster(state, 'external_compare');
+    }
+  }
+
+  if (event.type === 'search_query') {
+    state.search_count += 1;
+    if (state.search_count >= BOOSTER_TRIGGERS.search_query_count) {
+      addBooster(state, 'search_repeated');
+    }
+  }
+
+  if (event.type === 'wishlist_add' && event.payload?.action === 'add') {
+    addBooster(state, 'wishlist_added');
+  }
+}
+
+// active_boosters 는 원본 관측 기록으로 그대로 두고, enabled 는 읽기 시점 필터로만
+// 동작시킨다. 그래서 토글을 꺼도 세션을 다시 쓸 필요가 없고, 다시 켜면 소급 적용된다.
+function scoredBoosters(state) {
+  return state.active_boosters.filter((name) => thresholds.boosters?.[name]?.enabled === true);
 }
 
 function intentScore(state) {
-  return state.active_boosters.reduce((sum, booster) => {
-    return sum + Number(thresholds.booster_weights[booster] || 0);
+  const sum = scoredBoosters(state).reduce((acc, booster) => {
+    return acc + Number(thresholds.boosters[booster].weight || 0);
   }, 0);
+  // 2dp 반올림. 운영자가 0.5 를 입력했는데 0.15+0.35 === 0.49999999999999994 라
+  // 영원히 발화하지 않는 사고를 막는다.
+  return Math.round(sum * 100) / 100;
+}
+
+// intent 가 높을수록 이탈 위험이 크므로 더 큰 혜택을 준다.
+function discountFor(score) {
+  const d = thresholds.discount;
+  if (score >= d.tier3_min_score) return d.tier3_percent;
+  if (score >= d.tier2_min_score) return d.tier2_percent;
+  return d.tier1_percent;
 }
 
 function hiddenForSeconds(state, now) {
@@ -294,8 +619,11 @@ async function evaluateScenario(state, now) {
   const score = intentScore(state);
   const s1 = thresholds.scenarios.S1;
   const s2 = thresholds.scenarios.S2;
+  const scored = scoredBoosters(state);
+  const s2Base = S2_BASE_BOOSTERS.filter((name) => thresholds.boosters?.[name]?.enabled === true);
   const engine = new Engine();
 
+  if (s1.enabled !== false) {
   engine.addRule({
     priority: 10,
     conditions: {
@@ -310,16 +638,17 @@ async function evaluateScenario(state, now) {
       params: { scenario_id: 'S1', component: 'coupon_modal' },
     },
   });
+  }
 
+  // 기본조건 신호가 전부 꺼지면 룰 자체를 등록하지 않는다.
+  // any: [] 의 동작에 의존하지 않기 위함.
+  if (s2.enabled !== false && s2Base.length > 0) {
   engine.addRule({
     priority: 5,
     conditions: {
       all: [
         {
-          any: [
-            { fact: 'clipboard_copy_match', operator: 'equal', value: true },
-            { fact: 'broadcast_channel_multi_tab', operator: 'equal', value: true },
-          ],
+          any: s2Base.map((name) => ({ fact: name, operator: 'equal', value: true })),
         },
         { fact: 'intent_score', operator: 'greaterThanInclusive', value: s2.intent_score_min },
       ],
@@ -329,26 +658,32 @@ async function evaluateScenario(state, now) {
       params: { scenario_id: 'S2', component: 'price_match_banner' },
     },
   });
+  }
 
-  const result = await engine.run({
+  const facts = {
     cart_count: state.cart_count,
     hidden_for_seconds: hiddenForSeconds(state, now),
     intent_score: score,
-    clipboard_copy_match: state.active_boosters.includes('clipboard_copy_match'),
-    broadcast_channel_multi_tab: state.active_boosters.includes('broadcast_channel_multi_tab'),
-  });
+  };
+  // 팩트도 scored 기준으로 만든다. active_boosters 를 쓰면 운영자가 끈 신호로
+  // S2 기본조건이 계속 열린다.
+  for (const name of S2_BASE_BOOSTERS) {
+    facts[name] = scored.includes(name);
+  }
+
+  const result = await engine.run(facts);
 
   const match =
     result.events.find((event) => event.params?.scenario_id === 'S1') ||
     result.events.find((event) => event.params?.scenario_id === 'S2');
   if (match) {
-    return { ...match.params, score };
+    return { ...match.params, score, scored_boosters: scored };
   }
 
   return null;
 }
 
-function fallbackCopy(scenarioId) {
+function fallbackCopy(scenarioId, discountPercent) {
   if (scenarioId === 'S2') {
     return {
       title: '떠나기 전에 비교해보세요',
@@ -359,7 +694,7 @@ function fallbackCopy(scenarioId) {
 
   return {
     title: '떠나기 전 잠깐!',
-    body: '지금 구매하시면 10% 추가 할인 쿠폰을 드려요.',
+    body: `지금 구매하시면 ${discountPercent || 10}% 추가 할인 쿠폰을 드려요.`,
     cta: '쿠폰 받기',
   };
 }
@@ -386,7 +721,7 @@ function parseGeminiCopy(text) {
   }
 }
 
-function geminiPrompt(scenarioId, state) {
+function geminiPrompt(scenarioId, state, scored, discountPercent) {
   const scenarioName = scenarioId === 'S2' ? 'price comparison intent' : 'cart abandonment intent';
   const hotelName = state.hotel_name || 'the selected hotel';
 
@@ -397,16 +732,16 @@ function geminiPrompt(scenarioId, state) {
     'Do not invent exact prices, inventory counts, or unsupported benefits.',
     `Scenario: ${scenarioName}.`,
     `Hotel context: ${hotelName}.`,
-    `Active signals: ${state.active_boosters.join(', ') || 'none'}.`,
+    `Active signals: ${(scored || []).join(', ') || 'none'}.`,
     scenarioId === 'S1'
-      ? 'Goal: encourage the user to complete the booking before leaving. Mention a limited 10% coupon benefit.'
+      ? `Goal: encourage the user to complete the booking before leaving. Mention a limited ${discountPercent || 10}% coupon benefit.`
       : 'Goal: encourage the user to compare benefits inside this service before leaving.',
   ].join('\n');
 }
 
-async function generateCopyWithGemini(scenarioId, state) {
+async function generateCopyWithGemini(scenarioId, state, scored, discountPercent) {
   if (!GEMINI_API_KEY) {
-    return { copy: fallbackCopy(scenarioId), source: 'fallback' };
+    return { copy: fallbackCopy(scenarioId, discountPercent), source: 'fallback' };
   }
 
   const controller = new AbortController();
@@ -423,7 +758,7 @@ async function generateCopyWithGemini(scenarioId, state) {
           contents: [
             {
               role: 'user',
-              parts: [{ text: geminiPrompt(scenarioId, state) }],
+              parts: [{ text: geminiPrompt(scenarioId, state, scored, discountPercent) }],
             },
           ],
           generationConfig: {
@@ -440,7 +775,7 @@ async function generateCopyWithGemini(scenarioId, state) {
 
     if (!response.ok) {
       console.warn(`[Worker] Gemini request failed with status ${response.status}. Using fallback copy.`);
-      return { copy: fallbackCopy(scenarioId), source: 'fallback' };
+      return { copy: fallbackCopy(scenarioId, discountPercent), source: 'fallback' };
     }
 
     const payload = await response.json();
@@ -449,13 +784,13 @@ async function generateCopyWithGemini(scenarioId, state) {
 
     if (!copy) {
       console.warn('[Worker] Gemini returned invalid copy. Using fallback copy.');
-      return { copy: fallbackCopy(scenarioId), source: 'fallback' };
+      return { copy: fallbackCopy(scenarioId, discountPercent), source: 'fallback' };
     }
 
     return { copy, source: 'gemini' };
   } catch (err) {
     console.warn(`[Worker] Gemini copy generation skipped: ${err.message}. Using fallback copy.`);
-    return { copy: fallbackCopy(scenarioId), source: 'fallback' };
+    return { copy: fallbackCopy(scenarioId, discountPercent), source: 'fallback' };
   } finally {
     clearTimeout(timer);
   }
@@ -473,7 +808,10 @@ async function createIntervention(sessionId, state, decision) {
   const isCoolingDown = await redis.exists(cooldownKey(sessionId, decision.scenario_id));
   if (isCoolingDown) return;
 
-  const generatedCopy = await generateCopyWithGemini(decision.scenario_id, state);
+  const scored = decision.scored_boosters || scoredBoosters(state);
+  // S1 만 쿠폰을 준다. 할인율은 intent 구간에 따라 5 / 10 / 15%.
+  const discountPercent = decision.scenario_id === 'S1' ? discountFor(decision.score) : undefined;
+  const generatedCopy = await generateCopyWithGemini(decision.scenario_id, state, scored, discountPercent);
 
   const intervention = {
     intervention_id: crypto.randomUUID(),
@@ -484,11 +822,15 @@ async function createIntervention(sessionId, state, decision) {
     copy: generatedCopy.copy,
     context: {
       hotel_name: state.hotel_name || undefined,
-      discount_percent: decision.scenario_id === 'S1' ? 10 : undefined,
+      discount_percent: discountPercent,
+      // 프론트가 코드를 발명하지 않도록 워커가 내려보낸다.
+      coupon_code: discountPercent ? `HOVER${discountPercent}` : undefined,
     },
     ttl_seconds: thresholds.global.pending_intervention_ttl_seconds,
     intent_score: Number(decision.score.toFixed(3)),
     active_boosters: state.active_boosters,
+    scored_boosters: scored,
+    config_version: thresholds.version ?? 0,
     copy_source: generatedCopy.source,
   };
 
@@ -540,6 +882,7 @@ async function saveState(sessionId, state) {
       last_page_url: state.last_page_url,
       last_referrer: state.last_referrer,
       hotel_name: state.hotel_name,
+      search_count: String(state.search_count),
       active_boosters: JSON.stringify(state.active_boosters),
       intervention_count: String(state.intervention_count),
     })
@@ -585,7 +928,7 @@ async function processStream() {
 
   while (true) {
     try {
-      thresholds = loadThresholds();
+      await refreshConfig();
       const result = await redis.xread('BLOCK', 5000, 'STREAMS', STREAM_KEY, lastId);
       if (!result) continue;
 

@@ -1,5 +1,6 @@
 import { TRACKER_CONFIG } from './config';
 import { EVENT_TYPES, type DecisionPayload, type LogEntry, type LogLevel, type TrackerSnapshot } from './types';
+import { DEFAULT_CONFIG } from './runtimeConfig';
 
 // 디버그 패널이 구독하는 모듈 싱글턴.
 // useSyncExternalStore 의 getServerSnapshot 이 이 고정 객체를 그대로 돌려주기 때문에
@@ -23,6 +24,9 @@ export const INITIAL_SNAPSHOT: TrackerSnapshot = Object.freeze({
   intentScore: 0,
   hotelName: '',
   tabCount: 1,
+  searchCount: 0,
+  // getServerSnapshot 이 이 객체를 참조로 돌려주므로 서버·첫 클라 렌더가 같다.
+  config: DEFAULT_CONFIG,
   ingestion: 'unknown',
   decision: 'unknown',
   queued: 0,
