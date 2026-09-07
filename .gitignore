@@ -41,3 +41,6 @@ packages/*/package-lock.json
 
 # Next.js 검증용 별도 빌드 출력
 .next-build/
+
+# 에디터·도구 로컬 설정
+.claude/

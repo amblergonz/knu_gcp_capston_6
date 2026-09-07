@@ -3,6 +3,9 @@ const Redis = require('ioredis');
 
 const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
 const PORT = parseInt(process.env.PORT || '4000', 10);
+// TTL 이 없는 스트림이라 상한을 두지 않으면 메모리가 계속 는다.
+// '~' 는 근사 트리밍이라 XADD 비용이 거의 늘지 않는다.
+const STREAM_MAXLEN = parseInt(process.env.EVENT_STREAM_MAXLEN || '100000', 10);
 
 fastify.register(require('@fastify/cors'), { origin: '*' });
 
@@ -76,7 +79,9 @@ fastify.post('/events', { schema: eventSchema }, async (request, reply) => {
 
   for (const event of events) {
     await redis.xadd(
-      'events_stream', '*',
+      'events_stream',
+      'MAXLEN', '~', STREAM_MAXLEN,
+      '*',
       'session_id', session_id,
       'device', request.body.device,
       'user_id', request.body.user_id || '',

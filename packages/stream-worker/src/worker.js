@@ -8,6 +8,7 @@ const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
 const SESSION_TTL_SECONDS = parseInt(process.env.SESSION_TTL_SECONDS || '1800', 10);
 const STREAM_KEY = process.env.EVENT_STREAM_KEY || 'events_stream';
 const INTERVENTION_STREAM_KEY = process.env.INTERVENTION_STREAM_KEY || 'interventions_stream';
+const INTERVENTION_STREAM_MAXLEN = parseInt(process.env.INTERVENTION_STREAM_MAXLEN || '50000', 10);
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 const GEMINI_TIMEOUT_MS = parseInt(process.env.GEMINI_TIMEOUT_MS || '10000', 10);
@@ -43,7 +44,6 @@ const defaultThresholds = {
     scroll_depth_deep: 0.05,
     idle_entered: 0.05,
     focus_lost: 0.05,
-    xgboost_intent_proba: 0,
   },
   discount: {
     tier1_percent: 5,
@@ -75,7 +75,6 @@ const BOOSTERS = {
   scroll_depth_deep:           { label: '깊은 스크롤',            tier: 'ambient',  event_type: 'scroll_depth' },
   idle_entered:                { label: '유휴 진입',             tier: 'ambient',  event_type: 'idle' },
   focus_lost:                  { label: '포커스 이탈',            tier: 'ambient',  event_type: 'window_focus' },
-  xgboost_intent_proba:        { label: '모델 예측 (미사용)',     tier: 'reserved', event_type: null, reserved: true },
 };
 const BOOSTER_NAMES = Object.keys(BOOSTERS);
 const S2_BASE_BOOSTERS = BOOSTER_NAMES.filter((name) => BOOSTERS[name].s2_base);
@@ -846,6 +845,9 @@ async function createIntervention(sessionId, state, decision) {
     .expire(sessionKey(sessionId), SESSION_TTL_SECONDS)
     .xadd(
       INTERVENTION_STREAM_KEY,
+      'MAXLEN',
+      '~',
+      INTERVENTION_STREAM_MAXLEN,
       '*',
       'session_id',
       sessionId,

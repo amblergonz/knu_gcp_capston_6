@@ -16,8 +16,7 @@ export type BoosterName =
   | 'session_length_5min'
   | 'scroll_depth_deep'
   | 'idle_entered'
-  | 'focus_lost'
-  | 'xgboost_intent_proba';
+  | 'focus_lost';
 
 export type BoosterTier = 'high' | 'mid' | 'ambient' | 'reserved';
 
@@ -76,7 +75,6 @@ export const BOOSTER_ORDER: readonly BoosterName[] = [
   'scroll_depth_deep',
   'idle_entered',
   'focus_lost',
-  'xgboost_intent_proba',
 ];
 
 // packages/shared/config/thresholds.yml 의 기준값과 같아야 한다.
@@ -94,7 +92,6 @@ const DEFAULT_BOOSTERS: Array<[BoosterName, string, BoosterTier, string | null, 
   ['scroll_depth_deep', '깊은 스크롤', 'ambient', 'scroll_depth', false, 0.05, false],
   ['idle_entered', '유휴 진입', 'ambient', 'idle', false, 0.05, false],
   ['focus_lost', '포커스 이탈', 'ambient', 'window_focus', false, 0.05, false],
-  ['xgboost_intent_proba', '모델 예측 (미사용)', 'reserved', null, false, 0, true],
 ];
 
 function buildDefaultBoosters(): Record<BoosterName, BoosterConfig> {
