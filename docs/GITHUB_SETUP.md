@@ -1,14 +1,14 @@
-# 🚀 GitHub 연결 가이드
+# GitHub 연결 가이드
 
-## 📌 현재 상태
+## 현재 상태
 
-✅ 로컬 Git 저장소 초기화 완료  
-✅ 첫 커밋 생성: "🎯 Init: Project structure, monorepо setup, and team guides"  
-✅ 모노레포 구조 및 6개 팀원별 가이드 작성 완료
+[x] 로컬 Git 저장소 초기화 완료
+[x] 첫 커밋 생성: " Init: Project structure, monorepо setup, and team guides"
+[x] 모노레포 구조 및 6개 팀원별 가이드 작성 완료
 
 ---
 
-## 1️⃣ GitHub에 Main Repository 생성
+## 1⃣ GitHub에 Main Repository 생성
 
 ### A. GitHub에서 새 저장소 만들기
 
@@ -19,7 +19,7 @@
    Repository name:        hover
    Description:            Real-time marketing intervention platform for hotel booking
    Visibility:             Public (또는 Private)
-   Initialize repository:  ❌ No (이미 로컬에서 git init 했음)
+   Initialize repository:   No (이미 로컬에서 git init 했음)
    ```
 4. **"Create repository"** 클릭
 
@@ -38,8 +38,8 @@ git branch -M main
 git push -u origin main
 ```
 
-> **예:** 계정명이 `john-doe`면:  
-> `git remote add origin https://github.com/john-doe/hover.git`
+>**예:** 계정명이 `john-doe`면:
+>`git remote add origin https://github.com/john-doe/hover.git`
 
 ### C. 확인
 ```bash
@@ -53,9 +53,9 @@ git remote -v
 
 ---
 
-## 2️⃣ 팀원별 Repository 구조 (선택사항)
+## 2⃣ 팀원별 Repository 구조 (선택사항)
 
-### 옵션 A: 단일 Main Repo (권장 ✅)
+### 옵션 A: 단일 Main Repo (권장 [x])
 ```
 GitHub 계정/
 └── hover (monorepo 통합)
@@ -85,7 +85,7 @@ git checkout -b fe1/tracking-sdk
 cd packages/tracking-sdk
 # ... 개발
 git add .
-git commit -m "✨ Add visibility tracking"
+git commit -m " Add visibility tracking"
 git push origin fe1/tracking-sdk
 # → GitHub에서 PR 생성
 ```
@@ -113,7 +113,7 @@ git push origin fe1/tracking-sdk
 
 ---
 
-## 3️⃣ GitHub 설정 (Main Repo 기준)
+## 3⃣ GitHub 설정 (Main Repo 기준)
 
 ### Collaborators 추가
 
@@ -127,13 +127,13 @@ git push origin fe1/tracking-sdk
 1. **Settings → Branches**
 2. "Add rule" → "main"
 3. 설정:
-   - ✅ Require pull request reviews
-   - ✅ Dismiss stale pull request approvals
-   - ✅ Require branches to be up to date
+   - [x] Require pull request reviews
+   - [x] Dismiss stale pull request approvals
+   - [x] Require branches to be up to date
 
 ---
 
-## 4️⃣ 각 팀원의 첫 번째 작업
+## 4⃣ 각 팀원의 첫 번째 작업
 
 ### 모든 팀원이 수행할 일
 
@@ -159,7 +159,7 @@ pnpm dev
 
 # 5. 변경 커밋
 git add .
-git commit -m "🔧 Setup TypeScript + DevServer"
+git commit -m " Setup TypeScript + DevServer"
 git push origin fe1/setup
 
 # 6. GitHub에서 PR 생성
@@ -171,7 +171,7 @@ git push origin fe1/setup
 
 ---
 
-## 5️⃣ 주간 Git 룰
+## 5⃣ 주간 Git 룰
 
 ### 브랜치 네이밍 규칙
 ```
@@ -189,12 +189,12 @@ be4/retailrocket-analysis
 ```
 {emoji} {Type}: {Description}
 
-✨ feat: Add visibility API tracking
-🐛 fix: Handle clipboard permission error
-♻️ refactor: Reorganize rule engine structure
-📚 docs: Update event-schema.md
-🧪 test: Add unit tests for S1 rule
-🔧 chore: Update dependencies
+ feat: Add visibility API tracking
+ fix: Handle clipboard permission error
+ refactor: Reorganize rule engine structure
+ docs: Update event-schema.md
+ test: Add unit tests for S1 rule
+ chore: Update dependencies
 ```
 
 ### PR 제목
@@ -212,7 +212,7 @@ be4/retailrocket-analysis
 
 ---
 
-## 6️⃣ GitHub로 협력하는 팁
+## 6⃣ GitHub로 협력하는 팁
 
 ### Issue 생성
 
@@ -245,7 +245,7 @@ FE1이 이벤트를 어디로 보낼지 모름
 
 ---
 
-## 7️⃣ 로컬 개발 후 Push 체크리스트
+## 7⃣ 로컬 개발 후 Push 체크리스트
 
 ### Push 전
 - [ ] 코드 작동 확인 (로컬 테스트)
@@ -259,14 +259,14 @@ FE1이 이벤트를 어디로 보낼지 모름
 git log --oneline -5
 
 # 예상 출력:
-# a1b2c3d ✨ Add visibility tracking
-# e4f5g6h 📚 Update event-schema docs
-# i7j8k9l 🧪 Add test for visibility
+# a1b2c3d  Add visibility tracking
+# e4f5g6h  Update event-schema docs
+# i7j8k9l  Add test for visibility
 ```
 
 ---
 
-## 8️⃣ GitHub Actions (CI/CD 자동화)
+## 8⃣ GitHub Actions (CI/CD 자동화)
 
 ### 기본 CI 워크플로우
 
@@ -284,7 +284,7 @@ on:
 jobs:
   lint-and-test:
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v3
       - uses: pnpm/action-setup@v2
@@ -292,16 +292,16 @@ jobs:
         with:
           node-version: '20'
           cache: 'pnpm'
-      
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      
+
       - name: Lint
         run: pnpm lint
-      
+
       - name: Type check
         run: pnpm type-check
-      
+
       - name: Test
         run: pnpm test --if-present
 ```
@@ -310,7 +310,7 @@ jobs:
 
 ---
 
-## 📞 문제 해결
+## 문제 해결
 
 ### 1. "origin already exists"
 ```bash
@@ -342,10 +342,10 @@ git push -f origin <branch>  # 주의: force push
 
 ---
 
-## ✅ 다음 단계
+## [x] 다음 단계
 
 1. **GitHub 계정 준비** (아직 없으면)
-2. **"hover" 저장소 생성** (위 1️⃣절차)
+2. **"hover" 저장소 생성** (위 1⃣절차)
 3. **로컬에서 `git push` 실행**
 4. **https://github.com/YOUR_USERNAME/hover 확인**
 5. **6명 팀원 Collaborators로 추가**
@@ -353,4 +353,4 @@ git push -f origin <branch>  # 주의: force push
 
 ---
 
-**당신의 GitHub 저장소가 팀의 협력 중심입니다! 🚀**
+**당신의 GitHub 저장소가 팀의 협력 중심입니다! **

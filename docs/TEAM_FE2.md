@@ -1,12 +1,12 @@
-# 🎨 FE2 — Widget SDK + 관리 대시보드
+# FE2 — Widget SDK + 관리 대시보드
 
-## 📌 당신의 미션
+## 당신의 미션
 
 **고객이 보는 "개입 위젯"(쿠폰 모달, 최저가 배너)과 평가자가 보는 "결과 대시보드"를 만들어야 합니다.**
 
 ---
 
-## 🎯 W1 — Kickoff (4/29 ~ 5/3)
+## W1 — Kickoff (4/29 ~ 5/3)
 
 ### 할 일
 - [ ] PRD v1.0 정독
@@ -35,11 +35,11 @@ pnpm install
 pnpm dev  # 포트 3001
 ```
 
-> 📌 **중요:** 개입 페이로드는 BE2가 Decision API를 만들 때 필요합니다. W2 첫날까지 조인해야 합니다.
+> **중요:** 개입 페이로드는 BE2가 Decision API를 만들 때 필요합니다. W2 첫날까지 조인해야 합니다.
 
 ---
 
-## 🎯 W2 — 골격 구축 (5/6 ~ 5/10)
+## W2 — 골격 구축 (5/6 ~ 5/10)
 
 ### Widget SDK
 - [ ] 컴포넌트 1종 필수: **쿠폰 모달** (S1)
@@ -85,7 +85,7 @@ packages/admin-dashboard/
 
 ---
 
-## 🎯 W3 — 위젯 완성 (5/13 ~ 5/17)
+## W3 — 위젯 완성 (5/13 ~ 5/17)
 
 ### Widget SDK
 - [ ] 쿠폰 모달 **완성**
@@ -106,7 +106,7 @@ npm run lighthouse
 
 ---
 
-## 🎯 W4 ~ W6 — 대시보드 완성 & A/B
+## W4 ~ W6 — 대시보드 완성 & A/B
 
 ### W4
 - [ ] **Scenarios 페이지** 완성
@@ -127,7 +127,7 @@ npm run lighthouse
 
 ---
 
-## 📋 주요 파일 & 타입
+## 주요 파일 & 타입
 
 ### 개입 페이로드 (`docs/intervention-payload.md`)
 ```typescript
@@ -188,7 +188,7 @@ if (decision.widgets.length > 0) {
   const container = document.createElement('div');
   container.id = 'hover-widget';
   document.body.appendChild(container);
-  
+
   // Lazy load + render
   import('@hover/widget-sdk').then(({ renderWidget }) => {
     renderWidget(container, decision.widgets[0]);
@@ -198,7 +198,7 @@ if (decision.widgets.length > 0) {
 
 ---
 
-## 🔗 의존성 & 협업
+## 의존성 & 협업
 
 ### BE2와 협력
 - **개입 페이로드 정의** (W1 동결)
@@ -215,7 +215,7 @@ if (decision.widgets.length > 0) {
 
 ---
 
-## 💡 팁
+## 팁
 
 1. **Shadow DOM 격리**
    ```typescript
@@ -251,7 +251,7 @@ if (decision.widgets.length > 0) {
 
 ---
 
-## 📞 블로커 발생 시
+## 블로커 발생 시
 
 - **개입 페이로드 정의 안 됨?** → BE2에 즉시 연락 (W1 중 해결)
 - **Decision API 안 뜸?** → BE2에 확인 (W3 금요일까지)
@@ -259,4 +259,4 @@ if (decision.widgets.length > 0) {
 
 ---
 
-**Remember:** 당신의 위젯이 고객 화면에 1.5초 안에 떠야 우리가 이탈을 막습니다. ⚡
+**Remember:** 당신의 위젯이 고객 화면에 1.5초 안에 떠야 우리가 이탈을 막습니다.

@@ -1,12 +1,12 @@
-# ⚙️ BE4 — Data Science & Analysis
+# BE4 — Data Science & Analysis
 
-## 📌 당신의 미션
+## 당신의 미션
 
 **공개 데이터셋으로 가설을 검증하고, S1과 S2의 발화 임계치를 수치로 제시합니다. 발표와 보고서의 임팩트는 여기서 나옵니다.**
 
 ---
 
-## 🎯 W1 — Kickoff (4/29 ~ 5/3)
+## W1 — Kickoff (4/29 ~ 5/3)
 
 ### 할 일
 - [ ] 데이터셋 다운로드
@@ -37,7 +37,7 @@ jupyter notebook
 
 ---
 
-## 🎯 W2 — Retailrocket 분석 (5/6 ~ 5/10)
+## W2 — Retailrocket 분석 (5/6 ~ 5/10)
 
 ### Retailrocket 분석 목표
 **S1의 임계치 N 도출:** "카트 추가 후 몇 초 만에 이탈하는가?"
@@ -64,12 +64,12 @@ cart_to_exit_times = []
 for session in sessions_with_cart:
     session_events = events[events['sessionId'] == session].sort_values('timestamp')
     cart_idx = session_events[session_events['event'] == 'addtocart'].index
-    
+
     # 카트 후 이탈 시간 계산
     if len(cart_idx) > 0:
         cart_time = session_events.loc[cart_idx[0], 'timestamp']
         remaining = session_events[session_events['timestamp'] > cart_time]
-        
+
         if len(remaining) > 0:
             exit_time = remaining.iloc[-1]['timestamp']
             duration_seconds = (exit_time - cart_time) / 1000  # ms → seconds
@@ -120,7 +120,7 @@ notebooks/01_retailrocket.ipynb
 
 ---
 
-## 🎯 W3 — OTTO 분석 (5/13 ~ 5/17)
+## W3 — OTTO 분석 (5/13 ~ 5/17)
 
 ### OTTO 분석 목표
 1. **세션 기반 행동 패턴** 이해
@@ -182,7 +182,7 @@ class GRU4Rec(nn.Module):
         self.embedding = nn.Embedding(num_items, embedding_dim)
         self.gru = nn.GRU(embedding_dim, hidden_dim, batch_first=True)
         self.output = nn.Linear(hidden_dim, num_items)
-    
+
     def forward(self, x):
         embeddings = self.embedding(x)
         _, hidden = self.gru(embeddings)
@@ -203,7 +203,7 @@ notebooks/02_otto.ipynb
 
 ---
 
-## 🎯 W4 ~ W5 — A/B 통계 (5/20 ~ 5/31)
+## W4 ~ W5 — A/B 통계 (5/20 ~ 5/31)
 
 ### A/B 테스트 결과 분석
 
@@ -236,9 +236,9 @@ Lift:              {lift:.1%}
 
 # 2. Chi-square 검정
 contingency_table = np.array([
-    [len(control_data[control_data['converted'] == True]), 
+    [len(control_data[control_data['converted'] == True]),
      len(control_data[control_data['converted'] == False])],
-    [len(treatment_data[treatment_data['converted'] == True]), 
+    [len(treatment_data[treatment_data['converted'] == True]),
      len(treatment_data[treatment_data['converted'] == False])]
 ])
 
@@ -262,7 +262,7 @@ ax1.set_title('S1: Control vs Treatment')
 ax1.set_ylim([0, max(control_cr, treatment_cr) * 1.2])
 
 # 신뢰 구간
-ax2.errorbar(['Control', 'Treatment'], 
+ax2.errorbar(['Control', 'Treatment'],
              [control_cr, treatment_cr],
              yerr=[1.96 * np.std([control_cr, treatment_cr]) / np.sqrt(len(control_data))
                    for _ in range(2)])
@@ -285,7 +285,7 @@ notebooks/03_ab_synthetic.ipynb
 
 ---
 
-## 🎯 W6 ~ W8 — 발표 자료 생성
+## W6 ~ W8 — 발표 자료 생성
 
 ### 발표용 도표 패키지
 
@@ -331,19 +331,19 @@ ax.set_ylabel('Conversion Rate')
 ax.set_title(f'Hover S1: A/B Test Result (p={p_value:.4f})')
 ax.set_ylim([0, max(control_cr, treatment_cr) * 1.3])
 # 통계 정보 추가
-ax.text(0.5, max(control_cr, treatment_cr) * 1.1, 
+ax.text(0.5, max(control_cr, treatment_cr) * 1.1,
         f'Lift: {lift:.1%}\nSignificant: {p_value < 0.05}',
         ha='center', fontsize=12)
 plt.tight_layout()
 plt.savefig('presentation_charts/02_ab_results.png', dpi=300)
 plt.close()
 
-print("✅ Presentation charts exported to presentation_charts/")
+print("[x] Presentation charts exported to presentation_charts/")
 ```
 
 ---
 
-## 📋 노트북 구조
+## 노트북 구조
 
 ```
 hover/notebooks/
@@ -374,7 +374,7 @@ hover/notebooks/
 
 ---
 
-## 🔗 협업
+## 협업
 
 ### BE2와 협력
 - **S1 임계치 N 전달** (W3)
@@ -392,7 +392,7 @@ hover/notebooks/
 
 ---
 
-## 💡 팁
+## 팁
 
 1. **Jupyter 노트북은 실행 가능해야 함**
    - 모든 셀이 순서대로 실행 가능
@@ -413,7 +413,7 @@ hover/notebooks/
 
 ---
 
-## 📞 블로커 발생 시
+## 블로커 발생 시
 
 - **Retailrocket 데이터 문제?** → Kaggle 대체 데이터셋 확인
 - **OTTO 학습 시간 너무 김?** → subset 사용 또는 사전학습 모델
@@ -421,4 +421,4 @@ hover/notebooks/
 
 ---
 
-**Remember:** 숫자가 우리의 가설을 증명합니다. 발표의 임팩트는 당신의 분석에서 나옵니다. 📊
+**Remember:** 숫자가 우리의 가설을 증명합니다. 발표의 임팩트는 당신의 분석에서 나옵니다.

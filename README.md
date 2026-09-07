@@ -258,3 +258,12 @@ cd packages/demo-hotel-site && pnpm type-check && pnpm build
 - **워커 수평 확장 불가** — consumer group 도입이 선행돼야 합니다.
 - **전환 추적 없음** — 구매 귀속이 없어 CTR·전환율을 계산하지 않습니다.
 - **설정 API 무인증** — `:4002`는 데모 전용입니다. `CONFIG_WRITE_TOKEN`으로 잠글 수 있으나 기본은 열려 있습니다. localhost 밖으로 노출하지 마세요.
+
+---
+
+## 라이센스
+
+학기 캡스톤 프로젝트입니다.
+
+- 코드: 강원대학교
+- 데이터: Kaggle 데이터셋 원 라이센스 준수

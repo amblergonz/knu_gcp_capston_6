@@ -1,6 +1,6 @@
 # BE-A 파트 개요 — Data Science
 
-> 최종 업데이트: 2026-05-18
+>최종 업데이트: 2026-05-18
 
 ---
 
@@ -23,7 +23,7 @@ thresholds.yml ──→ [BE-C Stream Worker가 읽어서 판단]
                     [FE 팝업 표시]
 ```
 
-BE-A는 코드를 직접 실행하는 서버를 만드는 게 아니라, **BE-C가 판단할 때 쓰는 기준값을 데이터로 뽑아내는 역할**이다.  
+BE-A는 코드를 직접 실행하는 서버를 만드는 게 아니라, **BE-C가 판단할 때 쓰는 기준값을 데이터로 뽑아내는 역할**이다.
 `packages/shared/config/thresholds.yml`이 BE-A의 핵심 산출물이다.
 
 ---
@@ -40,7 +40,7 @@ notebooks/
 └── outputs/                        # 분석 결과 도표·CSV
 
 packages/shared/config/
-└── thresholds.yml                  # ★ 핵심 산출물
+└── thresholds.yml                  #  핵심 산출물
 
 packages/data-science/
 ├── main.py                         # FastAPI 모델 서빙 (port 8000)
@@ -98,7 +98,7 @@ docs/be-a/
 
 | 지표 | 결과 | 목표 |
 |---|---|---|
-| FP Rate | **0.0%** | < 15% ✅ |
+| FP Rate | **0.0%** | < 15% [x] |
 | Precision | 100.0% | — |
 | Treatment 전환율 | 0.786% | — |
 | Control 전환율 | 0.722% | — |
@@ -138,9 +138,9 @@ python -m uvicorn main:app --host 0.0.0.0 --port 8000
 
 | 엔드포인트 | 설명 | 상태 |
 |---|---|---|
-| `GET /health` | 헬스체크 | ✅ |
-| `GET /thresholds` | 현재 thresholds.yml 반환 | ✅ |
-| `POST /predict` | 세션 feature → 이탈 확률 | ⚠️ 미학습 (0.0 반환) |
+| `GET /health` | 헬스체크 | [x] |
+| `GET /thresholds` | 현재 thresholds.yml 반환 | [x] |
+| `POST /predict` | 세션 feature → 이탈 확률 | 주의 미학습 (0.0 반환) |
 
 `/predict`는 XGBoost 학습 완료 후 실제 추론 로직으로 교체 예정 (Stretch).
 

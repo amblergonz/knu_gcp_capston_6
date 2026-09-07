@@ -1,8 +1,8 @@
 # BE-B 코드 통합 변경사항
 
-> 원본: https://github.com/Kwonsoonil123/AnalShop_backend  
-> 통합일: 2026-05-18  
-> 커밋: `17bba4c`
+>원본: https://github.com/Kwonsoonil123/AnalShop_backend
+>통합일: 2026-05-18
+>커밋: `17bba4c`
 
 단순 복사가 아니라 Hover 프로젝트 구조에 맞게 **상당 부분을 수정·보완**하였다.
 
@@ -61,8 +61,8 @@ Hover의 `docker-compose.yml` 기준으로 통일.
 | 모듈 시스템 | CommonJS (`require`) | CommonJS 유지 (TypeScript 전환 보류) |
 | TypeScript | 미사용 | scaffold는 TS였으나 JS 직접 사용 |
 
-> Hover scaffold의 각 package.json은 TypeScript + ts-node 설정이었으나,  
-> AnalShop 코드가 CommonJS JS이므로 `"type": "module"` 제거 + TS 의존성 제거 후 JS 직접 실행.
+>Hover scaffold의 각 package.json은 TypeScript + ts-node 설정이었으나,
+>AnalShop 코드가 CommonJS JS이므로 `"type": "module"` 제거 + TS 의존성 제거 후 JS 직접 실행.
 
 ---
 
@@ -196,12 +196,12 @@ AnalShop에 없던 파일로, Hover에서 새로 작성.
 ## 7. 실제 동작 테스트 결과 (2026-05-18)
 
 ```
-POST /events           → 202 Accepted ✅
-Worker 이탈 감지        → pending:session_id Redis 저장 ✅
-GET /decision/:id      → 쿠폰 JSON 200 OK ✅
-전달 후 key 자동 삭제   → EXISTS = 0 ✅
-Simulator 10명 실행    → 전원 202, 10개 pending key 생성 ✅
-GET /signals/coverage  → 16개 신호 카운트 반환 ✅
-GET /scenarios/firings → S1/S2 통계 반환 ✅
-GET /thresholds        → thresholds.yml 내용 반환 ✅
+POST /events           → 202 Accepted [x]
+Worker 이탈 감지        → pending:session_id Redis 저장 [x]
+GET /decision/:id      → 쿠폰 JSON 200 OK [x]
+전달 후 key 자동 삭제   → EXISTS = 0 [x]
+Simulator 10명 실행    → 전원 202, 10개 pending key 생성 [x]
+GET /signals/coverage  → 16개 신호 카운트 반환 [x]
+GET /scenarios/firings → S1/S2 통계 반환 [x]
+GET /thresholds        → thresholds.yml 내용 반환 [x]
 ```

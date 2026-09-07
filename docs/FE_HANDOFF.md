@@ -1,8 +1,8 @@
 # FE 개발자 핸드오프 문서
 
-> 작성일: 2026-05-22  
-> 대상: FE1 (Tracking SDK), FE2 (Widget SDK), FE3 (Admin Dashboard)  
-> 검증 상태: 전체 E2E 통과
+>작성일: 2026-05-22
+>대상: FE1 (Tracking SDK), FE2 (Widget SDK), FE3 (Admin Dashboard)
+>검증 상태: 전체 E2E 통과
 
 ---
 
@@ -16,7 +16,7 @@ API Spec 문서(v1.1)의 포트가 실제 구현과 다릅니다. **아래 포�
 | Decision API | **4001** | ~~3002~~ | FE2 → BE-C |
 | Dashboard API | **4002** | ~~3001~~ | FE3 → BE-B |
 
-> 이유: 3000/3001은 demo-hotel-site, admin-dashboard 프론트엔드 앱이 사용합니다.
+>이유: 3000/3001은 demo-hotel-site, admin-dashboard 프론트엔드 앱이 사용합니다.
 
 ---
 
@@ -52,15 +52,15 @@ POST http://localhost:4000/events
 
 | 필드 | 필수 | 규칙 |
 |---|---|---|
-| `session_id` | ✅ | 문자열, 1–128자 |
-| `device` | ✅ | `"desktop"` / `"mobile"` / `"tablet"` |
-| `events` | ✅ | 배열, 1–100개 |
+| `session_id` | [x] | 문자열, 1–128자 |
+| `device` | [x] | `"desktop"` / `"mobile"` / `"tablet"` |
+| `events` | [x] | 배열, 1–100개 |
 | `user_id` | 선택 | 문자열, 최대 128자 |
-| `events[].event_id` | ✅ | 문자열, 1–128자 |
-| `events[].ts` | ✅ | Unix 밀리초 (숫자) |
-| `events[].type` | ✅ | 아래 허용 목록 참고 |
-| `events[].payload` | ✅ | 객체 (내용 자유) |
-| `events[].page_url` | ✅ | 문자열, 1–2048자 |
+| `events[].event_id` | [x] | 문자열, 1–128자 |
+| `events[].ts` | [x] | Unix 밀리초 (숫자) |
+| `events[].type` | [x] | 아래 허용 목록 참고 |
+| `events[].payload` | [x] | 객체 (내용 자유) |
+| `events[].page_url` | [x] | 문자열, 1–2048자 |
 | `events[].referrer` | 선택 | 문자열, 최대 2048자 |
 
 ### 허용 event type 목록
@@ -209,7 +209,7 @@ evtSource.onmessage = (e) => {
 };
 ```
 
-> heartbeat는 5초마다 전송됩니다.
+>heartbeat는 5초마다 전송됩니다.
 
 ### 4.2 신호 커버리지
 
@@ -227,7 +227,7 @@ GET http://localhost:4002/signals/coverage
 }
 ```
 
-> 현재 mock 데이터입니다. ClickHouse 연동 후 실제값으로 교체 예정입니다.
+>현재 mock 데이터입니다. ClickHouse 연동 후 실제값으로 교체 예정입니다.
 
 ### 4.3 시나리오 발화 통계
 
@@ -247,7 +247,7 @@ GET http://localhost:4002/scenarios/firings?from=2026-01-01&to=2026-05-22
 }
 ```
 
-> 현재 mock 데이터입니다. ClickHouse 연동 후 실제값으로 교체 예정입니다.
+>현재 mock 데이터입니다. ClickHouse 연동 후 실제값으로 교체 예정입니다.
 
 ---
 
@@ -307,7 +307,7 @@ node packages/decision-api/src/index.js
 node packages/dashboard-api/src/index.js
 ```
 
-> ⚠️ stream-worker는 반드시 **단일 인스턴스**만 실행해야 합니다. 두 개 이상 실행 시 동일 세션에 개입이 중복 생성됩니다.
+> 주의 — stream-worker는 반드시 **단일 인스턴스**만 실행해야 합니다. 두 개 이상 실행 시 동일 세션에 개입이 중복 생성됩니다.
 
 ### Gemini API 활성화 (선택)
 
@@ -366,14 +366,14 @@ curl http://localhost:4001/decision/test-001
 
 | 항목 | 결과 |
 |---|---|
-| `POST /events` 유효성 검증 (400) | ✅ |
-| S1 E2E (cart + hidden 11s → coupon_modal) | ✅ |
-| S2 E2E (clipboard + multi-tab → price_match_banner) | ✅ |
-| Decision API 1회 반환 후 204 | ✅ |
-| `ab_group` 필드 정상 반환 | ✅ |
-| `ttl_seconds: 300` Redis TTL 일치 | ✅ |
-| 한국어 fallback copy | ✅ |
-| `interventions_stream` 기록 | ✅ |
-| Dashboard SSE heartbeat | ✅ |
-| Dashboard `/signals/coverage` 16개 신호 | ✅ |
-| Dashboard `/scenarios/firings` | ✅ |
+| `POST /events` 유효성 검증 (400) | [x] |
+| S1 E2E (cart + hidden 11s → coupon_modal) | [x] |
+| S2 E2E (clipboard + multi-tab → price_match_banner) | [x] |
+| Decision API 1회 반환 후 204 | [x] |
+| `ab_group` 필드 정상 반환 | [x] |
+| `ttl_seconds: 300` Redis TTL 일치 | [x] |
+| 한국어 fallback copy | [x] |
+| `interventions_stream` 기록 | [x] |
+| Dashboard SSE heartbeat | [x] |
+| Dashboard `/signals/coverage` 16개 신호 | [x] |
+| Dashboard `/scenarios/firings` | [x] |
