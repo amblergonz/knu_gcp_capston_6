@@ -124,18 +124,37 @@ async function main() {
     }
 
     const now = Date.now();
+    // S1 은 독립 신호 두 개 이상을 요구한다 (thresholds.yml 참고).
+    // 유입 0.15 + 호텔명 복사 0.35 + 탭 반복 이탈 0.35 = 0.85 >= 0.65
+    // 여기에 cart_count >= 2, hidden_for_seconds >= 20 을 함께 만족시킨다.
     await postEvents(s1Session, [
       {
-        event_id: `${s1Session}-cart`,
-        ts: now - 20000,
+        event_id: `${s1Session}-cart-1`,
+        ts: now - 45000,
         type: 'add_to_cart',
         page_url: 'https://example.test/hotel/lotte',
         referrer: 'https://google.com/search?q=hotel',
-        payload: { product_id: 'hotel-lotte' },
+        payload: { product_id: 'hotel-lotte-deluxe' },
+      },
+      {
+        event_id: `${s1Session}-cart-2`,
+        ts: now - 43000,
+        type: 'add_to_cart',
+        page_url: 'https://example.test/hotel/lotte',
+        referrer: '',
+        payload: { product_id: 'hotel-lotte-suite' },
+      },
+      {
+        event_id: `${s1Session}-copy`,
+        ts: now - 40000,
+        type: 'clipboard_copy',
+        page_url: 'https://example.test/hotel/lotte',
+        referrer: '',
+        payload: { selected_text: 'Lotte Hotel Seoul room' },
       },
       {
         event_id: `${s1Session}-hidden-1`,
-        ts: now - 15000,
+        ts: now - 35000,
         type: 'visibility_change',
         page_url: 'https://example.test/hotel/lotte',
         referrer: '',
@@ -143,7 +162,7 @@ async function main() {
       },
       {
         event_id: `${s1Session}-visible`,
-        ts: now - 12000,
+        ts: now - 30000,
         type: 'visibility_change',
         page_url: 'https://example.test/hotel/lotte',
         referrer: '',
@@ -151,7 +170,7 @@ async function main() {
       },
       {
         event_id: `${s1Session}-hidden-2`,
-        ts: now - 11000,
+        ts: now - 25000,
         type: 'visibility_change',
         page_url: 'https://example.test/hotel/lotte',
         referrer: '',
@@ -166,6 +185,8 @@ async function main() {
     await assertSecondReadIsEmpty(s1Session);
     await assertInterventionStream(redis, s1Session);
 
+    // S2 는 복사만으로는 0.35 라 발화하지 않는다.
+    // 멀티탭이 더해져 0.70 >= 0.55 가 되는 두 번째 이벤트에서 발화한다.
     await postEvents(s2Session, [
       {
         event_id: `${s2Session}-copy`,
