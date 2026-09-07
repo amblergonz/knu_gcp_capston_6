@@ -1,6 +1,7 @@
 import { enqueue } from './queue';
 import { getSession, touchSession } from './session';
 import { applyEventToMirror, computeIntentScore, emptyMirror, type Mirror } from './rules';
+import { getSnapshot } from './store';
 import { bumpCount, patch, pushLog } from './store';
 import { isEventType, type EventType, type TrackedEvent } from './types';
 
@@ -16,12 +17,14 @@ export function resetMirror(now = Date.now()) {
 }
 
 export function syncMirror() {
+  const cfg = getSnapshot().config;
   patch({
     cartCount: mirror.cartCount,
     hiddenAt: mirror.hiddenAt,
     hiddenCount: mirror.hiddenCount,
+    searchCount: mirror.searchCount,
     boosters: mirror.boosters.slice(),
-    intentScore: computeIntentScore(mirror.boosters),
+    intentScore: computeIntentScore(mirror.boosters, cfg),
     hotelName: mirror.hotelName,
     tabCount: mirror.tabCount,
   });
@@ -93,7 +96,7 @@ export function track(
   if (!ev) return null;
 
   const now = Date.now();
-  applyEventToMirror(mirror, ev, now);
+  applyEventToMirror(mirror, ev, now, getSnapshot().config);
   syncMirror();
   touchSession();
   bumpCount(type);

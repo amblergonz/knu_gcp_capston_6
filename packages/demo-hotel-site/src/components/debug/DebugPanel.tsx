@@ -2,16 +2,20 @@
 
 import { useEffect, useState } from 'react';
 import { useTrackerSnapshot } from '@/lib/tracker/useTracker';
-import { evaluateMirror, S1, type Mirror } from '@/lib/tracker/rules';
-import { getMirror, restartSession, requestPoll } from '@/lib/tracker';
+import { evaluateMirror, emptyMirror, type Mirror } from '@/lib/tracker/rules';
+import { getMirror, restartSession, requestPoll, getSyncState, subscribeSyncState, type SyncState } from '@/lib/tracker';
 import { setPaused } from '@/lib/tracker/queue';
 import { clearCart } from '@/lib/cart';
 import { EVENT_TYPES } from '@/lib/tracker/types';
 import { IntentGauge } from './IntentGauge';
 import { ScenarioChecklist } from './ScenarioChecklist';
+import { SignalTuner } from './SignalTuner';
 import { cn } from '@/lib/cn';
 
 const OPEN_KEY = 'hover_demo_panel_open';
+
+// 부스터로 승격되지 않은 이벤트. 수집은 되지만 점수에 관여하지 않는다.
+const COLLECT_ONLY = new Set(['page_view', 'click', 'scroll']);
 
 const LEVEL_COLOR: Record<string, string> = {
   sent: 'border-sky-500 text-sky-300',
@@ -27,6 +31,12 @@ export function DebugPanel() {
   const [mounted, setMounted] = useState(false);
   // 탭이 숨겨진 시간은 이벤트 없이도 흘러가므로 별도로 초를 돌린다.
   const [tick, setTick] = useState(0);
+  const [syncState, setSyncState] = useState<SyncState>('idle');
+
+  useEffect(() => {
+    setSyncState(getSyncState());
+    return subscribeSyncState(setSyncState);
+  }, []);
 
   useEffect(() => {
     setMounted(true);
@@ -71,13 +81,13 @@ export function DebugPanel() {
     });
 
   // 미러는 모듈 상태라 tick 마다 다시 읽어 숨김 초를 갱신한다.
-  const mirror: Mirror = mounted ? getMirror() : { sessionStartedAt: 0, cartCount: 0, hiddenAt: 0, hiddenCount: 0, boosters: [], hotelName: '', tabCount: 1 };
-  const scenarios = mounted ? evaluateMirror(mirror, Date.now()) : [];
+  const mirror: Mirror = mounted ? getMirror() : emptyMirror(0);
+  const scenarios = mounted ? evaluateMirror(mirror, Date.now(), snap.config) : [];
   void tick;
 
   const maxCount = Math.max(1, ...EVENT_TYPES.map((t) => snap.counts[t] ?? 0));
   const sessionAgeMin = snap.sessionStartedAt ? Math.floor((Date.now() - snap.sessionStartedAt) / 60000) : 0;
-  const gap = Math.max(0, S1.intentScoreMin - snap.intentScore);
+  const gap = Math.max(0, snap.config.scenarios.S1.intent_score_min - snap.intentScore);
   const hint = gap > 0 ? `S1 까지 ${gap.toFixed(2)} 부족` : null;
 
   return (
@@ -122,7 +132,7 @@ export function DebugPanel() {
 
       <div className="panel-scroll flex-1 divide-y divide-slate-800 overflow-y-auto overscroll-contain">
         <Section title="Intent Score">
-          <IntentGauge score={snap.intentScore} active={snap.boosters} />
+          <IntentGauge score={snap.intentScore} active={snap.boosters} cfg={snap.config} />
           {snap.lastAuthoritative && (
             <p className="mt-4 rounded bg-slate-900 px-2 py-1.5 text-[10px] text-slate-500">
               위 값은 클라이언트 추정입니다. 마지막 개입의 서버 값:{' '}
@@ -136,6 +146,15 @@ export function DebugPanel() {
 
         <Section title="시나리오 조건">
           <ScenarioChecklist scenarios={scenarios} hint={hint} />
+        </Section>
+
+        <Section title="신호 튜닝">
+          <SignalTuner
+            cfg={snap.config}
+            activeBoosters={snap.boosters}
+            score={snap.intentScore}
+            syncState={syncState}
+          />
         </Section>
 
         <Section title="세션">
@@ -174,6 +193,7 @@ export function DebugPanel() {
                   />
                   <span className={cn('relative truncate font-mono text-[10px]', c > 0 ? 'text-slate-300' : 'text-slate-700')}>
                     {t}
+                    {COLLECT_ONLY.has(t) && <span className="ml-1.5 font-sans text-slate-600">수집만</span>}
                   </span>
                   <span className={cn('relative tabular-nums text-[10px]', c > 0 ? 'text-slate-400' : 'text-slate-700')}>
                     {c}

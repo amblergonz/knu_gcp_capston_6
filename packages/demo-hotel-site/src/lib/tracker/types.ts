@@ -45,13 +45,9 @@ export interface EventEnvelope {
   events: TrackedEvent[];
 }
 
-/** 워커가 계산하는 부스터. packages/shared/config/thresholds.yml 의 키와 동일. */
-export type BoosterName =
-  | 'clipboard_copy_match'
-  | 'broadcast_channel_multi_tab'
-  | 'referrer_price_compare'
-  | 'session_length_5min'
-  | 'hidden_repeated';
+// 부스터 이름과 설정 타입은 runtimeConfig 가 단일 출처다.
+export type { BoosterName, BoosterConfig, RuntimeConfig } from './runtimeConfig';
+import type { BoosterName, RuntimeConfig } from './runtimeConfig';
 
 export interface InterventionCopy {
   title: string;
@@ -67,10 +63,13 @@ export interface DecisionPayload {
   ab_group: 'control' | 'treatment';
   component: 'coupon_modal' | 'price_match_banner';
   copy: InterventionCopy;
-  context: { hotel_name?: string; discount_percent?: number };
+  context: { hotel_name?: string; discount_percent?: number; coupon_code?: string };
   ttl_seconds: number;
   intent_score: number;
   active_boosters: string[];
+  /** 꺼진 신호를 뺀 실제 채점 대상 */
+  scored_boosters: string[];
+  config_version: number;
   copy_source: string;
 }
 
@@ -103,6 +102,9 @@ export interface TrackerSnapshot {
   intentScore: number;
   hotelName: string;
   tabCount: number;
+  searchCount: number;
+  /** 워커가 발행한 유효 설정. 서버 렌더에서는 DEFAULT_CONFIG 고정. */
+  config: RuntimeConfig;
   /** 전송 상태 */
   ingestion: ConnState;
   decision: ConnState;

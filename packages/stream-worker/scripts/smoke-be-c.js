@@ -125,8 +125,11 @@ async function main() {
 
     const now = Date.now();
     // S1 은 독립 신호 두 개 이상을 요구한다 (thresholds.yml 참고).
-    // 유입 0.15 + 호텔명 복사 0.35 + 탭 반복 이탈 0.35 = 0.85 >= 0.65
+    // 유입 0.15 + 폼 체류 0.20 + 찜 0.15 + 깊은 스크롤 0.05 = 0.55 >= 0.52
     // 여기에 cart_count >= 2, hidden_for_seconds >= 20 을 함께 만족시킨다.
+    //
+    // 주의: S2 기본조건 부스터(복사/멀티탭/외부링크)를 섞으면 탭 이탈 전에
+    // S2 가 먼저 발화해 S1 이 오지 않는다.
     await postEvents(s1Session, [
       {
         event_id: `${s1Session}-cart-1`,
@@ -145,31 +148,31 @@ async function main() {
         payload: { product_id: 'hotel-lotte-suite' },
       },
       {
-        event_id: `${s1Session}-copy`,
-        ts: now - 40000,
-        type: 'clipboard_copy',
+        event_id: `${s1Session}-scroll`,
+        ts: now - 42000,
+        type: 'scroll_depth',
         page_url: 'https://example.test/hotel/lotte',
         referrer: '',
-        payload: { selected_text: 'Lotte Hotel Seoul room' },
+        payload: { percent: 100 },
+      },
+      {
+        event_id: `${s1Session}-wishlist`,
+        ts: now - 41000,
+        type: 'wishlist_add',
+        page_url: 'https://example.test/hotel/lotte',
+        referrer: '',
+        payload: { hotel_id: 'hotel-lotte', action: 'add' },
+      },
+      {
+        event_id: `${s1Session}-form`,
+        ts: now - 40000,
+        type: 'form_field',
+        page_url: 'https://example.test/checkout',
+        referrer: '',
+        payload: { form: 'checkout', field: 'phone', dwell_ms: 9000 },
       },
       {
         event_id: `${s1Session}-hidden-1`,
-        ts: now - 35000,
-        type: 'visibility_change',
-        page_url: 'https://example.test/hotel/lotte',
-        referrer: '',
-        payload: { hidden: true },
-      },
-      {
-        event_id: `${s1Session}-visible`,
-        ts: now - 30000,
-        type: 'visibility_change',
-        page_url: 'https://example.test/hotel/lotte',
-        referrer: '',
-        payload: { hidden: false },
-      },
-      {
-        event_id: `${s1Session}-hidden-2`,
         ts: now - 25000,
         type: 'visibility_change',
         page_url: 'https://example.test/hotel/lotte',

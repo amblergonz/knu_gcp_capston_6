@@ -1,41 +1,72 @@
 # Hover real-time intervention thresholds.
 # BE-A owns analytical updates; BE-C consumes this file at worker runtime.
 #
+# 이 파일은 기준값이다. 운영자가 SIGNAL 콘솔에서 조정한 값은 Redis 의
+# hover:config:runtime 에 저장되고, 워커가 매 루프 이 파일 위에 덮어쓴다.
+# 콘솔에서 "기본값 복원"을 누르면 다시 이 값으로 돌아온다.
+#
 # 설계 원칙 - 단일 신호로는 어떤 시나리오도 발화하지 않는다.
-# 부스터 하나(최대 0.35)가 어느 임계치도 넘지 못하도록 가중치를 잡았고,
+# 부스터 하나(최대 0.30)가 어느 임계치도 넘지 못하고,
 # 서로 독립적인 행동 신호가 최소 두 개 모여야 개입이 나간다.
 #
-# 도달 가능한 점수 조합
-#   0.15 유입만
-#   0.35 복사만 / 멀티탭만 / 탭 반복 이탈만
-#   0.50 복사 + 유입
-#   0.60 복사 + 5분 체류
-#   0.70 복사 + 멀티탭  또는  복사 + 탭 반복 이탈
-#   0.75 유입 + 5분 체류 + 탭 반복 이탈
-#   0.85 유입 + 복사 + 탭 반복 이탈
-# 임계치는 조합 사이의 빈 구간(폭 0.05)에 두어 부동소수점 오차로 뒤집히지 않게 한다.
+# 앰비언트 브라우징만으로는 발화하지 않는다
+#   5분 체류 0.10 + 깊은 스크롤 0.05 + 유휴 0.05 + 포커스 이탈 0.05 + 유입 0.15 = 0.40
+#   S2(0.42) 미달이고, S2 기본조건 신호(복사/멀티탭/외부링크)도 하나도 없다.
+#
+# 임계치는 0.05 격자를 벗어난 위치에 둔다.
+# JS 에서 0.15+0.35 는 0.49999999999999994 이므로 임계치를 0.50 에 두면 안 된다.
+#
+# 주의 - 들여쓴 주석에 콜론을 넣지 말 것. 파서가 키로 오인한다.
 
 scenarios:
   S1:
     base_match:
       cart_min_count: 2
       tab_hidden_seconds: 20
-    intent_score_min: 0.65
+    intent_score_min: 0.52
     cooldown_seconds: 86400
   S2:
-    base_match_any:
-      - clipboard_copy_match: true
-      - broadcast_channel_multi_tab: true
-    intent_score_min: 0.55
+    intent_score_min: 0.42
     cooldown_seconds: 86400
 
+# 고관여 - 명시적인 비교·이탈 행동
+# 중간   - 망설임과 맥락
+# 앰비언트 - 일반 탐색에서도 흔히 발생하므로 낮게 잡는다
+#
+# focus_lost 가 0.05 인 이유
+#   데스크톱에서 alt-tab 한 번이 window_focus 와 visibility_change 를 동시에 쏜다.
+#   hidden_repeated 와 사실상 항상 함께 더해지므로 가중치를 겹쳐 주면 안 된다.
 booster_weights:
-  clipboard_copy_match: 0.35
-  broadcast_channel_multi_tab: 0.35
+  clipboard_copy_match: 0.30
+  broadcast_channel_multi_tab: 0.30
+  external_compare: 0.30
+  hidden_repeated: 0.25
+  checkout_form_dwell: 0.20
   referrer_price_compare: 0.15
-  session_length_5min: 0.25
-  hidden_repeated: 0.35
+  search_repeated: 0.15
+  wishlist_added: 0.15
+  session_length_5min: 0.10
+  scroll_depth_deep: 0.05
+  idle_entered: 0.05
+  focus_lost: 0.05
   xgboost_intent_proba: 0.0
+
+# 이탈 의도가 강할수록 잃을 위험이 크므로 더 큰 혜택을 준다.
+# 파서가 리스트를 못 읽어 평평한 스칼라로 적는다.
+#   0.52 이상 5%  /  0.63 이상 10%  /  0.78 이상 15%
+#
+# 구간을 이 위치에 둔 이유
+#   S1 은 조건이 처음 충족되는 순간 발화한다. hidden_repeated(0.25)는 탭을
+#   두 번 숨겨야 붙는데 그 시점이면 대개 S1 이 이미 발화한 뒤이고,
+#   S2 기본조건 부스터(복사/멀티탭/외부링크)를 쓰면 S2 가 먼저 나간다.
+#   그래서 S1 이 실제로 발화하는 점수대는 대략 0.52 ~ 0.80 이다.
+#   구간을 그 안에 고르게 배치해야 세 단계가 모두 살아 있다.
+discount:
+  tier1_percent: 5
+  tier2_min_score: 0.63
+  tier2_percent: 10
+  tier3_min_score: 0.78
+  tier3_percent: 15
 
 global:
   intervention_per_session_max: 2

@@ -10,6 +10,13 @@ import { cn } from '@/lib/cn';
 // 위젯이 hover:apply-coupon 커스텀 이벤트를 쏘면 코드가 채워지고 실제로 할인이 적용된다.
 export const COUPON_EVENT = 'hover:apply-coupon';
 
+// 워커의 discountFor 가 만들어내는 코드들. 손으로 입력해도 동작해야 한다.
+const COUPON_CODES: Record<string, number> = {
+  HOVER5: 5,
+  HOVER10: 10,
+  HOVER15: 15,
+};
+
 export function PriceBreakdown() {
   const cart = useCart();
   const [mounted, setMounted] = useState(false);
@@ -46,8 +53,8 @@ export function PriceBreakdown() {
 
   const submitCoupon = () => {
     const c = code.trim().toUpperCase();
-    if (c === 'HOVER10') {
-      applyCoupon(c, 10);
+    if (COUPON_CODES[c] !== undefined) {
+      applyCoupon(c, COUPON_CODES[c]);
       setError('');
     } else if (c === '') {
       clearCoupon();
