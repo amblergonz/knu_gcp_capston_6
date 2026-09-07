@@ -1,0 +1,3573 @@
+[
+  {
+    "id": "h01",
+    "name": "신라 서울 호텔",
+    "name_en": "Shilla Seoul Hotel",
+    "brand": "신라",
+    "category": "호텔",
+    "star": 5,
+    "region": "서울",
+    "district": "중구 장충동",
+    "address": "서울 중구 장충동 212",
+    "rating": 4.8,
+    "review_count": 1692,
+    "base_price": 452000,
+    "original_price": 511000,
+    "discount_percent": 13,
+    "images": [
+      {
+        "photo_id": "1582719478250-c89cae4dc85b",
+        "alt": "신라 서울 호텔 사진 1"
+      },
+      {
+        "photo_id": "1590490360182-c33d57733427",
+        "alt": "신라 서울 호텔 사진 2"
+      },
+      {
+        "photo_id": "1631049307264-da0ec9d70304",
+        "alt": "신라 서울 호텔 사진 3"
+      },
+      {
+        "photo_id": "1445019980597-93fa8acb246c",
+        "alt": "신라 서울 호텔 사진 4"
+      },
+      {
+        "photo_id": "1578683010236-d716f9a3f461",
+        "alt": "신라 서울 호텔 사진 5"
+      }
+    ],
+    "description": "서울 중구 장충동에 위치한 5성급 호텔입니다. 신라 서울 호텔은 비즈니스와 휴양을 모두 아우르는 공간으로, 전 객실에 독립 냉난방과 대형 창을 갖췄습니다. 로비 라운지에서는 하루 종일 음료를 제공합니다.",
+    "highlights": [
+      "전 층 금연이며 공기청정기가 비치되어 있습니다.",
+      "전 객실 무료 와이파이와 24시간 룸서비스를 제공합니다.",
+      "주변에 대형 쇼핑몰과 전통시장이 인접해 있습니다."
+    ],
+    "amenities": [
+      "pool",
+      "pet",
+      "parking",
+      "business",
+      "bar",
+      "wifi",
+      "restaurant",
+      "fitness"
+    ],
+    "tags": [
+      "오션뷰",
+      "조식 포함",
+      "수영장"
+    ],
+    "nearby": [
+      {
+        "name": "남산서울타워",
+        "distance_m": 1400
+      },
+      {
+        "name": "명동거리",
+        "distance_m": 700
+      },
+      {
+        "name": "동대문디자인플라자",
+        "distance_m": 2100
+      },
+      {
+        "name": "경복궁",
+        "distance_m": 3200
+      }
+    ],
+    "policy": {
+      "checkin": "15:00",
+      "checkout": "11:00",
+      "cancel": "체크인 3일 전까지 무료 취소가 가능합니다. 이후에는 첫 1박 요금이 부과됩니다.",
+      "children": "만 12세 이하 아동은 기존 침구 사용 시 무료로 투숙할 수 있습니다."
+    },
+    "competitors": [
+      {
+        "site": "아고다",
+        "price": 483600,
+        "url": "https://www.agoda.com/ko-kr/"
+      },
+      {
+        "site": "부킹닷컴",
+        "price": 461000,
+        "url": "https://www.booking.com/"
+      },
+      {
+        "site": "네이버 호텔",
+        "price": 488200,
+        "url": "https://hotels.naver.com/"
+      }
+    ],
+    "rooms": [
+      {
+        "id": "h01-r1",
+        "name": "스탠다드 트윈",
+        "bed": "싱글 베드 2",
+        "size_m2": 24,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "시티뷰",
+        "breakfast": true,
+        "refundable": true,
+        "price": 452000,
+        "original_price": null,
+        "remaining": 1,
+        "photo_id": "1566073771259-6a8506099945",
+        "options": [
+          {
+            "id": "parking",
+            "label": "발렛 주차",
+            "price": 15000
+          },
+          {
+            "id": "late",
+            "label": "레이트 체크아웃 (14시)",
+            "price": 30000
+          }
+        ]
+      },
+      {
+        "id": "h01-r2",
+        "name": "마운틴뷰 디럭스",
+        "bed": "퀸 베드 1",
+        "size_m2": 35,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "마운틴뷰",
+        "breakfast": false,
+        "refundable": true,
+        "price": 533000,
+        "original_price": 608000,
+        "remaining": 6,
+        "photo_id": "1551882547-ff40c63fe5fa",
+        "options": []
+      },
+      {
+        "id": "h01-r3",
+        "name": "풀빌라 2베드룸",
+        "bed": "킹 베드 1 + 트윈 2",
+        "size_m2": 83,
+        "capacity": {
+          "standard": 4,
+          "max": 6
+        },
+        "view": "오션뷰",
+        "breakfast": true,
+        "refundable": true,
+        "price": 1085000,
+        "original_price": 1172000,
+        "remaining": 1,
+        "photo_id": "1571003123894-1f0594d2b5d9",
+        "options": [
+          {
+            "id": "parking",
+            "label": "발렛 주차",
+            "price": 15000
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "h02",
+    "name": "롯데 호텔 서울",
+    "name_en": "Lotte Hotel Seoul",
+    "brand": "롯데",
+    "category": "호텔",
+    "star": 5,
+    "region": "서울",
+    "district": "중구 소공동",
+    "address": "서울 중구 소공동 13",
+    "rating": 4.6,
+    "review_count": 2894,
+    "base_price": 470000,
+    "original_price": 512000,
+    "discount_percent": 9,
+    "images": [
+      {
+        "photo_id": "1560448204-e02f11c3d0e2",
+        "alt": "롯데 호텔 서울 사진 1"
+      },
+      {
+        "photo_id": "1522798514-97ceb8c4f1c8",
+        "alt": "롯데 호텔 서울 사진 2"
+      },
+      {
+        "photo_id": "1584132967334-10e028bd69f7",
+        "alt": "롯데 호텔 서울 사진 3"
+      },
+      {
+        "photo_id": "1540518614846-7eded433c457",
+        "alt": "롯데 호텔 서울 사진 4"
+      },
+      {
+        "photo_id": "1615460549969-36fa19521a4f",
+        "alt": "롯데 호텔 서울 사진 5"
+      }
+    ],
+    "description": "서울 중구 소공동에 위치한 5성급 호텔입니다. 롯데 호텔 서울은 비즈니스와 휴양을 모두 아우르는 공간으로, 전 객실에 독립 냉난방과 대형 창을 갖췄습니다. 로비 라운지에서는 하루 종일 음료를 제공합니다.",
+    "highlights": [
+      "전 객실에서 바다 또는 시내 전망을 감상할 수 있습니다.",
+      "전 층 금연이며 공기청정기가 비치되어 있습니다.",
+      "체크인 전·체크아웃 후에도 짐을 맡길 수 있습니다."
+    ],
+    "amenities": [
+      "laundry",
+      "bar",
+      "parking",
+      "airport",
+      "business",
+      "breakfast",
+      "pet",
+      "wifi"
+    ],
+    "tags": [
+      "오션뷰",
+      "조식 포함",
+      "역세권"
+    ],
+    "nearby": [
+      {
+        "name": "남산서울타워",
+        "distance_m": 1400
+      },
+      {
+        "name": "명동거리",
+        "distance_m": 700
+      },
+      {
+        "name": "동대문디자인플라자",
+        "distance_m": 2100
+      },
+      {
+        "name": "경복궁",
+        "distance_m": 3200
+      }
+    ],
+    "policy": {
+      "checkin": "15:00",
+      "checkout": "11:00",
+      "cancel": "체크인 3일 전까지 무료 취소가 가능합니다. 이후에는 첫 1박 요금이 부과됩니다.",
+      "children": "만 12세 이하 아동은 기존 침구 사용 시 무료로 투숙할 수 있습니다."
+    },
+    "competitors": [
+      {
+        "site": "아고다",
+        "price": 488800,
+        "url": "https://www.agoda.com/ko-kr/"
+      },
+      {
+        "site": "부킹닷컴",
+        "price": 512300,
+        "url": "https://www.booking.com/"
+      },
+      {
+        "site": "네이버 호텔",
+        "price": 502900,
+        "url": "https://hotels.naver.com/"
+      }
+    ],
+    "rooms": [
+      {
+        "id": "h02-r1",
+        "name": "마운틴뷰 디럭스",
+        "bed": "퀸 베드 1",
+        "size_m2": 32,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "마운틴뷰",
+        "breakfast": true,
+        "refundable": false,
+        "price": 470000,
+        "original_price": 573000,
+        "remaining": 5,
+        "photo_id": "1611892440504-42a792e24d32",
+        "options": [
+          {
+            "id": "parking",
+            "label": "발렛 주차",
+            "price": 15000
+          },
+          {
+            "id": "late",
+            "label": "레이트 체크아웃 (14시)",
+            "price": 30000
+          }
+        ]
+      },
+      {
+        "id": "h02-r2",
+        "name": "디럭스 트윈 오션뷰",
+        "bed": "싱글 베드 2",
+        "size_m2": 40,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "오션뷰",
+        "breakfast": false,
+        "refundable": true,
+        "price": 537000,
+        "original_price": 655000,
+        "remaining": 2,
+        "photo_id": "1618773928121-c32242e63f39",
+        "options": [
+          {
+            "id": "spa",
+            "label": "스파 이용권 2인",
+            "price": 55000
+          }
+        ]
+      },
+      {
+        "id": "h02-r3",
+        "name": "프리미어 킹 오션뷰",
+        "bed": "킹 베드 1",
+        "size_m2": 40,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "오션뷰",
+        "breakfast": true,
+        "refundable": false,
+        "price": 597000,
+        "original_price": 698000,
+        "remaining": 5,
+        "photo_id": "1596394516093-501ba68a0ba6",
+        "options": [
+          {
+            "id": "parking",
+            "label": "발렛 주차",
+            "price": 15000
+          },
+          {
+            "id": "breakfast",
+            "label": "조식 2인 추가",
+            "price": 38000
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "h03",
+    "name": "그랜드 하얏트 서울 호텔",
+    "name_en": "Grand Hyatt Seoul",
+    "brand": "하얏트",
+    "category": "호텔",
+    "star": 5,
+    "region": "서울",
+    "district": "용산구 한남동",
+    "address": "서울 용산구 한남동 6",
+    "rating": 4.7,
+    "review_count": 2824,
+    "base_price": 538000,
+    "original_price": 629000,
+    "discount_percent": 17,
+    "images": [
+      {
+        "photo_id": "1568084680786-a84f91d1153c",
+        "alt": "그랜드 하얏트 서울 호텔 사진 1"
+      },
+      {
+        "photo_id": "1521783988139-89397d761dce",
+        "alt": "그랜드 하얏트 서울 호텔 사진 2"
+      },
+      {
+        "photo_id": "1559599189-fe84dea4eb79",
+        "alt": "그랜드 하얏트 서울 호텔 사진 3"
+      },
+      {
+        "photo_id": "1520250497591-112f2f40a3f4",
+        "alt": "그랜드 하얏트 서울 호텔 사진 4"
+      },
+      {
+        "photo_id": "1519690889869-e705e59f72e1",
+        "alt": "그랜드 하얏트 서울 호텔 사진 5"
+      }
+    ],
+    "description": "서울 용산구 한남동에 위치한 5성급 호텔입니다. 그랜드 하얏트 서울 호텔은 비즈니스와 휴양을 모두 아우르는 공간으로, 전 객실에 독립 냉난방과 대형 창을 갖췄습니다. 로비 라운지에서는 하루 종일 음료를 제공합니다.",
+    "highlights": [
+      "전 층 금연이며 공기청정기가 비치되어 있습니다.",
+      "실내 수영장과 사우나를 투숙객에게 무료로 개방합니다.",
+      "전 객실에서 바다 또는 시내 전망을 감상할 수 있습니다."
+    ],
+    "amenities": [
+      "breakfast",
+      "wifi",
+      "pet",
+      "laundry",
+      "parking",
+      "pool",
+      "restaurant",
+      "fitness",
+      "business",
+      "airport"
+    ],
+    "tags": [
+      "시티뷰",
+      "조식 포함",
+      "수영장"
+    ],
+    "nearby": [
+      {
+        "name": "남산서울타워",
+        "distance_m": 1400
+      },
+      {
+        "name": "명동거리",
+        "distance_m": 700
+      },
+      {
+        "name": "동대문디자인플라자",
+        "distance_m": 2100
+      },
+      {
+        "name": "경복궁",
+        "distance_m": 3200
+      }
+    ],
+    "policy": {
+      "checkin": "15:00",
+      "checkout": "11:00",
+      "cancel": "체크인 3일 전까지 무료 취소가 가능합니다. 이후에는 첫 1박 요금이 부과됩니다.",
+      "children": "만 12세 이하 아동은 기존 침구 사용 시 무료로 투숙할 수 있습니다."
+    },
+    "competitors": [
+      {
+        "site": "아고다",
+        "price": 554100,
+        "url": "https://www.agoda.com/ko-kr/"
+      },
+      {
+        "site": "부킹닷컴",
+        "price": 548800,
+        "url": "https://www.booking.com/"
+      },
+      {
+        "site": "네이버 호텔",
+        "price": 581000,
+        "url": "https://hotels.naver.com/"
+      }
+    ],
+    "rooms": [
+      {
+        "id": "h03-r1",
+        "name": "한실 스탠다드",
+        "bed": "온돌",
+        "size_m2": 33,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "가든뷰",
+        "breakfast": true,
+        "refundable": false,
+        "price": 538000,
+        "original_price": 597000,
+        "remaining": 6,
+        "photo_id": "1587985064135-0366536eab42",
+        "options": [
+          {
+            "id": "breakfast",
+            "label": "조식 2인 추가",
+            "price": 38000
+          }
+        ]
+      },
+      {
+        "id": "h03-r2",
+        "name": "마운틴뷰 디럭스",
+        "bed": "퀸 베드 1",
+        "size_m2": 33,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "마운틴뷰",
+        "breakfast": true,
+        "refundable": true,
+        "price": 604000,
+        "original_price": 658000,
+        "remaining": 4,
+        "photo_id": "1602002418082-a4443e081dd1",
+        "options": [
+          {
+            "id": "late",
+            "label": "레이트 체크아웃 (14시)",
+            "price": 30000
+          }
+        ]
+      },
+      {
+        "id": "h03-r3",
+        "name": "디럭스 킹 시티뷰",
+        "bed": "킹 베드 1",
+        "size_m2": 35,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "시티뷰",
+        "breakfast": false,
+        "refundable": true,
+        "price": 625000,
+        "original_price": 719000,
+        "remaining": 1,
+        "photo_id": "1566195992011-5f6b21e539aa",
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "h04",
+    "name": "웨스틴 조선 서울 호텔",
+    "name_en": "Westin Josun Seoul",
+    "brand": "웨스틴",
+    "category": "호텔",
+    "star": 5,
+    "region": "서울",
+    "district": "중구 소공동",
+    "address": "서울 중구 소공동 194",
+    "rating": 4.6,
+    "review_count": 2634,
+    "base_price": 457000,
+    "original_price": 484000,
+    "discount_percent": 6,
+    "images": [
+      {
+        "photo_id": "1493809842364-78817add7ffb",
+        "alt": "웨스틴 조선 서울 호텔 사진 1"
+      },
+      {
+        "photo_id": "1600210492486-724fe5c67fb0",
+        "alt": "웨스틴 조선 서울 호텔 사진 2"
+      },
+      {
+        "photo_id": "1566073771259-6a8506099945",
+        "alt": "웨스틴 조선 서울 호텔 사진 3"
+      },
+      {
+        "photo_id": "1551882547-ff40c63fe5fa",
+        "alt": "웨스틴 조선 서울 호텔 사진 4"
+      },
+      {
+        "photo_id": "1571003123894-1f0594d2b5d9",
+        "alt": "웨스틴 조선 서울 호텔 사진 5"
+      }
+    ],
+    "description": "서울 중구 소공동에 위치한 5성급 호텔입니다. 웨스틴 조선 서울 호텔은 비즈니스와 휴양을 모두 아우르는 공간으로, 전 객실에 독립 냉난방과 대형 창을 갖췄습니다. 로비 라운지에서는 하루 종일 음료를 제공합니다.",
+    "highlights": [
+      "지하철역에서 도보 5분 거리로 이동이 편리합니다.",
+      "실내 수영장과 사우나를 투숙객에게 무료로 개방합니다.",
+      "주변에 대형 쇼핑몰과 전통시장이 인접해 있습니다."
+    ],
+    "amenities": [
+      "fitness",
+      "business",
+      "laundry",
+      "pet",
+      "bar",
+      "pool",
+      "restaurant",
+      "spa"
+    ],
+    "tags": [
+      "오션뷰",
+      "가성비",
+      "수영장"
+    ],
+    "nearby": [
+      {
+        "name": "남산서울타워",
+        "distance_m": 1400
+      },
+      {
+        "name": "명동거리",
+        "distance_m": 700
+      },
+      {
+        "name": "동대문디자인플라자",
+        "distance_m": 2100
+      },
+      {
+        "name": "경복궁",
+        "distance_m": 3200
+      }
+    ],
+    "policy": {
+      "checkin": "15:00",
+      "checkout": "11:00",
+      "cancel": "체크인 3일 전까지 무료 취소가 가능합니다. 이후에는 첫 1박 요금이 부과됩니다.",
+      "children": "만 12세 이하 아동은 기존 침구 사용 시 무료로 투숙할 수 있습니다."
+    },
+    "competitors": [
+      {
+        "site": "아고다",
+        "price": 489000,
+        "url": "https://www.agoda.com/ko-kr/"
+      },
+      {
+        "site": "부킹닷컴",
+        "price": 466100,
+        "url": "https://www.booking.com/"
+      },
+      {
+        "site": "네이버 호텔",
+        "price": 479900,
+        "url": "https://hotels.naver.com/"
+      }
+    ],
+    "rooms": [
+      {
+        "id": "h04-r1",
+        "name": "한실 스탠다드",
+        "bed": "온돌",
+        "size_m2": 31,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "가든뷰",
+        "breakfast": false,
+        "refundable": true,
+        "price": 457000,
+        "original_price": 498000,
+        "remaining": 6,
+        "photo_id": "1512918728675-ed5a9ecdebfd",
+        "options": [
+          {
+            "id": "breakfast",
+            "label": "조식 2인 추가",
+            "price": 38000
+          },
+          {
+            "id": "spa",
+            "label": "스파 이용권 2인",
+            "price": 55000
+          }
+        ]
+      },
+      {
+        "id": "h04-r2",
+        "name": "디럭스 트윈 오션뷰",
+        "bed": "싱글 베드 2",
+        "size_m2": 34,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "오션뷰",
+        "breakfast": false,
+        "refundable": false,
+        "price": 587000,
+        "original_price": null,
+        "remaining": 7,
+        "photo_id": "1618221195710-dd6b41faaea6",
+        "options": []
+      },
+      {
+        "id": "h04-r3",
+        "name": "풀빌라 2베드룸",
+        "bed": "킹 베드 1 + 트윈 2",
+        "size_m2": 91,
+        "capacity": {
+          "standard": 4,
+          "max": 6
+        },
+        "view": "오션뷰",
+        "breakfast": false,
+        "refundable": false,
+        "price": 1044000,
+        "original_price": 1211000,
+        "remaining": 6,
+        "photo_id": "1505693416388-ac5ce068fe85",
+        "options": [
+          {
+            "id": "parking",
+            "label": "발렛 주차",
+            "price": 15000
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "h05",
+    "name": "파르나스 호텔 강남",
+    "name_en": "Parnas Hotel Gangnam",
+    "brand": "파르나스",
+    "category": "호텔",
+    "star": 5,
+    "region": "서울",
+    "district": "강남구 삼성동",
+    "address": "서울 강남구 삼성동 59",
+    "rating": 4.5,
+    "review_count": 3399,
+    "base_price": 459000,
+    "original_price": 523000,
+    "discount_percent": 14,
+    "images": [
+      {
+        "photo_id": "1445019980597-93fa8acb246c",
+        "alt": "파르나스 호텔 강남 사진 1"
+      },
+      {
+        "photo_id": "1578683010236-d716f9a3f461",
+        "alt": "파르나스 호텔 강남 사진 2"
+      },
+      {
+        "photo_id": "1611892440504-42a792e24d32",
+        "alt": "파르나스 호텔 강남 사진 3"
+      },
+      {
+        "photo_id": "1618773928121-c32242e63f39",
+        "alt": "파르나스 호텔 강남 사진 4"
+      },
+      {
+        "photo_id": "1596394516093-501ba68a0ba6",
+        "alt": "파르나스 호텔 강남 사진 5"
+      }
+    ],
+    "description": "서울 강남구 삼성동에 위치한 5성급 호텔입니다. 파르나스 호텔 강남은 비즈니스와 휴양을 모두 아우르는 공간으로, 전 객실에 독립 냉난방과 대형 창을 갖췄습니다. 로비 라운지에서는 하루 종일 음료를 제공합니다.",
+    "highlights": [
+      "실내 수영장과 사우나를 투숙객에게 무료로 개방합니다.",
+      "조식 뷔페에서 한식과 양식을 모두 즐길 수 있습니다.",
+      "지하철역에서 도보 5분 거리로 이동이 편리합니다."
+    ],
+    "amenities": [
+      "breakfast",
+      "pet",
+      "spa",
+      "airport",
+      "business",
+      "parking",
+      "restaurant",
+      "wifi",
+      "laundry"
+    ],
+    "tags": [
+      "오션뷰",
+      "조식 포함",
+      "역세권"
+    ],
+    "nearby": [
+      {
+        "name": "남산서울타워",
+        "distance_m": 1400
+      },
+      {
+        "name": "명동거리",
+        "distance_m": 700
+      },
+      {
+        "name": "동대문디자인플라자",
+        "distance_m": 2100
+      },
+      {
+        "name": "경복궁",
+        "distance_m": 3200
+      }
+    ],
+    "policy": {
+      "checkin": "15:00",
+      "checkout": "11:00",
+      "cancel": "체크인 3일 전까지 무료 취소가 가능합니다. 이후에는 첫 1박 요금이 부과됩니다.",
+      "children": "만 12세 이하 아동은 기존 침구 사용 시 무료로 투숙할 수 있습니다."
+    },
+    "competitors": [
+      {
+        "site": "아고다",
+        "price": 495700,
+        "url": "https://www.agoda.com/ko-kr/"
+      },
+      {
+        "site": "부킹닷컴",
+        "price": 472800,
+        "url": "https://www.booking.com/"
+      },
+      {
+        "site": "네이버 호텔",
+        "price": 495700,
+        "url": "https://hotels.naver.com/"
+      }
+    ],
+    "rooms": [
+      {
+        "id": "h05-r1",
+        "name": "마운틴뷰 디럭스",
+        "bed": "퀸 베드 1",
+        "size_m2": 32,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "마운틴뷰",
+        "breakfast": false,
+        "refundable": false,
+        "price": 459000,
+        "original_price": 532000,
+        "remaining": 8,
+        "photo_id": "1582719478250-c89cae4dc85b",
+        "options": [
+          {
+            "id": "breakfast",
+            "label": "조식 2인 추가",
+            "price": 38000
+          },
+          {
+            "id": "parking",
+            "label": "발렛 주차",
+            "price": 15000
+          }
+        ]
+      },
+      {
+        "id": "h05-r2",
+        "name": "프리미어 킹 오션뷰",
+        "bed": "킹 베드 1",
+        "size_m2": 40,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "오션뷰",
+        "breakfast": true,
+        "refundable": false,
+        "price": 584000,
+        "original_price": null,
+        "remaining": 4,
+        "photo_id": "1590490360182-c33d57733427",
+        "options": []
+      },
+      {
+        "id": "h05-r3",
+        "name": "풀빌라 2베드룸",
+        "bed": "킹 베드 1 + 트윈 2",
+        "size_m2": 82,
+        "capacity": {
+          "standard": 4,
+          "max": 6
+        },
+        "view": "오션뷰",
+        "breakfast": true,
+        "refundable": true,
+        "price": 934000,
+        "original_price": 1027000,
+        "remaining": 3,
+        "photo_id": "1631049307264-da0ec9d70304",
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "h06",
+    "name": "노보텔 앰배서더 서울 동대문 호텔",
+    "name_en": "Novotel Ambassador Seoul Dongdaemun",
+    "brand": "노보텔",
+    "category": "호텔",
+    "star": 4,
+    "region": "서울",
+    "district": "중구 을지로",
+    "address": "서울 중구 을지로 115",
+    "rating": 4.3,
+    "review_count": 778,
+    "base_price": 210000,
+    "original_price": 246000,
+    "discount_percent": 17,
+    "images": [
+      {
+        "photo_id": "1540518614846-7eded433c457",
+        "alt": "노보텔 앰배서더 서울 동대문 호텔 사진 1"
+      },
+      {
+        "photo_id": "1615460549969-36fa19521a4f",
+        "alt": "노보텔 앰배서더 서울 동대문 호텔 사진 2"
+      },
+      {
+        "photo_id": "1587985064135-0366536eab42",
+        "alt": "노보텔 앰배서더 서울 동대문 호텔 사진 3"
+      },
+      {
+        "photo_id": "1602002418082-a4443e081dd1",
+        "alt": "노보텔 앰배서더 서울 동대문 호텔 사진 4"
+      },
+      {
+        "photo_id": "1566195992011-5f6b21e539aa",
+        "alt": "노보텔 앰배서더 서울 동대문 호텔 사진 5"
+      }
+    ],
+    "description": "서울 중구 을지로에 위치한 4성급 호텔입니다. 노보텔 앰배서더 서울 동대문 호텔은 비즈니스와 휴양을 모두 아우르는 공간으로, 전 객실에 독립 냉난방과 대형 창을 갖췄습니다. 로비 라운지에서는 하루 종일 음료를 제공합니다.",
+    "highlights": [
+      "실내 수영장과 사우나를 투숙객에게 무료로 개방합니다.",
+      "전 층 금연이며 공기청정기가 비치되어 있습니다.",
+      "조식 뷔페에서 한식과 양식을 모두 즐길 수 있습니다."
+    ],
+    "amenities": [
+      "spa",
+      "airport",
+      "pet",
+      "wifi",
+      "fitness",
+      "business",
+      "restaurant"
+    ],
+    "tags": [
+      "시티뷰",
+      "조식 포함",
+      "역세권"
+    ],
+    "nearby": [
+      {
+        "name": "남산서울타워",
+        "distance_m": 1400
+      },
+      {
+        "name": "명동거리",
+        "distance_m": 700
+      },
+      {
+        "name": "동대문디자인플라자",
+        "distance_m": 2100
+      },
+      {
+        "name": "경복궁",
+        "distance_m": 3200
+      }
+    ],
+    "policy": {
+      "checkin": "15:00",
+      "checkout": "11:00",
+      "cancel": "체크인 3일 전까지 무료 취소가 가능합니다. 이후에는 첫 1박 요금이 부과됩니다.",
+      "children": "만 12세 이하 아동은 기존 침구 사용 시 무료로 투숙할 수 있습니다."
+    },
+    "competitors": [
+      {
+        "site": "아고다",
+        "price": 226800,
+        "url": "https://www.agoda.com/ko-kr/"
+      },
+      {
+        "site": "부킹닷컴",
+        "price": 220500,
+        "url": "https://www.booking.com/"
+      },
+      {
+        "site": "네이버 호텔",
+        "price": 216300,
+        "url": "https://hotels.naver.com/"
+      }
+    ],
+    "rooms": [
+      {
+        "id": "h06-r1",
+        "name": "마운틴뷰 디럭스",
+        "bed": "퀸 베드 1",
+        "size_m2": 31,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "마운틴뷰",
+        "breakfast": true,
+        "refundable": true,
+        "price": 210000,
+        "original_price": 233000,
+        "remaining": 1,
+        "photo_id": "1560448204-e02f11c3d0e2",
+        "options": [
+          {
+            "id": "late",
+            "label": "레이트 체크아웃 (14시)",
+            "price": 30000
+          }
+        ]
+      },
+      {
+        "id": "h06-r2",
+        "name": "디럭스 킹 시티뷰",
+        "bed": "킹 베드 1",
+        "size_m2": 38,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "시티뷰",
+        "breakfast": false,
+        "refundable": false,
+        "price": 217000,
+        "original_price": 243000,
+        "remaining": 7,
+        "photo_id": "1522798514-97ceb8c4f1c8",
+        "options": []
+      },
+      {
+        "id": "h06-r3",
+        "name": "이그제큐티브 스위트",
+        "bed": "킹 베드 1",
+        "size_m2": 57,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "시티뷰",
+        "breakfast": true,
+        "refundable": true,
+        "price": 347000,
+        "original_price": null,
+        "remaining": 1,
+        "photo_id": "1584132967334-10e028bd69f7",
+        "options": [
+          {
+            "id": "breakfast",
+            "label": "조식 2인 추가",
+            "price": 38000
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "h07",
+    "name": "파라다이스 호텔 부산",
+    "name_en": "Paradise Hotel Busan",
+    "brand": "파라다이스",
+    "category": "호텔",
+    "star": 5,
+    "region": "부산",
+    "district": "해운대구 중동",
+    "address": "부산 해운대구 중동 86",
+    "rating": 4.7,
+    "review_count": 3312,
+    "base_price": 491000,
+    "original_price": 574000,
+    "discount_percent": 17,
+    "images": [
+      {
+        "photo_id": "1519690889869-e705e59f72e1",
+        "alt": "파라다이스 호텔 부산 사진 1"
+      },
+      {
+        "photo_id": "1512918728675-ed5a9ecdebfd",
+        "alt": "파라다이스 호텔 부산 사진 2"
+      },
+      {
+        "photo_id": "1618221195710-dd6b41faaea6",
+        "alt": "파라다이스 호텔 부산 사진 3"
+      },
+      {
+        "photo_id": "1505693416388-ac5ce068fe85",
+        "alt": "파라다이스 호텔 부산 사진 4"
+      },
+      {
+        "photo_id": "1493809842364-78817add7ffb",
+        "alt": "파라다이스 호텔 부산 사진 5"
+      }
+    ],
+    "description": "부산 해운대구 중동에 위치한 5성급 호텔입니다. 파라다이스 호텔 부산은 비즈니스와 휴양을 모두 아우르는 공간으로, 전 객실에 독립 냉난방과 대형 창을 갖췄습니다. 로비 라운지에서는 하루 종일 음료를 제공합니다.",
+    "highlights": [
+      "전 층 금연이며 공기청정기가 비치되어 있습니다.",
+      "실내 수영장과 사우나를 투숙객에게 무료로 개방합니다.",
+      "주변에 대형 쇼핑몰과 전통시장이 인접해 있습니다."
+    ],
+    "amenities": [
+      "airport",
+      "business",
+      "pool",
+      "pet",
+      "fitness",
+      "restaurant",
+      "parking",
+      "laundry",
+      "spa"
+    ],
+    "tags": [
+      "오션뷰",
+      "조식 포함",
+      "수영장"
+    ],
+    "nearby": [
+      {
+        "name": "해운대해수욕장",
+        "distance_m": 350
+      },
+      {
+        "name": "동백섬",
+        "distance_m": 1200
+      },
+      {
+        "name": "광안대교 전망대",
+        "distance_m": 4300
+      },
+      {
+        "name": "부산아쿠아리움",
+        "distance_m": 600
+      }
+    ],
+    "policy": {
+      "checkin": "15:00",
+      "checkout": "11:00",
+      "cancel": "체크인 3일 전까지 무료 취소가 가능합니다. 이후에는 첫 1박 요금이 부과됩니다.",
+      "children": "만 12세 이하 아동은 기존 침구 사용 시 무료로 투숙할 수 있습니다."
+    },
+    "competitors": [
+      {
+        "site": "아고다",
+        "price": 515600,
+        "url": "https://www.agoda.com/ko-kr/"
+      },
+      {
+        "site": "부킹닷컴",
+        "price": 510600,
+        "url": "https://www.booking.com/"
+      },
+      {
+        "site": "네이버 호텔",
+        "price": 525400,
+        "url": "https://hotels.naver.com/"
+      }
+    ],
+    "rooms": [
+      {
+        "id": "h07-r1",
+        "name": "한실 스탠다드",
+        "bed": "온돌",
+        "size_m2": 28,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "가든뷰",
+        "breakfast": false,
+        "refundable": true,
+        "price": 491000,
+        "original_price": null,
+        "remaining": 6,
+        "photo_id": "1568084680786-a84f91d1153c",
+        "options": [
+          {
+            "id": "spa",
+            "label": "스파 이용권 2인",
+            "price": 55000
+          }
+        ]
+      },
+      {
+        "id": "h07-r2",
+        "name": "디럭스 킹 시티뷰",
+        "bed": "킹 베드 1",
+        "size_m2": 33,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "시티뷰",
+        "breakfast": true,
+        "refundable": false,
+        "price": 571000,
+        "original_price": 622000,
+        "remaining": 1,
+        "photo_id": "1521783988139-89397d761dce",
+        "options": [
+          {
+            "id": "breakfast",
+            "label": "조식 2인 추가",
+            "price": 38000
+          },
+          {
+            "id": "parking",
+            "label": "발렛 주차",
+            "price": 15000
+          }
+        ]
+      },
+      {
+        "id": "h07-r3",
+        "name": "프리미어 킹 오션뷰",
+        "bed": "킹 베드 1",
+        "size_m2": 45,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "오션뷰",
+        "breakfast": false,
+        "refundable": true,
+        "price": 702000,
+        "original_price": 786000,
+        "remaining": 7,
+        "photo_id": "1559599189-fe84dea4eb79",
+        "options": [
+          {
+            "id": "parking",
+            "label": "발렛 주차",
+            "price": 15000
+          }
+        ]
+      },
+      {
+        "id": "h07-r4",
+        "name": "이그제큐티브 스위트",
+        "bed": "킹 베드 1",
+        "size_m2": 68,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "시티뷰",
+        "breakfast": true,
+        "refundable": true,
+        "price": 913000,
+        "original_price": null,
+        "remaining": 2,
+        "photo_id": "1520250497591-112f2f40a3f4",
+        "options": [
+          {
+            "id": "breakfast",
+            "label": "조식 2인 추가",
+            "price": 38000
+          },
+          {
+            "id": "late",
+            "label": "레이트 체크아웃 (14시)",
+            "price": 30000
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "h08",
+    "name": "힐튼 부산 호텔",
+    "name_en": "Hilton Busan",
+    "brand": "힐튼",
+    "category": "호텔",
+    "star": 5,
+    "region": "부산",
+    "district": "기장군 기장읍",
+    "address": "부산 기장군 기장읍 203",
+    "rating": 4.6,
+    "review_count": 3361,
+    "base_price": 463000,
+    "original_price": 509000,
+    "discount_percent": 10,
+    "images": [
+      {
+        "photo_id": "1571003123894-1f0594d2b5d9",
+        "alt": "힐튼 부산 호텔 사진 1"
+      },
+      {
+        "photo_id": "1582719478250-c89cae4dc85b",
+        "alt": "힐튼 부산 호텔 사진 2"
+      },
+      {
+        "photo_id": "1590490360182-c33d57733427",
+        "alt": "힐튼 부산 호텔 사진 3"
+      },
+      {
+        "photo_id": "1631049307264-da0ec9d70304",
+        "alt": "힐튼 부산 호텔 사진 4"
+      },
+      {
+        "photo_id": "1445019980597-93fa8acb246c",
+        "alt": "힐튼 부산 호텔 사진 5"
+      }
+    ],
+    "description": "부산 기장군 기장읍에 위치한 5성급 호텔입니다. 힐튼 부산 호텔은 비즈니스와 휴양을 모두 아우르는 공간으로, 전 객실에 독립 냉난방과 대형 창을 갖췄습니다. 로비 라운지에서는 하루 종일 음료를 제공합니다.",
+    "highlights": [
+      "체크인 전·체크아웃 후에도 짐을 맡길 수 있습니다.",
+      "지하철역에서 도보 5분 거리로 이동이 편리합니다.",
+      "주변에 대형 쇼핑몰과 전통시장이 인접해 있습니다."
+    ],
+    "amenities": [
+      "wifi",
+      "breakfast",
+      "restaurant",
+      "pool",
+      "parking",
+      "pet",
+      "airport",
+      "business"
+    ],
+    "tags": [
+      "오션뷰",
+      "가성비",
+      "수영장"
+    ],
+    "nearby": [
+      {
+        "name": "해운대해수욕장",
+        "distance_m": 350
+      },
+      {
+        "name": "동백섬",
+        "distance_m": 1200
+      },
+      {
+        "name": "광안대교 전망대",
+        "distance_m": 4300
+      },
+      {
+        "name": "부산아쿠아리움",
+        "distance_m": 600
+      }
+    ],
+    "policy": {
+      "checkin": "15:00",
+      "checkout": "11:00",
+      "cancel": "체크인 3일 전까지 무료 취소가 가능합니다. 이후에는 첫 1박 요금이 부과됩니다.",
+      "children": "만 12세 이하 아동은 기존 침구 사용 시 무료로 투숙할 수 있습니다."
+    },
+    "competitors": [
+      {
+        "site": "아고다",
+        "price": 481500,
+        "url": "https://www.agoda.com/ko-kr/"
+      },
+      {
+        "site": "부킹닷컴",
+        "price": 495400,
+        "url": "https://www.booking.com/"
+      },
+      {
+        "site": "네이버 호텔",
+        "price": 486200,
+        "url": "https://hotels.naver.com/"
+      }
+    ],
+    "rooms": [
+      {
+        "id": "h08-r1",
+        "name": "마운틴뷰 디럭스",
+        "bed": "퀸 베드 1",
+        "size_m2": 33,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "마운틴뷰",
+        "breakfast": false,
+        "refundable": true,
+        "price": 463000,
+        "original_price": 519000,
+        "remaining": 3,
+        "photo_id": "1600210492486-724fe5c67fb0",
+        "options": []
+      },
+      {
+        "id": "h08-r2",
+        "name": "디럭스 트윈 오션뷰",
+        "bed": "싱글 베드 2",
+        "size_m2": 40,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "오션뷰",
+        "breakfast": false,
+        "refundable": true,
+        "price": 529000,
+        "original_price": null,
+        "remaining": 3,
+        "photo_id": "1566073771259-6a8506099945",
+        "options": [
+          {
+            "id": "spa",
+            "label": "스파 이용권 2인",
+            "price": 55000
+          }
+        ]
+      },
+      {
+        "id": "h08-r3",
+        "name": "이그제큐티브 스위트",
+        "bed": "킹 베드 1",
+        "size_m2": 58,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "시티뷰",
+        "breakfast": false,
+        "refundable": true,
+        "price": 764000,
+        "original_price": 848000,
+        "remaining": 4,
+        "photo_id": "1551882547-ff40c63fe5fa",
+        "options": [
+          {
+            "id": "spa",
+            "label": "스파 이용권 2인",
+            "price": 55000
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "h09",
+    "name": "부산 해운대 오션 리조트",
+    "name_en": "Busan Haeundae Ocean Resort",
+    "brand": "오션",
+    "category": "리조트",
+    "star": 4,
+    "region": "부산",
+    "district": "해운대구 우동",
+    "address": "부산 해운대구 우동 217",
+    "rating": 4.2,
+    "review_count": 2180,
+    "base_price": 215000,
+    "original_price": 267000,
+    "discount_percent": 24,
+    "images": [
+      {
+        "photo_id": "1560448204-e02f11c3d0e2",
+        "alt": "부산 해운대 오션 리조트 사진 1"
+      },
+      {
+        "photo_id": "1522798514-97ceb8c4f1c8",
+        "alt": "부산 해운대 오션 리조트 사진 2"
+      },
+      {
+        "photo_id": "1584132967334-10e028bd69f7",
+        "alt": "부산 해운대 오션 리조트 사진 3"
+      },
+      {
+        "photo_id": "1540518614846-7eded433c457",
+        "alt": "부산 해운대 오션 리조트 사진 4"
+      },
+      {
+        "photo_id": "1615460549969-36fa19521a4f",
+        "alt": "부산 해운대 오션 리조트 사진 5"
+      }
+    ],
+    "description": "부산 해운대구 우동에 위치한 4성급 리조트입니다. 부산 해운대 오션 리조트은 비즈니스와 휴양을 모두 아우르는 공간으로, 전 객실에 독립 냉난방과 대형 창을 갖췄습니다. 로비 라운지에서는 하루 종일 음료를 제공합니다.",
+    "highlights": [
+      "전 객실 무료 와이파이와 24시간 룸서비스를 제공합니다.",
+      "실내 수영장과 사우나를 투숙객에게 무료로 개방합니다.",
+      "전 층 금연이며 공기청정기가 비치되어 있습니다."
+    ],
+    "amenities": [
+      "airport",
+      "business",
+      "restaurant",
+      "wifi",
+      "parking",
+      "breakfast",
+      "laundry"
+    ],
+    "tags": [
+      "오션뷰",
+      "조식 포함",
+      "역세권"
+    ],
+    "nearby": [
+      {
+        "name": "해운대해수욕장",
+        "distance_m": 350
+      },
+      {
+        "name": "동백섬",
+        "distance_m": 1200
+      },
+      {
+        "name": "광안대교 전망대",
+        "distance_m": 4300
+      },
+      {
+        "name": "부산아쿠아리움",
+        "distance_m": 600
+      }
+    ],
+    "policy": {
+      "checkin": "15:00",
+      "checkout": "11:00",
+      "cancel": "체크인 3일 전까지 무료 취소가 가능합니다. 이후에는 첫 1박 요금이 부과됩니다.",
+      "children": "만 12세 이하 아동은 기존 침구 사용 시 무료로 투숙할 수 있습니다."
+    },
+    "competitors": [
+      {
+        "site": "아고다",
+        "price": 230100,
+        "url": "https://www.agoda.com/ko-kr/"
+      },
+      {
+        "site": "부킹닷컴",
+        "price": 223600,
+        "url": "https://www.booking.com/"
+      },
+      {
+        "site": "네이버 호텔",
+        "price": 234400,
+        "url": "https://hotels.naver.com/"
+      }
+    ],
+    "rooms": [
+      {
+        "id": "h09-r1",
+        "name": "스탠다드 트윈",
+        "bed": "싱글 베드 2",
+        "size_m2": 30,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "시티뷰",
+        "breakfast": true,
+        "refundable": true,
+        "price": 215000,
+        "original_price": 237000,
+        "remaining": 7,
+        "photo_id": "1578683010236-d716f9a3f461",
+        "options": []
+      },
+      {
+        "id": "h09-r2",
+        "name": "마운틴뷰 디럭스",
+        "bed": "퀸 베드 1",
+        "size_m2": 33,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "마운틴뷰",
+        "breakfast": false,
+        "refundable": true,
+        "price": 254000,
+        "original_price": 292000,
+        "remaining": 8,
+        "photo_id": "1611892440504-42a792e24d32",
+        "options": []
+      },
+      {
+        "id": "h09-r3",
+        "name": "디럭스 트윈 오션뷰",
+        "bed": "싱글 베드 2",
+        "size_m2": 39,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "오션뷰",
+        "breakfast": false,
+        "refundable": false,
+        "price": 290000,
+        "original_price": 354000,
+        "remaining": 1,
+        "photo_id": "1618773928121-c32242e63f39",
+        "options": []
+      },
+      {
+        "id": "h09-r4",
+        "name": "이그제큐티브 스위트",
+        "bed": "킹 베드 1",
+        "size_m2": 62,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "시티뷰",
+        "breakfast": true,
+        "refundable": true,
+        "price": 419000,
+        "original_price": 469000,
+        "remaining": 1,
+        "photo_id": "1596394516093-501ba68a0ba6",
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "h10",
+    "name": "롯데 호텔 제주",
+    "name_en": "Lotte Hotel Jeju",
+    "brand": "롯데",
+    "category": "호텔",
+    "star": 5,
+    "region": "제주",
+    "district": "서귀포시 색달동",
+    "address": "제주 서귀포시 색달동 163",
+    "rating": 4.5,
+    "review_count": 2692,
+    "base_price": 449000,
+    "original_price": 548000,
+    "discount_percent": 22,
+    "images": [
+      {
+        "photo_id": "1521783988139-89397d761dce",
+        "alt": "롯데 호텔 제주 사진 1"
+      },
+      {
+        "photo_id": "1559599189-fe84dea4eb79",
+        "alt": "롯데 호텔 제주 사진 2"
+      },
+      {
+        "photo_id": "1520250497591-112f2f40a3f4",
+        "alt": "롯데 호텔 제주 사진 3"
+      },
+      {
+        "photo_id": "1519690889869-e705e59f72e1",
+        "alt": "롯데 호텔 제주 사진 4"
+      },
+      {
+        "photo_id": "1512918728675-ed5a9ecdebfd",
+        "alt": "롯데 호텔 제주 사진 5"
+      }
+    ],
+    "description": "제주 서귀포시 색달동에 위치한 5성급 호텔입니다. 롯데 호텔 제주은 비즈니스와 휴양을 모두 아우르는 공간으로, 전 객실에 독립 냉난방과 대형 창을 갖췄습니다. 로비 라운지에서는 하루 종일 음료를 제공합니다.",
+    "highlights": [
+      "전 객실에서 바다 또는 시내 전망을 감상할 수 있습니다.",
+      "체크인 전·체크아웃 후에도 짐을 맡길 수 있습니다.",
+      "지하철역에서 도보 5분 거리로 이동이 편리합니다."
+    ],
+    "amenities": [
+      "bar",
+      "business",
+      "spa",
+      "wifi",
+      "parking",
+      "pool",
+      "restaurant",
+      "fitness",
+      "laundry"
+    ],
+    "tags": [
+      "시티뷰",
+      "조식 포함",
+      "수영장"
+    ],
+    "nearby": [
+      {
+        "name": "중문색달해변",
+        "distance_m": 800
+      },
+      {
+        "name": "천지연폭포",
+        "distance_m": 5200
+      },
+      {
+        "name": "주상절리대",
+        "distance_m": 2400
+      },
+      {
+        "name": "제주국제공항",
+        "distance_m": 18000
+      }
+    ],
+    "policy": {
+      "checkin": "15:00",
+      "checkout": "11:00",
+      "cancel": "체크인 3일 전까지 무료 취소가 가능합니다. 이후에는 첫 1박 요금이 부과됩니다.",
+      "children": "만 12세 이하 아동은 기존 침구 사용 시 무료로 투숙할 수 있습니다."
+    },
+    "competitors": [
+      {
+        "site": "아고다",
+        "price": 489400,
+        "url": "https://www.agoda.com/ko-kr/"
+      },
+      {
+        "site": "부킹닷컴",
+        "price": 480400,
+        "url": "https://www.booking.com/"
+      },
+      {
+        "site": "네이버 호텔",
+        "price": 462500,
+        "url": "https://hotels.naver.com/"
+      }
+    ],
+    "rooms": [
+      {
+        "id": "h10-r1",
+        "name": "한실 스탠다드",
+        "bed": "온돌",
+        "size_m2": 30,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "가든뷰",
+        "breakfast": false,
+        "refundable": false,
+        "price": 449000,
+        "original_price": 539000,
+        "remaining": 6,
+        "photo_id": "1587985064135-0366536eab42",
+        "options": [
+          {
+            "id": "spa",
+            "label": "스파 이용권 2인",
+            "price": 55000
+          }
+        ]
+      },
+      {
+        "id": "h10-r2",
+        "name": "마운틴뷰 디럭스",
+        "bed": "퀸 베드 1",
+        "size_m2": 28,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "마운틴뷰",
+        "breakfast": false,
+        "refundable": true,
+        "price": 505000,
+        "original_price": null,
+        "remaining": 5,
+        "photo_id": "1602002418082-a4443e081dd1",
+        "options": []
+      },
+      {
+        "id": "h10-r3",
+        "name": "디럭스 킹 시티뷰",
+        "bed": "킹 베드 1",
+        "size_m2": 30,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "시티뷰",
+        "breakfast": true,
+        "refundable": false,
+        "price": 522000,
+        "original_price": 626000,
+        "remaining": 5,
+        "photo_id": "1566195992011-5f6b21e539aa",
+        "options": [
+          {
+            "id": "breakfast",
+            "label": "조식 2인 추가",
+            "price": 38000
+          },
+          {
+            "id": "spa",
+            "label": "스파 이용권 2인",
+            "price": 55000
+          }
+        ]
+      },
+      {
+        "id": "h10-r4",
+        "name": "이그제큐티브 스위트",
+        "bed": "킹 베드 1",
+        "size_m2": 61,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "시티뷰",
+        "breakfast": false,
+        "refundable": true,
+        "price": 835000,
+        "original_price": null,
+        "remaining": 3,
+        "photo_id": "1568084680786-a84f91d1153c",
+        "options": [
+          {
+            "id": "parking",
+            "label": "발렛 주차",
+            "price": 15000
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "h11",
+    "name": "신라 제주 리조트",
+    "name_en": "Shilla Jeju Resort",
+    "brand": "신라",
+    "category": "리조트",
+    "star": 5,
+    "region": "제주",
+    "district": "서귀포시 중문동",
+    "address": "제주 서귀포시 중문동 115",
+    "rating": 4.9,
+    "review_count": 1616,
+    "base_price": 520000,
+    "original_price": 614000,
+    "discount_percent": 18,
+    "images": [
+      {
+        "photo_id": "1600210492486-724fe5c67fb0",
+        "alt": "신라 제주 리조트 사진 1"
+      },
+      {
+        "photo_id": "1566073771259-6a8506099945",
+        "alt": "신라 제주 리조트 사진 2"
+      },
+      {
+        "photo_id": "1551882547-ff40c63fe5fa",
+        "alt": "신라 제주 리조트 사진 3"
+      },
+      {
+        "photo_id": "1571003123894-1f0594d2b5d9",
+        "alt": "신라 제주 리조트 사진 4"
+      },
+      {
+        "photo_id": "1582719478250-c89cae4dc85b",
+        "alt": "신라 제주 리조트 사진 5"
+      }
+    ],
+    "description": "제주 서귀포시 중문동에 위치한 5성급 리조트입니다. 신라 제주 리조트은 비즈니스와 휴양을 모두 아우르는 공간으로, 전 객실에 독립 냉난방과 대형 창을 갖췄습니다. 로비 라운지에서는 하루 종일 음료를 제공합니다.",
+    "highlights": [
+      "조식 뷔페에서 한식과 양식을 모두 즐길 수 있습니다.",
+      "지하철역에서 도보 5분 거리로 이동이 편리합니다.",
+      "전 층 금연이며 공기청정기가 비치되어 있습니다."
+    ],
+    "amenities": [
+      "parking",
+      "fitness",
+      "pool",
+      "airport",
+      "wifi",
+      "spa",
+      "bar",
+      "restaurant",
+      "business",
+      "laundry"
+    ],
+    "tags": [
+      "오션뷰",
+      "가성비",
+      "수영장"
+    ],
+    "nearby": [
+      {
+        "name": "중문색달해변",
+        "distance_m": 800
+      },
+      {
+        "name": "천지연폭포",
+        "distance_m": 5200
+      },
+      {
+        "name": "주상절리대",
+        "distance_m": 2400
+      },
+      {
+        "name": "제주국제공항",
+        "distance_m": 18000
+      }
+    ],
+    "policy": {
+      "checkin": "15:00",
+      "checkout": "11:00",
+      "cancel": "체크인 3일 전까지 무료 취소가 가능합니다. 이후에는 첫 1박 요금이 부과됩니다.",
+      "children": "만 12세 이하 아동은 기존 침구 사용 시 무료로 투숙할 수 있습니다."
+    },
+    "competitors": [
+      {
+        "site": "아고다",
+        "price": 530400,
+        "url": "https://www.agoda.com/ko-kr/"
+      },
+      {
+        "site": "부킹닷컴",
+        "price": 566800,
+        "url": "https://www.booking.com/"
+      },
+      {
+        "site": "네이버 호텔",
+        "price": 530400,
+        "url": "https://hotels.naver.com/"
+      }
+    ],
+    "rooms": [
+      {
+        "id": "h11-r1",
+        "name": "한실 스탠다드",
+        "bed": "온돌",
+        "size_m2": 29,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "가든뷰",
+        "breakfast": false,
+        "refundable": false,
+        "price": 520000,
+        "original_price": null,
+        "remaining": 3,
+        "photo_id": "1618221195710-dd6b41faaea6",
+        "options": [
+          {
+            "id": "parking",
+            "label": "발렛 주차",
+            "price": 15000
+          },
+          {
+            "id": "breakfast",
+            "label": "조식 2인 추가",
+            "price": 38000
+          }
+        ]
+      },
+      {
+        "id": "h11-r2",
+        "name": "마운틴뷰 디럭스",
+        "bed": "퀸 베드 1",
+        "size_m2": 32,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "마운틴뷰",
+        "breakfast": false,
+        "refundable": true,
+        "price": 584000,
+        "original_price": null,
+        "remaining": 6,
+        "photo_id": "1505693416388-ac5ce068fe85",
+        "options": [
+          {
+            "id": "late",
+            "label": "레이트 체크아웃 (14시)",
+            "price": 30000
+          }
+        ]
+      },
+      {
+        "id": "h11-r3",
+        "name": "프리미어 킹 오션뷰",
+        "bed": "킹 베드 1",
+        "size_m2": 42,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "오션뷰",
+        "breakfast": false,
+        "refundable": true,
+        "price": 743000,
+        "original_price": 869000,
+        "remaining": 1,
+        "photo_id": "1493809842364-78817add7ffb",
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "h12",
+    "name": "제주 애월 오션뷰 풀빌라 리조트",
+    "name_en": "Jeju Aewol Ocean Pool Villa",
+    "brand": "애월",
+    "category": "풀빌라",
+    "star": 4,
+    "region": "제주",
+    "district": "제주시 애월읍",
+    "address": "제주 제주시 애월읍 203",
+    "rating": 4.4,
+    "review_count": 2241,
+    "base_price": 268000,
+    "original_price": 324000,
+    "discount_percent": 21,
+    "images": [
+      {
+        "photo_id": "1578683010236-d716f9a3f461",
+        "alt": "제주 애월 오션뷰 풀빌라 리조트 사진 1"
+      },
+      {
+        "photo_id": "1611892440504-42a792e24d32",
+        "alt": "제주 애월 오션뷰 풀빌라 리조트 사진 2"
+      },
+      {
+        "photo_id": "1618773928121-c32242e63f39",
+        "alt": "제주 애월 오션뷰 풀빌라 리조트 사진 3"
+      },
+      {
+        "photo_id": "1596394516093-501ba68a0ba6",
+        "alt": "제주 애월 오션뷰 풀빌라 리조트 사진 4"
+      },
+      {
+        "photo_id": "1560448204-e02f11c3d0e2",
+        "alt": "제주 애월 오션뷰 풀빌라 리조트 사진 5"
+      }
+    ],
+    "description": "제주 제주시 애월읍에 위치한 4성급 풀빌라입니다. 제주 애월 오션뷰 풀빌라 리조트은 비즈니스와 휴양을 모두 아우르는 공간으로, 전 객실에 독립 냉난방과 대형 창을 갖췄습니다. 로비 라운지에서는 하루 종일 음료를 제공합니다.",
+    "highlights": [
+      "전 층 금연이며 공기청정기가 비치되어 있습니다.",
+      "실내 수영장과 사우나를 투숙객에게 무료로 개방합니다.",
+      "주변에 대형 쇼핑몰과 전통시장이 인접해 있습니다."
+    ],
+    "amenities": [
+      "wifi",
+      "airport",
+      "pool",
+      "breakfast",
+      "parking",
+      "fitness",
+      "business"
+    ],
+    "tags": [
+      "오션뷰",
+      "조식 포함",
+      "수영장"
+    ],
+    "nearby": [
+      {
+        "name": "중문색달해변",
+        "distance_m": 800
+      },
+      {
+        "name": "천지연폭포",
+        "distance_m": 5200
+      },
+      {
+        "name": "주상절리대",
+        "distance_m": 2400
+      },
+      {
+        "name": "제주국제공항",
+        "distance_m": 18000
+      }
+    ],
+    "policy": {
+      "checkin": "15:00",
+      "checkout": "11:00",
+      "cancel": "체크인 3일 전까지 무료 취소가 가능합니다. 이후에는 첫 1박 요금이 부과됩니다.",
+      "children": "만 12세 이하 아동은 기존 침구 사용 시 무료로 투숙할 수 있습니다."
+    },
+    "competitors": [
+      {
+        "site": "아고다",
+        "price": 292100,
+        "url": "https://www.agoda.com/ko-kr/"
+      },
+      {
+        "site": "부킹닷컴",
+        "price": 273400,
+        "url": "https://www.booking.com/"
+      },
+      {
+        "site": "네이버 호텔",
+        "price": 286800,
+        "url": "https://hotels.naver.com/"
+      }
+    ],
+    "rooms": [
+      {
+        "id": "h12-r1",
+        "name": "스탠다드 트윈",
+        "bed": "싱글 베드 2",
+        "size_m2": 28,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "시티뷰",
+        "breakfast": false,
+        "refundable": true,
+        "price": 268000,
+        "original_price": 314000,
+        "remaining": 4,
+        "photo_id": "1590490360182-c33d57733427",
+        "options": [
+          {
+            "id": "breakfast",
+            "label": "조식 2인 추가",
+            "price": 38000
+          }
+        ]
+      },
+      {
+        "id": "h12-r2",
+        "name": "디럭스 킹 시티뷰",
+        "bed": "킹 베드 1",
+        "size_m2": 35,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "시티뷰",
+        "breakfast": true,
+        "refundable": false,
+        "price": 327000,
+        "original_price": 396000,
+        "remaining": 9,
+        "photo_id": "1631049307264-da0ec9d70304",
+        "options": [
+          {
+            "id": "late",
+            "label": "레이트 체크아웃 (14시)",
+            "price": 30000
+          },
+          {
+            "id": "spa",
+            "label": "스파 이용권 2인",
+            "price": 55000
+          }
+        ]
+      },
+      {
+        "id": "h12-r3",
+        "name": "풀빌라 2베드룸",
+        "bed": "킹 베드 1 + 트윈 2",
+        "size_m2": 83,
+        "capacity": {
+          "standard": 4,
+          "max": 6
+        },
+        "view": "오션뷰",
+        "breakfast": false,
+        "refundable": true,
+        "price": 643000,
+        "original_price": null,
+        "remaining": 2,
+        "photo_id": "1445019980597-93fa8acb246c",
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "h13",
+    "name": "그랜드 하얏트 제주 호텔",
+    "name_en": "Grand Hyatt Jeju",
+    "brand": "하얏트",
+    "category": "호텔",
+    "star": 5,
+    "region": "제주",
+    "district": "제주시 노형동",
+    "address": "제주 제주시 노형동 192",
+    "rating": 4.6,
+    "review_count": 2381,
+    "base_price": 372000,
+    "original_price": 435000,
+    "discount_percent": 17,
+    "images": [
+      {
+        "photo_id": "1587985064135-0366536eab42",
+        "alt": "그랜드 하얏트 제주 호텔 사진 1"
+      },
+      {
+        "photo_id": "1602002418082-a4443e081dd1",
+        "alt": "그랜드 하얏트 제주 호텔 사진 2"
+      },
+      {
+        "photo_id": "1566195992011-5f6b21e539aa",
+        "alt": "그랜드 하얏트 제주 호텔 사진 3"
+      },
+      {
+        "photo_id": "1568084680786-a84f91d1153c",
+        "alt": "그랜드 하얏트 제주 호텔 사진 4"
+      },
+      {
+        "photo_id": "1521783988139-89397d761dce",
+        "alt": "그랜드 하얏트 제주 호텔 사진 5"
+      }
+    ],
+    "description": "제주 제주시 노형동에 위치한 5성급 호텔입니다. 그랜드 하얏트 제주 호텔은 비즈니스와 휴양을 모두 아우르는 공간으로, 전 객실에 독립 냉난방과 대형 창을 갖췄습니다. 로비 라운지에서는 하루 종일 음료를 제공합니다.",
+    "highlights": [
+      "실내 수영장과 사우나를 투숙객에게 무료로 개방합니다.",
+      "체크인 전·체크아웃 후에도 짐을 맡길 수 있습니다.",
+      "전 층 금연이며 공기청정기가 비치되어 있습니다."
+    ],
+    "amenities": [
+      "airport",
+      "pet",
+      "wifi",
+      "parking",
+      "bar",
+      "business",
+      "pool",
+      "breakfast",
+      "fitness",
+      "laundry"
+    ],
+    "tags": [
+      "오션뷰",
+      "조식 포함",
+      "수영장"
+    ],
+    "nearby": [
+      {
+        "name": "중문색달해변",
+        "distance_m": 800
+      },
+      {
+        "name": "천지연폭포",
+        "distance_m": 5200
+      },
+      {
+        "name": "주상절리대",
+        "distance_m": 2400
+      },
+      {
+        "name": "제주국제공항",
+        "distance_m": 18000
+      }
+    ],
+    "policy": {
+      "checkin": "15:00",
+      "checkout": "11:00",
+      "cancel": "체크인 3일 전까지 무료 취소가 가능합니다. 이후에는 첫 1박 요금이 부과됩니다.",
+      "children": "만 12세 이하 아동은 기존 침구 사용 시 무료로 투숙할 수 있습니다."
+    },
+    "competitors": [
+      {
+        "site": "아고다",
+        "price": 386900,
+        "url": "https://www.agoda.com/ko-kr/"
+      },
+      {
+        "site": "부킹닷컴",
+        "price": 405500,
+        "url": "https://www.booking.com/"
+      },
+      {
+        "site": "네이버 호텔",
+        "price": 390600,
+        "url": "https://hotels.naver.com/"
+      }
+    ],
+    "rooms": [
+      {
+        "id": "h13-r1",
+        "name": "스탠다드 트윈",
+        "bed": "싱글 베드 2",
+        "size_m2": 26,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "시티뷰",
+        "breakfast": false,
+        "refundable": true,
+        "price": 372000,
+        "original_price": 454000,
+        "remaining": 7,
+        "photo_id": "1522798514-97ceb8c4f1c8",
+        "options": []
+      },
+      {
+        "id": "h13-r2",
+        "name": "디럭스 트윈 오션뷰",
+        "bed": "싱글 베드 2",
+        "size_m2": 40,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "오션뷰",
+        "breakfast": true,
+        "refundable": false,
+        "price": 502000,
+        "original_price": 582000,
+        "remaining": 7,
+        "photo_id": "1584132967334-10e028bd69f7",
+        "options": []
+      },
+      {
+        "id": "h13-r3",
+        "name": "프리미어 킹 오션뷰",
+        "bed": "킹 베드 1",
+        "size_m2": 40,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "오션뷰",
+        "breakfast": true,
+        "refundable": true,
+        "price": 558000,
+        "original_price": null,
+        "remaining": 1,
+        "photo_id": "1540518614846-7eded433c457",
+        "options": []
+      },
+      {
+        "id": "h13-r4",
+        "name": "풀빌라 2베드룸",
+        "bed": "킹 베드 1 + 트윈 2",
+        "size_m2": 78,
+        "capacity": {
+          "standard": 4,
+          "max": 6
+        },
+        "view": "오션뷰",
+        "breakfast": true,
+        "refundable": false,
+        "price": 893000,
+        "original_price": null,
+        "remaining": 6,
+        "photo_id": "1615460549969-36fa19521a4f",
+        "options": [
+          {
+            "id": "breakfast",
+            "label": "조식 2인 추가",
+            "price": 38000
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "h14",
+    "name": "켄싱턴 리조트 설악",
+    "name_en": "Kensington Resort Seorak",
+    "brand": "켄싱턴",
+    "category": "리조트",
+    "star": 4,
+    "region": "강원",
+    "district": "속초시 설악동",
+    "address": "강원 속초시 설악동 167",
+    "rating": 4.1,
+    "review_count": 2753,
+    "base_price": 189000,
+    "original_price": 210000,
+    "discount_percent": 11,
+    "images": [
+      {
+        "photo_id": "1512918728675-ed5a9ecdebfd",
+        "alt": "켄싱턴 리조트 설악 사진 1"
+      },
+      {
+        "photo_id": "1618221195710-dd6b41faaea6",
+        "alt": "켄싱턴 리조트 설악 사진 2"
+      },
+      {
+        "photo_id": "1505693416388-ac5ce068fe85",
+        "alt": "켄싱턴 리조트 설악 사진 3"
+      },
+      {
+        "photo_id": "1493809842364-78817add7ffb",
+        "alt": "켄싱턴 리조트 설악 사진 4"
+      },
+      {
+        "photo_id": "1600210492486-724fe5c67fb0",
+        "alt": "켄싱턴 리조트 설악 사진 5"
+      }
+    ],
+    "description": "강원 속초시 설악동에 위치한 4성급 리조트입니다. 켄싱턴 리조트 설악은 비즈니스와 휴양을 모두 아우르는 공간으로, 전 객실에 독립 냉난방과 대형 창을 갖췄습니다. 로비 라운지에서는 하루 종일 음료를 제공합니다.",
+    "highlights": [
+      "실내 수영장과 사우나를 투숙객에게 무료로 개방합니다.",
+      "전 객실에서 바다 또는 시내 전망을 감상할 수 있습니다.",
+      "체크인 전·체크아웃 후에도 짐을 맡길 수 있습니다."
+    ],
+    "amenities": [
+      "fitness",
+      "restaurant",
+      "bar",
+      "business",
+      "pool",
+      "laundry",
+      "wifi"
+    ],
+    "tags": [
+      "오션뷰",
+      "가성비",
+      "수영장"
+    ],
+    "nearby": [
+      {
+        "name": "설악산국립공원",
+        "distance_m": 4100
+      },
+      {
+        "name": "속초중앙시장",
+        "distance_m": 3200
+      },
+      {
+        "name": "경포호",
+        "distance_m": 1500
+      },
+      {
+        "name": "정동진역",
+        "distance_m": 12000
+      }
+    ],
+    "policy": {
+      "checkin": "15:00",
+      "checkout": "11:00",
+      "cancel": "체크인 3일 전까지 무료 취소가 가능합니다. 이후에는 첫 1박 요금이 부과됩니다.",
+      "children": "만 12세 이하 아동은 기존 침구 사용 시 무료로 투숙할 수 있습니다."
+    },
+    "competitors": [
+      {
+        "site": "아고다",
+        "price": 200300,
+        "url": "https://www.agoda.com/ko-kr/"
+      },
+      {
+        "site": "부킹닷컴",
+        "price": 206000,
+        "url": "https://www.booking.com/"
+      },
+      {
+        "site": "네이버 호텔",
+        "price": 196600,
+        "url": "https://hotels.naver.com/"
+      }
+    ],
+    "rooms": [
+      {
+        "id": "h14-r1",
+        "name": "스탠다드 트윈",
+        "bed": "싱글 베드 2",
+        "size_m2": 29,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "시티뷰",
+        "breakfast": false,
+        "refundable": true,
+        "price": 189000,
+        "original_price": null,
+        "remaining": 5,
+        "photo_id": "1559599189-fe84dea4eb79",
+        "options": []
+      },
+      {
+        "id": "h14-r2",
+        "name": "프리미어 킹 오션뷰",
+        "bed": "킹 베드 1",
+        "size_m2": 44,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "오션뷰",
+        "breakfast": false,
+        "refundable": false,
+        "price": 284000,
+        "original_price": null,
+        "remaining": 1,
+        "photo_id": "1520250497591-112f2f40a3f4",
+        "options": []
+      },
+      {
+        "id": "h14-r3",
+        "name": "이그제큐티브 스위트",
+        "bed": "킹 베드 1",
+        "size_m2": 52,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "시티뷰",
+        "breakfast": false,
+        "refundable": false,
+        "price": 369000,
+        "original_price": 443000,
+        "remaining": 4,
+        "photo_id": "1519690889869-e705e59f72e1",
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "h15",
+    "name": "강릉 씨마크 호텔",
+    "name_en": "Seamarq Hotel Gangneung",
+    "brand": "씨마크",
+    "category": "호텔",
+    "star": 5,
+    "region": "강원",
+    "district": "강릉시 해안로",
+    "address": "강원 강릉시 해안로 276",
+    "rating": 4.7,
+    "review_count": 3715,
+    "base_price": 342000,
+    "original_price": 421000,
+    "discount_percent": 23,
+    "images": [
+      {
+        "photo_id": "1590490360182-c33d57733427",
+        "alt": "강릉 씨마크 호텔 사진 1"
+      },
+      {
+        "photo_id": "1631049307264-da0ec9d70304",
+        "alt": "강릉 씨마크 호텔 사진 2"
+      },
+      {
+        "photo_id": "1445019980597-93fa8acb246c",
+        "alt": "강릉 씨마크 호텔 사진 3"
+      },
+      {
+        "photo_id": "1578683010236-d716f9a3f461",
+        "alt": "강릉 씨마크 호텔 사진 4"
+      },
+      {
+        "photo_id": "1611892440504-42a792e24d32",
+        "alt": "강릉 씨마크 호텔 사진 5"
+      }
+    ],
+    "description": "강원 강릉시 해안로에 위치한 5성급 호텔입니다. 강릉 씨마크 호텔은 비즈니스와 휴양을 모두 아우르는 공간으로, 전 객실에 독립 냉난방과 대형 창을 갖췄습니다. 로비 라운지에서는 하루 종일 음료를 제공합니다.",
+    "highlights": [
+      "체크인 전·체크아웃 후에도 짐을 맡길 수 있습니다.",
+      "주변에 대형 쇼핑몰과 전통시장이 인접해 있습니다.",
+      "전 객실 무료 와이파이와 24시간 룸서비스를 제공합니다."
+    ],
+    "amenities": [
+      "business",
+      "pet",
+      "laundry",
+      "restaurant",
+      "bar",
+      "pool",
+      "airport",
+      "parking",
+      "spa",
+      "breakfast"
+    ],
+    "tags": [
+      "오션뷰",
+      "조식 포함",
+      "수영장"
+    ],
+    "nearby": [
+      {
+        "name": "설악산국립공원",
+        "distance_m": 4100
+      },
+      {
+        "name": "속초중앙시장",
+        "distance_m": 3200
+      },
+      {
+        "name": "경포호",
+        "distance_m": 1500
+      },
+      {
+        "name": "정동진역",
+        "distance_m": 12000
+      }
+    ],
+    "policy": {
+      "checkin": "15:00",
+      "checkout": "11:00",
+      "cancel": "체크인 3일 전까지 무료 취소가 가능합니다. 이후에는 첫 1박 요금이 부과됩니다.",
+      "children": "만 12세 이하 아동은 기존 침구 사용 시 무료로 투숙할 수 있습니다."
+    },
+    "competitors": [
+      {
+        "site": "아고다",
+        "price": 348800,
+        "url": "https://www.agoda.com/ko-kr/"
+      },
+      {
+        "site": "부킹닷컴",
+        "price": 352300,
+        "url": "https://www.booking.com/"
+      },
+      {
+        "site": "네이버 호텔",
+        "price": 352300,
+        "url": "https://hotels.naver.com/"
+      }
+    ],
+    "rooms": [
+      {
+        "id": "h15-r1",
+        "name": "스탠다드 트윈",
+        "bed": "싱글 베드 2",
+        "size_m2": 27,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "시티뷰",
+        "breakfast": false,
+        "refundable": false,
+        "price": 342000,
+        "original_price": null,
+        "remaining": 8,
+        "photo_id": "1566073771259-6a8506099945",
+        "options": []
+      },
+      {
+        "id": "h15-r2",
+        "name": "디럭스 킹 시티뷰",
+        "bed": "킹 베드 1",
+        "size_m2": 33,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "시티뷰",
+        "breakfast": true,
+        "refundable": true,
+        "price": 417000,
+        "original_price": null,
+        "remaining": 1,
+        "photo_id": "1551882547-ff40c63fe5fa",
+        "options": []
+      },
+      {
+        "id": "h15-r3",
+        "name": "디럭스 트윈 오션뷰",
+        "bed": "싱글 베드 2",
+        "size_m2": 39,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "오션뷰",
+        "breakfast": true,
+        "refundable": true,
+        "price": 462000,
+        "original_price": 504000,
+        "remaining": 3,
+        "photo_id": "1571003123894-1f0594d2b5d9",
+        "options": [
+          {
+            "id": "late",
+            "label": "레이트 체크아웃 (14시)",
+            "price": 30000
+          },
+          {
+            "id": "spa",
+            "label": "스파 이용권 2인",
+            "price": 55000
+          }
+        ]
+      },
+      {
+        "id": "h15-r4",
+        "name": "풀빌라 2베드룸",
+        "bed": "킹 베드 1 + 트윈 2",
+        "size_m2": 81,
+        "capacity": {
+          "standard": 4,
+          "max": 6
+        },
+        "view": "오션뷰",
+        "breakfast": true,
+        "refundable": true,
+        "price": 821000,
+        "original_price": 920000,
+        "remaining": 1,
+        "photo_id": "1582719478250-c89cae4dc85b",
+        "options": [
+          {
+            "id": "breakfast",
+            "label": "조식 2인 추가",
+            "price": 38000
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "h16",
+    "name": "평창 알펜시아 리조트",
+    "name_en": "Alpensia Resort Pyeongchang",
+    "brand": "알펜시아",
+    "category": "리조트",
+    "star": 4,
+    "region": "강원",
+    "district": "평창군 대관령면",
+    "address": "강원 평창군 대관령면 230",
+    "rating": 4.2,
+    "review_count": 1489,
+    "base_price": 173000,
+    "original_price": 199000,
+    "discount_percent": 15,
+    "images": [
+      {
+        "photo_id": "1584132967334-10e028bd69f7",
+        "alt": "평창 알펜시아 리조트 사진 1"
+      },
+      {
+        "photo_id": "1540518614846-7eded433c457",
+        "alt": "평창 알펜시아 리조트 사진 2"
+      },
+      {
+        "photo_id": "1615460549969-36fa19521a4f",
+        "alt": "평창 알펜시아 리조트 사진 3"
+      },
+      {
+        "photo_id": "1587985064135-0366536eab42",
+        "alt": "평창 알펜시아 리조트 사진 4"
+      },
+      {
+        "photo_id": "1602002418082-a4443e081dd1",
+        "alt": "평창 알펜시아 리조트 사진 5"
+      }
+    ],
+    "description": "강원 평창군 대관령면에 위치한 4성급 리조트입니다. 평창 알펜시아 리조트은 비즈니스와 휴양을 모두 아우르는 공간으로, 전 객실에 독립 냉난방과 대형 창을 갖췄습니다. 로비 라운지에서는 하루 종일 음료를 제공합니다.",
+    "highlights": [
+      "실내 수영장과 사우나를 투숙객에게 무료로 개방합니다.",
+      "전 층 금연이며 공기청정기가 비치되어 있습니다.",
+      "전 객실에서 바다 또는 시내 전망을 감상할 수 있습니다."
+    ],
+    "amenities": [
+      "restaurant",
+      "pool",
+      "pet",
+      "bar",
+      "fitness",
+      "parking"
+    ],
+    "tags": [
+      "오션뷰",
+      "조식 포함",
+      "수영장"
+    ],
+    "nearby": [
+      {
+        "name": "설악산국립공원",
+        "distance_m": 4100
+      },
+      {
+        "name": "속초중앙시장",
+        "distance_m": 3200
+      },
+      {
+        "name": "경포호",
+        "distance_m": 1500
+      },
+      {
+        "name": "정동진역",
+        "distance_m": 12000
+      }
+    ],
+    "policy": {
+      "checkin": "15:00",
+      "checkout": "11:00",
+      "cancel": "체크인 3일 전까지 무료 취소가 가능합니다. 이후에는 첫 1박 요금이 부과됩니다.",
+      "children": "만 12세 이하 아동은 기존 침구 사용 시 무료로 투숙할 수 있습니다."
+    },
+    "competitors": [
+      {
+        "site": "아고다",
+        "price": 186800,
+        "url": "https://www.agoda.com/ko-kr/"
+      },
+      {
+        "site": "부킹닷컴",
+        "price": 179900,
+        "url": "https://www.booking.com/"
+      },
+      {
+        "site": "네이버 호텔",
+        "price": 181700,
+        "url": "https://hotels.naver.com/"
+      }
+    ],
+    "rooms": [
+      {
+        "id": "h16-r1",
+        "name": "한실 스탠다드",
+        "bed": "온돌",
+        "size_m2": 33,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "가든뷰",
+        "breakfast": true,
+        "refundable": false,
+        "price": 173000,
+        "original_price": null,
+        "remaining": 1,
+        "photo_id": "1618773928121-c32242e63f39",
+        "options": []
+      },
+      {
+        "id": "h16-r2",
+        "name": "디럭스 트윈 오션뷰",
+        "bed": "싱글 베드 2",
+        "size_m2": 35,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "오션뷰",
+        "breakfast": false,
+        "refundable": true,
+        "price": 223000,
+        "original_price": 256000,
+        "remaining": 9,
+        "photo_id": "1596394516093-501ba68a0ba6",
+        "options": [
+          {
+            "id": "spa",
+            "label": "스파 이용권 2인",
+            "price": 55000
+          }
+        ]
+      },
+      {
+        "id": "h16-r3",
+        "name": "이그제큐티브 스위트",
+        "bed": "킹 베드 1",
+        "size_m2": 57,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "시티뷰",
+        "breakfast": false,
+        "refundable": false,
+        "price": 322000,
+        "original_price": null,
+        "remaining": 3,
+        "photo_id": "1560448204-e02f11c3d0e2",
+        "options": [
+          {
+            "id": "parking",
+            "label": "발렛 주차",
+            "price": 15000
+          },
+          {
+            "id": "breakfast",
+            "label": "조식 2인 추가",
+            "price": 38000
+          }
+        ]
+      },
+      {
+        "id": "h16-r4",
+        "name": "풀빌라 2베드룸",
+        "bed": "킹 베드 1 + 트윈 2",
+        "size_m2": 86,
+        "capacity": {
+          "standard": 4,
+          "max": 6
+        },
+        "view": "오션뷰",
+        "breakfast": true,
+        "refundable": true,
+        "price": 396000,
+        "original_price": 475000,
+        "remaining": 2,
+        "photo_id": "1522798514-97ceb8c4f1c8",
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "h17",
+    "name": "경주 힐튼 호텔",
+    "name_en": "Hilton Gyeongju",
+    "brand": "힐튼",
+    "category": "호텔",
+    "star": 5,
+    "region": "경북",
+    "district": "경주시 보문로",
+    "address": "경북 경주시 보문로 93",
+    "rating": 4.4,
+    "review_count": 356,
+    "base_price": 228000,
+    "original_price": 255000,
+    "discount_percent": 12,
+    "images": [
+      {
+        "photo_id": "1520250497591-112f2f40a3f4",
+        "alt": "경주 힐튼 호텔 사진 1"
+      },
+      {
+        "photo_id": "1519690889869-e705e59f72e1",
+        "alt": "경주 힐튼 호텔 사진 2"
+      },
+      {
+        "photo_id": "1512918728675-ed5a9ecdebfd",
+        "alt": "경주 힐튼 호텔 사진 3"
+      },
+      {
+        "photo_id": "1618221195710-dd6b41faaea6",
+        "alt": "경주 힐튼 호텔 사진 4"
+      },
+      {
+        "photo_id": "1505693416388-ac5ce068fe85",
+        "alt": "경주 힐튼 호텔 사진 5"
+      }
+    ],
+    "description": "경북 경주시 보문로에 위치한 5성급 호텔입니다. 경주 힐튼 호텔은 비즈니스와 휴양을 모두 아우르는 공간으로, 전 객실에 독립 냉난방과 대형 창을 갖췄습니다. 로비 라운지에서는 하루 종일 음료를 제공합니다.",
+    "highlights": [
+      "조식 뷔페에서 한식과 양식을 모두 즐길 수 있습니다.",
+      "전 객실 무료 와이파이와 24시간 룸서비스를 제공합니다.",
+      "실내 수영장과 사우나를 투숙객에게 무료로 개방합니다."
+    ],
+    "amenities": [
+      "business",
+      "parking",
+      "bar",
+      "restaurant",
+      "breakfast",
+      "airport",
+      "pool",
+      "fitness",
+      "laundry",
+      "pet"
+    ],
+    "tags": [
+      "오션뷰",
+      "조식 포함",
+      "수영장"
+    ],
+    "nearby": [
+      {
+        "name": "불국사",
+        "distance_m": 6200
+      },
+      {
+        "name": "보문호수",
+        "distance_m": 400
+      },
+      {
+        "name": "첨성대",
+        "distance_m": 8100
+      },
+      {
+        "name": "동궁과 월지",
+        "distance_m": 7800
+      }
+    ],
+    "policy": {
+      "checkin": "15:00",
+      "checkout": "11:00",
+      "cancel": "체크인 3일 전까지 무료 취소가 가능합니다. 이후에는 첫 1박 요금이 부과됩니다.",
+      "children": "만 12세 이하 아동은 기존 침구 사용 시 무료로 투숙할 수 있습니다."
+    },
+    "competitors": [
+      {
+        "site": "아고다",
+        "price": 248500,
+        "url": "https://www.agoda.com/ko-kr/"
+      },
+      {
+        "site": "부킹닷컴",
+        "price": 244000,
+        "url": "https://www.booking.com/"
+      },
+      {
+        "site": "네이버 호텔",
+        "price": 232600,
+        "url": "https://hotels.naver.com/"
+      }
+    ],
+    "rooms": [
+      {
+        "id": "h17-r1",
+        "name": "스탠다드 트윈",
+        "bed": "싱글 베드 2",
+        "size_m2": 28,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "시티뷰",
+        "breakfast": true,
+        "refundable": true,
+        "price": 228000,
+        "original_price": 249000,
+        "remaining": 3,
+        "photo_id": "1566195992011-5f6b21e539aa",
+        "options": [
+          {
+            "id": "late",
+            "label": "레이트 체크아웃 (14시)",
+            "price": 30000
+          },
+          {
+            "id": "spa",
+            "label": "스파 이용권 2인",
+            "price": 55000
+          }
+        ]
+      },
+      {
+        "id": "h17-r2",
+        "name": "마운틴뷰 디럭스",
+        "bed": "퀸 베드 1",
+        "size_m2": 36,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "마운틴뷰",
+        "breakfast": false,
+        "refundable": false,
+        "price": 269000,
+        "original_price": null,
+        "remaining": 2,
+        "photo_id": "1568084680786-a84f91d1153c",
+        "options": [
+          {
+            "id": "late",
+            "label": "레이트 체크아웃 (14시)",
+            "price": 30000
+          }
+        ]
+      },
+      {
+        "id": "h17-r3",
+        "name": "디럭스 킹 시티뷰",
+        "bed": "킹 베드 1",
+        "size_m2": 35,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "시티뷰",
+        "breakfast": true,
+        "refundable": true,
+        "price": 278000,
+        "original_price": 306000,
+        "remaining": 9,
+        "photo_id": "1521783988139-89397d761dce",
+        "options": [
+          {
+            "id": "late",
+            "label": "레이트 체크아웃 (14시)",
+            "price": 30000
+          }
+        ]
+      },
+      {
+        "id": "h17-r4",
+        "name": "풀빌라 2베드룸",
+        "bed": "킹 베드 1 + 트윈 2",
+        "size_m2": 92,
+        "capacity": {
+          "standard": 4,
+          "max": 6
+        },
+        "view": "오션뷰",
+        "breakfast": true,
+        "refundable": false,
+        "price": 547000,
+        "original_price": null,
+        "remaining": 4,
+        "photo_id": "1559599189-fe84dea4eb79",
+        "options": [
+          {
+            "id": "spa",
+            "label": "스파 이용권 2인",
+            "price": 55000
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "h18",
+    "name": "여수 베네치아 호텔 & 리조트",
+    "name_en": "Yeosu Venezia Hotel & Resort",
+    "brand": "베네치아",
+    "category": "리조트",
+    "star": 4,
+    "region": "전남",
+    "district": "여수시 돌산읍",
+    "address": "전남 여수시 돌산읍 77",
+    "rating": 4.3,
+    "review_count": 589,
+    "base_price": 148000,
+    "original_price": 163000,
+    "discount_percent": 10,
+    "images": [
+      {
+        "photo_id": "1551882547-ff40c63fe5fa",
+        "alt": "여수 베네치아 호텔 & 리조트 사진 1"
+      },
+      {
+        "photo_id": "1571003123894-1f0594d2b5d9",
+        "alt": "여수 베네치아 호텔 & 리조트 사진 2"
+      },
+      {
+        "photo_id": "1582719478250-c89cae4dc85b",
+        "alt": "여수 베네치아 호텔 & 리조트 사진 3"
+      },
+      {
+        "photo_id": "1590490360182-c33d57733427",
+        "alt": "여수 베네치아 호텔 & 리조트 사진 4"
+      },
+      {
+        "photo_id": "1631049307264-da0ec9d70304",
+        "alt": "여수 베네치아 호텔 & 리조트 사진 5"
+      }
+    ],
+    "description": "전남 여수시 돌산읍에 위치한 4성급 리조트입니다. 여수 베네치아 호텔 & 리조트은 비즈니스와 휴양을 모두 아우르는 공간으로, 전 객실에 독립 냉난방과 대형 창을 갖췄습니다. 로비 라운지에서는 하루 종일 음료를 제공합니다.",
+    "highlights": [
+      "체크인 전·체크아웃 후에도 짐을 맡길 수 있습니다.",
+      "전 객실 무료 와이파이와 24시간 룸서비스를 제공합니다.",
+      "조식 뷔페에서 한식과 양식을 모두 즐길 수 있습니다."
+    ],
+    "amenities": [
+      "parking",
+      "airport",
+      "pet",
+      "fitness",
+      "laundry"
+    ],
+    "tags": [
+      "오션뷰",
+      "조식 포함",
+      "역세권"
+    ],
+    "nearby": [
+      {
+        "name": "여수엑스포해양공원",
+        "distance_m": 5400
+      },
+      {
+        "name": "오동도",
+        "distance_m": 6100
+      },
+      {
+        "name": "돌산대교",
+        "distance_m": 2200
+      },
+      {
+        "name": "향일암",
+        "distance_m": 14000
+      }
+    ],
+    "policy": {
+      "checkin": "15:00",
+      "checkout": "11:00",
+      "cancel": "체크인 3일 전까지 무료 취소가 가능합니다. 이후에는 첫 1박 요금이 부과됩니다.",
+      "children": "만 12세 이하 아동은 기존 침구 사용 시 무료로 투숙할 수 있습니다."
+    },
+    "competitors": [
+      {
+        "site": "아고다",
+        "price": 153900,
+        "url": "https://www.agoda.com/ko-kr/"
+      },
+      {
+        "site": "부킹닷컴",
+        "price": 159800,
+        "url": "https://www.booking.com/"
+      },
+      {
+        "site": "네이버 호텔",
+        "price": 161300,
+        "url": "https://hotels.naver.com/"
+      }
+    ],
+    "rooms": [
+      {
+        "id": "h18-r1",
+        "name": "스탠다드 트윈",
+        "bed": "싱글 베드 2",
+        "size_m2": 30,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "시티뷰",
+        "breakfast": true,
+        "refundable": true,
+        "price": 148000,
+        "original_price": null,
+        "remaining": 3,
+        "photo_id": "1493809842364-78817add7ffb",
+        "options": []
+      },
+      {
+        "id": "h18-r2",
+        "name": "이그제큐티브 스위트",
+        "bed": "킹 베드 1",
+        "size_m2": 61,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "시티뷰",
+        "breakfast": true,
+        "refundable": false,
+        "price": 289000,
+        "original_price": 350000,
+        "remaining": 1,
+        "photo_id": "1600210492486-724fe5c67fb0",
+        "options": []
+      },
+      {
+        "id": "h18-r3",
+        "name": "풀빌라 2베드룸",
+        "bed": "킹 베드 1 + 트윈 2",
+        "size_m2": 89,
+        "capacity": {
+          "standard": 4,
+          "max": 6
+        },
+        "view": "오션뷰",
+        "breakfast": true,
+        "refundable": true,
+        "price": 355000,
+        "original_price": 394000,
+        "remaining": 5,
+        "photo_id": "1566073771259-6a8506099945",
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "h19",
+    "name": "전주 한옥마을 부티크 호텔",
+    "name_en": "Jeonju Hanok Boutique Hotel",
+    "brand": "한옥마을",
+    "category": "부티크 호텔",
+    "star": 3,
+    "region": "전북",
+    "district": "전주시 완산구",
+    "address": "전북 전주시 완산구 212",
+    "rating": 4.5,
+    "review_count": 3560,
+    "base_price": 89000,
+    "original_price": 98000,
+    "discount_percent": 10,
+    "images": [
+      {
+        "photo_id": "1596394516093-501ba68a0ba6",
+        "alt": "전주 한옥마을 부티크 호텔 사진 1"
+      },
+      {
+        "photo_id": "1560448204-e02f11c3d0e2",
+        "alt": "전주 한옥마을 부티크 호텔 사진 2"
+      },
+      {
+        "photo_id": "1522798514-97ceb8c4f1c8",
+        "alt": "전주 한옥마을 부티크 호텔 사진 3"
+      },
+      {
+        "photo_id": "1584132967334-10e028bd69f7",
+        "alt": "전주 한옥마을 부티크 호텔 사진 4"
+      },
+      {
+        "photo_id": "1540518614846-7eded433c457",
+        "alt": "전주 한옥마을 부티크 호텔 사진 5"
+      }
+    ],
+    "description": "전북 전주시 완산구에 위치한 3성급 부티크 호텔입니다. 전주 한옥마을 부티크 호텔은 비즈니스와 휴양을 모두 아우르는 공간으로, 전 객실에 독립 냉난방과 대형 창을 갖췄습니다. 로비 라운지에서는 하루 종일 음료를 제공합니다.",
+    "highlights": [
+      "체크인 전·체크아웃 후에도 짐을 맡길 수 있습니다.",
+      "실내 수영장과 사우나를 투숙객에게 무료로 개방합니다.",
+      "조식 뷔페에서 한식과 양식을 모두 즐길 수 있습니다."
+    ],
+    "amenities": [
+      "airport",
+      "wifi",
+      "pet",
+      "parking",
+      "spa"
+    ],
+    "tags": [
+      "오션뷰",
+      "조식 포함",
+      "역세권"
+    ],
+    "nearby": [
+      {
+        "name": "전주한옥마을",
+        "distance_m": 300
+      },
+      {
+        "name": "경기전",
+        "distance_m": 550
+      },
+      {
+        "name": "전동성당",
+        "distance_m": 700
+      },
+      {
+        "name": "오목대",
+        "distance_m": 900
+      }
+    ],
+    "policy": {
+      "checkin": "15:00",
+      "checkout": "11:00",
+      "cancel": "체크인 3일 전까지 무료 취소가 가능합니다. 이후에는 첫 1박 요금이 부과됩니다.",
+      "children": "만 12세 이하 아동은 기존 침구 사용 시 무료로 투숙할 수 있습니다."
+    },
+    "competitors": [
+      {
+        "site": "아고다",
+        "price": 95200,
+        "url": "https://www.agoda.com/ko-kr/"
+      },
+      {
+        "site": "부킹닷컴",
+        "price": 97000,
+        "url": "https://www.booking.com/"
+      },
+      {
+        "site": "네이버 호텔",
+        "price": 94300,
+        "url": "https://hotels.naver.com/"
+      }
+    ],
+    "rooms": [
+      {
+        "id": "h19-r1",
+        "name": "스탠다드 트윈",
+        "bed": "싱글 베드 2",
+        "size_m2": 25,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "시티뷰",
+        "breakfast": true,
+        "refundable": false,
+        "price": 89000,
+        "original_price": null,
+        "remaining": 2,
+        "photo_id": "1445019980597-93fa8acb246c",
+        "options": []
+      },
+      {
+        "id": "h19-r2",
+        "name": "마운틴뷰 디럭스",
+        "bed": "퀸 베드 1",
+        "size_m2": 28,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "마운틴뷰",
+        "breakfast": true,
+        "refundable": true,
+        "price": 105000,
+        "original_price": 118000,
+        "remaining": 8,
+        "photo_id": "1578683010236-d716f9a3f461",
+        "options": [
+          {
+            "id": "parking",
+            "label": "발렛 주차",
+            "price": 15000
+          }
+        ]
+      },
+      {
+        "id": "h19-r3",
+        "name": "디럭스 킹 시티뷰",
+        "bed": "킹 베드 1",
+        "size_m2": 37,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "시티뷰",
+        "breakfast": true,
+        "refundable": false,
+        "price": 109000,
+        "original_price": 125000,
+        "remaining": 8,
+        "photo_id": "1611892440504-42a792e24d32",
+        "options": [
+          {
+            "id": "parking",
+            "label": "발렛 주차",
+            "price": 15000
+          },
+          {
+            "id": "late",
+            "label": "레이트 체크아웃 (14시)",
+            "price": 30000
+          }
+        ]
+      },
+      {
+        "id": "h19-r4",
+        "name": "프리미어 킹 오션뷰",
+        "bed": "킹 베드 1",
+        "size_m2": 46,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "오션뷰",
+        "breakfast": false,
+        "refundable": false,
+        "price": 134000,
+        "original_price": null,
+        "remaining": 2,
+        "photo_id": "1618773928121-c32242e63f39",
+        "options": [
+          {
+            "id": "spa",
+            "label": "스파 이용권 2인",
+            "price": 55000
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "h20",
+    "name": "인천 파라다이스 시티 호텔",
+    "name_en": "Paradise City Incheon",
+    "brand": "파라다이스",
+    "category": "호텔",
+    "star": 5,
+    "region": "인천",
+    "district": "중구 영종해안남로",
+    "address": "인천 중구 영종해안남로 206",
+    "rating": 4.6,
+    "review_count": 3120,
+    "base_price": 404000,
+    "original_price": 473000,
+    "discount_percent": 17,
+    "images": [
+      {
+        "photo_id": "1566195992011-5f6b21e539aa",
+        "alt": "인천 파라다이스 시티 호텔 사진 1"
+      },
+      {
+        "photo_id": "1568084680786-a84f91d1153c",
+        "alt": "인천 파라다이스 시티 호텔 사진 2"
+      },
+      {
+        "photo_id": "1521783988139-89397d761dce",
+        "alt": "인천 파라다이스 시티 호텔 사진 3"
+      },
+      {
+        "photo_id": "1559599189-fe84dea4eb79",
+        "alt": "인천 파라다이스 시티 호텔 사진 4"
+      },
+      {
+        "photo_id": "1520250497591-112f2f40a3f4",
+        "alt": "인천 파라다이스 시티 호텔 사진 5"
+      }
+    ],
+    "description": "인천 중구 영종해안남로에 위치한 5성급 호텔입니다. 인천 파라다이스 시티 호텔은 비즈니스와 휴양을 모두 아우르는 공간으로, 전 객실에 독립 냉난방과 대형 창을 갖췄습니다. 로비 라운지에서는 하루 종일 음료를 제공합니다.",
+    "highlights": [
+      "주변에 대형 쇼핑몰과 전통시장이 인접해 있습니다.",
+      "조식 뷔페에서 한식과 양식을 모두 즐길 수 있습니다.",
+      "전 층 금연이며 공기청정기가 비치되어 있습니다."
+    ],
+    "amenities": [
+      "airport",
+      "pool",
+      "laundry",
+      "pet",
+      "spa",
+      "restaurant",
+      "wifi",
+      "fitness",
+      "bar",
+      "business"
+    ],
+    "tags": [
+      "오션뷰",
+      "조식 포함",
+      "수영장"
+    ],
+    "nearby": [
+      {
+        "name": "인천국제공항",
+        "distance_m": 4200
+      },
+      {
+        "name": "을왕리해수욕장",
+        "distance_m": 8900
+      },
+      {
+        "name": "영종대교 전망대",
+        "distance_m": 11000
+      },
+      {
+        "name": "차이나타운",
+        "distance_m": 21000
+      }
+    ],
+    "policy": {
+      "checkin": "15:00",
+      "checkout": "11:00",
+      "cancel": "체크인 3일 전까지 무료 취소가 가능합니다. 이후에는 첫 1박 요금이 부과됩니다.",
+      "children": "만 12세 이하 아동은 기존 침구 사용 시 무료로 투숙할 수 있습니다."
+    },
+    "competitors": [
+      {
+        "site": "아고다",
+        "price": 432300,
+        "url": "https://www.agoda.com/ko-kr/"
+      },
+      {
+        "site": "부킹닷컴",
+        "price": 424200,
+        "url": "https://www.booking.com/"
+      },
+      {
+        "site": "네이버 호텔",
+        "price": 424200,
+        "url": "https://hotels.naver.com/"
+      }
+    ],
+    "rooms": [
+      {
+        "id": "h20-r1",
+        "name": "한실 스탠다드",
+        "bed": "온돌",
+        "size_m2": 26,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "가든뷰",
+        "breakfast": true,
+        "refundable": true,
+        "price": 404000,
+        "original_price": null,
+        "remaining": 5,
+        "photo_id": "1615460549969-36fa19521a4f",
+        "options": []
+      },
+      {
+        "id": "h20-r2",
+        "name": "마운틴뷰 디럭스",
+        "bed": "퀸 베드 1",
+        "size_m2": 34,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "마운틴뷰",
+        "breakfast": true,
+        "refundable": true,
+        "price": 454000,
+        "original_price": null,
+        "remaining": 6,
+        "photo_id": "1587985064135-0366536eab42",
+        "options": [
+          {
+            "id": "late",
+            "label": "레이트 체크아웃 (14시)",
+            "price": 30000
+          }
+        ]
+      },
+      {
+        "id": "h20-r3",
+        "name": "디럭스 트윈 오션뷰",
+        "bed": "싱글 베드 2",
+        "size_m2": 36,
+        "capacity": {
+          "standard": 2,
+          "max": 3
+        },
+        "view": "오션뷰",
+        "breakfast": false,
+        "refundable": true,
+        "price": 520000,
+        "original_price": null,
+        "remaining": 3,
+        "photo_id": "1602002418082-a4443e081dd1",
+        "options": [
+          {
+            "id": "breakfast",
+            "label": "조식 2인 추가",
+            "price": 38000
+          }
+        ]
+      }
+    ]
+  }
+]
