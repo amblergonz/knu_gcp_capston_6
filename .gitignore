@@ -27,3 +27,17 @@ notebooks/outputs/session_features.csv
 notebooks/ab_analysis_script.py
 .venv/
 __pycache__/
+
+# 로컬 발표 자료 바이너리 (레포에 올리지 않음)
+*.pptx
+*.docx
+~$*
+
+# pnpm 워크스페이스인데 npm 으로 설치되며 생긴 잔여물
+packages/*/package-lock.json
+
+# TypeScript 증분 빌드 캐시
+*.tsbuildinfo
+
+# Next.js 검증용 별도 빌드 출력
+.next-build/
