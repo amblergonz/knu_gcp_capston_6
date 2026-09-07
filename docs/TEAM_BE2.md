@@ -1,12 +1,12 @@
-# ⚙️ BE2 — Rule Engine + Stream Worker + Decision API
+# BE2 — Rule Engine + Stream Worker + Decision API
 
-## 📌 당신의 미션
+## 당신의 미션
 
 **"언제 고객에게 개입할지"의 두뇌. S1·S2 룰을 실제로 작동시키고, 결정을 반환하는 시스템입니다.**
 
 ---
 
-## 🎯 W1 — Kickoff (4/29 ~ 5/3)
+## W1 — Kickoff (4/29 ~ 5/3)
 
 ### 할 일
 - [ ] PRD v1.0 정독 + 질문/이슈
@@ -30,11 +30,11 @@ cd packages/decision-api
 npm install fastify zod
 ```
 
-> 📌 **중요:** 개입 페이로드는 FE2가 Widget SDK를 만들 때 필요합니다. W2 첫날까지 조인해야 합니다.
+> **중요:** 개입 페이로드는 FE2가 Widget SDK를 만들 때 필요합니다. W2 첫날까지 조인해야 합니다.
 
 ---
 
-## 🎯 W2 — 골격 구축 (5/6 ~ 5/10)
+## W2 — 골격 구축 (5/6 ~ 5/10)
 
 ### Stream Worker
 - [ ] Redis Streams 컨슈머 구조
@@ -61,7 +61,7 @@ npm install fastify zod
     'hover:events',
     lastId
   );
-  
+
   for (const [stream, data] of events) {
     for (const [id, fields] of data) {
       const event = deserialize(fields);
@@ -133,7 +133,7 @@ npm run dev
 
 ---
 
-## 🎯 W3 — 룰 작동 및 A/B 분기 (5/13 ~ 5/17)
+## W3 — 룰 작동 및 A/B 분기 (5/13 ~ 5/17)
 
 ### Stream Worker 완성
 - [ ] 룰 엔진 통합 완료
@@ -145,7 +145,7 @@ npm run dev
   // session_id 해시로 control/treatment 50:50 분할
   const hash = hashCode(decision.session_id) % 100;
   const abGroup = hash < 50 ? 'control' : 'treatment';
-  
+
   // control group: 개입 안 함 (위젯 없음)
   // treatment group: 개입 함 (위젯 있음)
   ```
@@ -197,12 +197,12 @@ npm run dev
   # 1. 데모 사이트에서 카트 추가 (cart_count: 1)
   # 2. 다른 탭으로 전환 (tab_hidden_seconds: 30+)
   # 3. 복귀 시 Decision API 호출
-  # 4. 쿠폰 모달이 화면에 나타남 ✅
+  # 4. 쿠폰 모달이 화면에 나타남 [x]
   ```
 
 ---
 
-## 🎯 W4 ~ W6 — S2 + 통계
+## W4 ~ W6 — S2 + 통계
 
 ### W4
 - [ ] S2 룰 동작 확인
@@ -221,7 +221,7 @@ npm run dev
 
 ---
 
-## 📋 주요 파일 & 타입
+## 주요 파일 & 타입
 
 ### Stream Worker 구조
 ```typescript
@@ -236,20 +236,20 @@ engine.addRule(rules);
 
 async function processStream() {
   const events = await redis.xread('STREAMS', 'hover:events', lastId);
-  
+
   for (const event of events) {
     // 세션 상태 조회
     const sessionState = await getSessionState(event.session_id);
-    
+
     // 룰 엔진 실행
     const facts = {
       cart_count: sessionState.cart_count,
       tab_hidden_seconds: now - sessionState.tab_change_ts,
       ...
     };
-    
+
     const { events: decisions } = await engine.run(facts);
-    
+
     // PostgreSQL에 저장
     for (const decision of decisions) {
       await db.insertIntervention({
@@ -267,14 +267,14 @@ async function processStream() {
 // src/server.ts
 fastify.post('/decide', async (req, reply) => {
   const { session_id, scenario_id } = req.body;
-  
+
   // 1. 세션 상태 조회
   const state = await getSessionState(session_id);
-  
+
   // 2. A/B 분기
   const hash = hashCode(session_id) % 100;
   const abGroup = hash < 50 ? 'control' : 'treatment';
-  
+
   // 3. Control group은 개입 안 함
   if (abGroup === 'control') {
     return {
@@ -282,10 +282,10 @@ fastify.post('/decide', async (req, reply) => {
       widgets: [] // 비어있음
     };
   }
-  
+
   // 4. Treatment group: 룰 엔진 실행 후 위젯 반환
   const intervention = await getLatestIntervention(session_id, scenario_id);
-  
+
   return {
     intervention_id: intervention.id,
     scenario_id: intervention.scenario_id,
@@ -297,7 +297,7 @@ fastify.post('/decide', async (req, reply) => {
 
 ---
 
-## 🔗 의존성 & 협업
+## 의존성 & 협업
 
 ### FE2와 협력
 - **개입 페이로드 정의** (W1 동결)
@@ -313,7 +313,7 @@ fastify.post('/decide', async (req, reply) => {
 
 ---
 
-## 💡 팁
+## 팁
 
 1. **json-rules-engine 문법**
    ```javascript
@@ -356,7 +356,7 @@ fastify.post('/decide', async (req, reply) => {
 
 ---
 
-## 📞 블로커 발생 시
+## 블로커 발생 시
 
 - **Ingestion API 연결 안 됨?** → BE1에 확인 (W2)
 - **Redis Streams 문법?** → 공식 튜토리얼 (빠름)
@@ -364,4 +364,4 @@ fastify.post('/decide', async (req, reply) => {
 
 ---
 
-**Remember:** 당신의 Decision API가 1.5초 안에 응답하지 않으면 위젯이 너무 늦게 뜹니다. 성능이 중요! ⚡
+**Remember:** 당신의 Decision API가 1.5초 안에 응답하지 않으면 위젯이 너무 늦게 뜹니다. 성능이 중요!

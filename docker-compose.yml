@@ -1,7 +1,11 @@
 version: '3.8'
 
+# 저장소는 Redis 하나다.
+# PostgreSQL·ClickHouse·model-api 는 어느 코드도 읽거나 쓰지 않아 제거했다.
+# 분석 파이프라인을 다시 붙일 때는 실제로 쓰는 코드와 함께 되살릴 것.
+
 services:
-  # Redis for Streams & Sessions
+  # Streams · 세션 상태 · 개입 큐 · 런타임 설정
   redis:
     image: redis:7-alpine
     container_name: hover-redis
@@ -11,41 +15,6 @@ services:
       - redis_data:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
-
-  # PostgreSQL for metadata
-  postgres:
-    image: postgres:16-alpine
-    container_name: hover-postgres
-    environment:
-      POSTGRES_DB: hover
-      POSTGRES_USER: hover
-      POSTGRES_PASSWORD: hover_dev
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U hover"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
-
-  # ClickHouse for Analytics
-  clickhouse:
-    image: clickhouse/clickhouse-server:24-alpine
-    container_name: hover-clickhouse
-    ports:
-      - "8123:8123"
-      - "9000:9000"
-    environment:
-      CLICKHOUSE_DB: hover
-    volumes:
-      - clickhouse_data:/var/lib/clickhouse
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8123/ping"]
       interval: 5s
       timeout: 3s
       retries: 5
@@ -61,15 +30,13 @@ services:
     environment:
       NODE_ENV: development
       REDIS_URL: redis://redis:6379
-      POSTGRES_URL: postgresql://hover:hover_dev@postgres:5432/hover
     depends_on:
       redis:
         condition: service_healthy
-      postgres:
-        condition: service_healthy
     restart: unless-stopped
 
-  # Stream Worker (BE2)
+  # Stream Worker (BE2) — 단일 인스턴스만 실행할 것.
+  # consumer group 없이 XREAD 하므로 두 개를 띄우면 개입이 중복 발화한다.
   stream-worker:
     build:
       context: ./packages/stream-worker
@@ -78,14 +45,15 @@ services:
     environment:
       NODE_ENV: development
       REDIS_URL: redis://redis:6379
-      POSTGRES_URL: postgresql://hover:hover_dev@postgres:5432/hover
-      CLICKHOUSE_URL: http://clickhouse:8123
+      THRESHOLDS_PATH: /app/config/thresholds.yml
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.5-flash}
+      GEMINI_TIMEOUT_MS: ${GEMINI_TIMEOUT_MS:-10000}
+      CONFIG_OVERRIDE_ENABLED: ${CONFIG_OVERRIDE_ENABLED:-true}
+    volumes:
+      - ./packages/shared/config:/app/config:ro
     depends_on:
       redis:
-        condition: service_healthy
-      postgres:
-        condition: service_healthy
-      clickhouse:
         condition: service_healthy
     restart: unless-stopped
 
@@ -100,15 +68,12 @@ services:
     environment:
       NODE_ENV: development
       REDIS_URL: redis://redis:6379
-      POSTGRES_URL: postgresql://hover:hover_dev@postgres:5432/hover
     depends_on:
       redis:
         condition: service_healthy
-      postgres:
-        condition: service_healthy
     restart: unless-stopped
 
-  # Dashboard API (BE3)
+  # Dashboard API (BE3) — 집계 + 신호 튜닝 설정
   dashboard-api:
     build:
       context: ./packages/dashboard-api
@@ -119,14 +84,10 @@ services:
     environment:
       NODE_ENV: development
       REDIS_URL: redis://redis:6379
-      POSTGRES_URL: postgresql://hover:hover_dev@postgres:5432/hover
-      CLICKHOUSE_URL: http://clickhouse:8123
+      CONFIG_WRITE_ENABLED: ${CONFIG_WRITE_ENABLED:-true}
+      CONFIG_WRITE_TOKEN: ${CONFIG_WRITE_TOKEN:-}
     depends_on:
       redis:
-        condition: service_healthy
-      postgres:
-        condition: service_healthy
-      clickhouse:
         condition: service_healthy
     restart: unless-stopped
 
@@ -139,11 +100,13 @@ services:
     ports:
       - "3000:3000"
     environment:
-      NEXT_PUBLIC_INGESTION_API: http://localhost:4000
-      NEXT_PUBLIC_DECISION_API: http://localhost:4001
+      NEXT_PUBLIC_INGESTION_URL: http://localhost:4000
+      NEXT_PUBLIC_DECISION_URL: http://localhost:4001
+      NEXT_PUBLIC_DASHBOARD_API: http://localhost:4002
     depends_on:
       - ingestion-api
       - decision-api
+      - dashboard-api
     restart: unless-stopped
 
   # Admin Dashboard (FE2)
@@ -162,8 +125,6 @@ services:
 
 volumes:
   redis_data:
-  postgres_data:
-  clickhouse_data:
 
 networks:
   default:

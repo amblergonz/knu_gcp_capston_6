@@ -1,0 +1,14 @@
+{
+  "t_rate": 0.7864,
+  "c_rate": 0.7217,
+  "chi2": 2.3794,
+  "p_value": 0.122948,
+  "uplift": 8.95,
+  "fp_rate": 0.0,
+  "precision": 100.0,
+  "total_fired": 753,
+  "tp": 753,
+  "fp": 0,
+  "significant": false,
+  "fp_ok": true
+}
