@@ -46,41 +46,120 @@ fastify.get('/stream/live', (request, reply) => {
   });
 });
 
-// 16개 신호별 수집 카운트 (stub — ClickHouse 연동 전 mock, 고정값)
+// ─────────────────────────────────────────────────────────────
+// 집계
+//
+// 두 지표 모두 Redis 스트림을 직접 훑는다. 데모 규모(수천 건)에서는
+// 전체 스캔이 충분히 빠르고, 별도 집계 저장소를 두지 않아도 된다.
+// 스트림이 커지면 MAX_SCAN 이 상한을 잡는다.
+// ─────────────────────────────────────────────────────────────
+
+const EVENT_STREAM_KEY = process.env.EVENT_STREAM_KEY || 'events_stream';
+const INTERVENTION_STREAM_KEY = process.env.INTERVENTION_STREAM_KEY || 'interventions_stream';
+const MAX_SCAN = parseInt(process.env.AGGREGATE_MAX_SCAN || '20000', 10);
+
+// ingestion-api 의 열거형과 같은 순서. 한 건도 없는 타입도 0 으로 보여야
+// "아직 안 잡힌 신호"가 대시보드에서 눈에 띈다.
+const EVENT_TYPES = [
+  'visibility_change', 'window_focus', 'idle', 'scroll', 'scroll_depth',
+  'form_field', 'clipboard_copy', 'broadcast_channel', 'page_lifecycle',
+  'cart_change', 'add_to_cart', 'page_view', 'click', 'external_link',
+  'search_query', 'wishlist_add',
+];
+
+function fieldsToObject(fields) {
+  const out = {};
+  for (let i = 0; i < fields.length; i += 2) out[fields[i]] = fields[i + 1];
+  return out;
+}
+
 fastify.get('/signals/coverage', async () => {
-  return {
-    page_view:               2847,
-    visibility_change:       1923,
-    click:                   1654,
-    scroll_depth:            1432,
-    idle_timeout:             891,
-    session_duration:        1203,
-    add_to_cart:              743,
-    form_focus:               612,
-    referrer_price_compare:   387,
-    external_link:            431,
-    search_query:             512,
-    mouse_leave:              934,
-    back_button:              289,
-    clipboard_copy:           264,
-    broadcast_multi_tab:      198,
-    wishlist_add:             178,
-  };
+  const counts = {};
+  for (const type of EVENT_TYPES) counts[type] = 0;
+
+  let sessions = new Set();
+  let total = 0;
+
+  try {
+    const entries = await redis.xrevrange(EVENT_STREAM_KEY, '+', '-', 'COUNT', MAX_SCAN);
+    for (const [, fields] of entries) {
+      const row = fieldsToObject(fields);
+      if (row.session_id) sessions.add(row.session_id);
+      let event;
+      try {
+        event = JSON.parse(row.data);
+      } catch (_) {
+        continue;
+      }
+      if (event && typeof event.type === 'string' && counts[event.type] !== undefined) {
+        counts[event.type] += 1;
+        total += 1;
+      }
+    }
+  } catch (err) {
+    fastify.log.error({ err }, 'signals/coverage aggregation failed');
+  }
+
+  return { counts, total_events: total, sessions: sessions.size, scanned_at: Date.now() };
 });
 
-// 시나리오별 발화 통계 (stub — ClickHouse 연동 전 mock)
-fastify.get('/scenarios/firings', async (request) => {
-  const { from, to } = request.query;
+fastify.get('/scenarios/firings', async () => {
+  // interventions_stream 은 워커가 개입을 만들 때마다 XADD 한다.
+  // 여기가 그 스트림의 첫 소비처다.
+  const byScenario = {
+    S1: { scenario_id: 'S1', fired: 0, control: 0, treatment: 0 },
+    S2: { scenario_id: 'S2', fired: 0, control: 0, treatment: 0 },
+  };
+  const bySource = { gemini: 0, fallback: 0 };
+  const boosterCounts = {};
+  let scoreSum = 0;
+
+  try {
+    const entries = await redis.xrevrange(INTERVENTION_STREAM_KEY, '+', '-', 'COUNT', MAX_SCAN);
+    for (const [, fields] of entries) {
+      const row = fieldsToObject(fields);
+      const bucket = byScenario[row.scenario_id];
+      if (!bucket) continue;
+
+      bucket.fired += 1;
+      if (row.ab_group === 'control') bucket.control += 1;
+      else bucket.treatment += 1;
+
+      const score = Number(row.intent_score);
+      if (Number.isFinite(score)) scoreSum += score;
+
+      if (bySource[row.copy_source] !== undefined) bySource[row.copy_source] += 1;
+
+      try {
+        for (const b of JSON.parse(row.scored_boosters || row.active_boosters || '[]')) {
+          boosterCounts[b] = (boosterCounts[b] || 0) + 1;
+        }
+      } catch (_) {
+        /* 손상된 항목은 건너뛴다 */
+      }
+    }
+  } catch (err) {
+    fastify.log.error({ err }, 'scenarios/firings aggregation failed');
+  }
+
+  const scenarios = Object.values(byScenario);
+  const totalFired = scenarios.reduce((sum, x) => sum + x.fired, 0);
+
   return {
-    from: from || null,
-    to: to || null,
-    scenarios: [
-      { scenario_id: 'S1', fired: 42, converted: 7, ctr: 0.167 },
-      { scenario_id: 'S2', fired: 18, converted: 3, ctr: 0.167 },
-    ],
+    scenarios,
+    total_fired: totalFired,
+    // control 은 개입이 만들어졌지만 프론트가 표시하지 않은 건수다.
+    // 전환 추적이 없으므로 CTR 대신 노출 비율을 그대로 보여준다.
+    ab_split: {
+      control: scenarios.reduce((sum, x) => sum + x.control, 0),
+      treatment: scenarios.reduce((sum, x) => sum + x.treatment, 0),
+    },
+    copy_source: bySource,
+    booster_counts: boosterCounts,
+    avg_intent_score: totalFired > 0 ? Math.round((scoreSum / totalFired) * 100) / 100 : 0,
+    scanned_at: Date.now(),
   };
 });
-
 
 // ─────────────────────────────────────────────────────────────
 // 신호 튜닝 설정 (SIGNAL 콘솔)

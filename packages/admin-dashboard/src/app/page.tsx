@@ -23,7 +23,16 @@ const C = {
 };
 
 interface LiveEvent { ts: number; event: string; session_id?: string; }
-interface ScenarioRow { scenario_id: string; fired: number; converted: number; ctr: number; }
+interface ScenarioRow { scenario_id: string; fired: number; control: number; treatment: number; }
+interface Firings {
+  scenarios: ScenarioRow[];
+  total_fired: number;
+  ab_split: { control: number; treatment: number };
+  copy_source: { gemini: number; fallback: number };
+  booster_counts: Record<string, number>;
+  avg_intent_score: number;
+}
+interface Coverage { counts: Record<string, number>; total_events: number; sessions: number; }
 
 function StatCard({ label, value, sub, color }: { label: string; value: string | number; sub: string; color: string }) {
   return (
@@ -51,8 +60,8 @@ const SIGNAL_COLORS = [
 
 export default function Dashboard() {
   const [liveEvents, setLiveEvents] = useState<LiveEvent[]>([]);
-  const [coverage, setCoverage] = useState<Record<string, number>>({});
-  const [scenarios, setScenarios] = useState<ScenarioRow[]>([]);
+  const [coverage, setCoverage] = useState<Coverage | null>(null);
+  const [firings, setFirings] = useState<Firings | null>(null);
   const [isLive, setIsLive] = useState(false);
   const [liveCount, setLiveCount] = useState(0);
   const [now, setNow] = useState('');
@@ -61,8 +70,14 @@ export default function Dashboard() {
   useEffect(() => { setNow(new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })); }, []);
 
   useEffect(() => {
-    fetch(`${API}/signals/coverage`).then(r => r.json()).then(setCoverage).catch(() => {});
-    fetch(`${API}/scenarios/firings`).then(r => r.json()).then((d) => setScenarios(d.scenarios ?? [])).catch(() => {});
+    // 실제 Redis 스트림 집계라 시간이 지나면 값이 는다. 10초마다 다시 읽는다.
+    const load = () => {
+      fetch(`${API}/signals/coverage`).then(r => r.json()).then(setCoverage).catch(() => {});
+      fetch(`${API}/scenarios/firings`).then(r => r.json()).then(setFirings).catch(() => {});
+    };
+    load();
+    const id = setInterval(load, 10000);
+    return () => clearInterval(id);
   }, []);
 
   useEffect(() => {
@@ -78,17 +93,21 @@ export default function Dashboard() {
     return () => es.close();
   }, []);
 
-  const coverageData = Object.entries(coverage)
+  const coverageData = Object.entries(coverage?.counts ?? {})
     .sort(([, a], [, b]) => b - a)
     .map(([name, value]) => ({ name: name.replace(/_/g, ' '), value }));
 
-  const firingsData = scenarios.map(s => ({ name: s.scenario_id, 발화: s.fired, 전환: s.converted }));
+  const scenarios = firings?.scenarios ?? [];
+  const firingsData = scenarios.map(s => ({ name: s.scenario_id, 표시: s.treatment, 억제: s.control }));
 
   const s1 = scenarios.find(s => s.scenario_id === 'S1');
   const s2 = scenarios.find(s => s.scenario_id === 'S2');
-  const totalFired = (s1?.fired ?? 0) + (s2?.fired ?? 0);
-  const totalConverted = (s1?.converted ?? 0) + (s2?.converted ?? 0);
-  const overallCtr = totalFired > 0 ? ((totalConverted / totalFired) * 100).toFixed(1) : '-';
+  const totalFired = firings?.total_fired ?? 0;
+  const shown = firings?.ab_split.treatment ?? 0;
+  const suppressed = firings?.ab_split.control ?? 0;
+  const geminiRate = firings && (firings.copy_source.gemini + firings.copy_source.fallback) > 0
+    ? Math.round((firings.copy_source.gemini / (firings.copy_source.gemini + firings.copy_source.fallback)) * 100)
+    : null;
 
   return (
     <div style={{ background: C.bg, minHeight: '100vh', color: C.text }}>
@@ -106,10 +125,10 @@ export default function Dashboard() {
       <main style={{ padding: '28px 32px', maxWidth: 1440, margin: '0 auto' }}>
         {/* ── Stat cards ── */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 24 }}>
-          <StatCard label="수신 이벤트" value={liveCount.toLocaleString()} sub="세션 시작 후 누적" color={C.primary} />
-          <StatCard label="S1 발화" value={s1?.fired ?? '-'} sub={`쿠폰 모달 · 전환 ${s1?.converted ?? 0}건`} color={C.primary} />
-          <StatCard label="S2 발화" value={s2?.fired ?? '-'} sub={`가격비교 배너 · 전환 ${s2?.converted ?? 0}건`} color={C.s2} />
-          <StatCard label="전체 CTR" value={overallCtr !== '-' ? `${overallCtr}%` : '-'} sub={`총 ${totalFired}건 발화`} color={C.yellow} />
+          <StatCard label="수신 이벤트" value={(coverage?.total_events ?? 0).toLocaleString()} sub={`세션 ${coverage?.sessions ?? 0}개 · 실시간 +${liveCount}`} color={C.primary} />
+          <StatCard label="S1 발화" value={s1?.fired ?? 0} sub={`쿠폰 모달 · 표시 ${s1?.treatment ?? 0}건`} color={C.primary} />
+          <StatCard label="S2 발화" value={s2?.fired ?? 0} sub={`가격비교 배너 · 표시 ${s2?.treatment ?? 0}건`} color={C.s2} />
+          <StatCard label="평균 intent" value={firings ? firings.avg_intent_score.toFixed(2) : '-'} sub={`총 ${totalFired}건 발화`} color={C.yellow} />
         </div>
 
         {/* ── Middle row ── */}
@@ -179,15 +198,15 @@ export default function Dashboard() {
                     cursor={{ fill: 'rgba(255,255,255,0.03)' }}
                     contentStyle={{ background: '#252836', border: `1px solid ${C.border}`, borderRadius: 8, color: C.text, fontSize: 12 }}
                   />
-                  <Bar dataKey="발화" fill={C.primary} radius={[4, 4, 0, 0]} barSize={48} />
-                  <Bar dataKey="전환" fill={C.s2} radius={[4, 4, 0, 0]} barSize={48} />
+                  <Bar dataKey="표시" fill={C.primary} radius={[4, 4, 0, 0]} barSize={48} />
+                  <Bar dataKey="억제" fill={C.s2} radius={[4, 4, 0, 0]} barSize={48} />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
               <div style={{ height: 180, display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.dim, fontSize: 13 }}>로딩 중...</div>
             )}
             <div style={{ display: 'flex', gap: 20, marginTop: 16 }}>
-              {[{ label: '발화', color: C.primary }, { label: '전환', color: C.s2 }].map(({ label, color }) => (
+              {[{ label: '표시', color: C.primary }, { label: '억제', color: C.s2 }].map(({ label, color }) => (
                 <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: C.muted }}>
                   <span style={{ width: 10, height: 10, borderRadius: 2, background: color, display: 'block' }} />
                   {label}
@@ -198,41 +217,59 @@ export default function Dashboard() {
 
           {/* A/B Results */}
           <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 24 }}>
-            <SectionTitle>A/B 테스트 결과</SectionTitle>
+            <SectionTitle>A/B 그룹 분포</SectionTitle>
 
-            {/* Group comparison */}
+            {/* 전환 추적이 없으므로 CTR 을 계산하지 않는다.
+                개입이 만들어진 뒤 실제로 표시된 비율만 보여준다. */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 20 }}>
               {[
-                { label: 'Control', ctr: 0, desc: '개입 없음', color: C.dim },
-                { label: 'Treatment', ctr: overallCtr !== '-' ? parseFloat(overallCtr) * 2 : 0, desc: '개입 적용', color: C.green },
-              ].map(({ label, ctr, desc, color }) => (
+                { label: 'Control', count: suppressed, desc: '생성 후 미표시', color: C.dim },
+                { label: 'Treatment', count: shown, desc: '실제 표시', color: C.green },
+              ].map(({ label, count, desc, color }) => (
                 <div key={label} style={{ background: C.bg, borderRadius: 8, padding: '14px 16px', textAlign: 'center' }}>
                   <div style={{ fontSize: 11, color: C.dim, marginBottom: 8, fontWeight: 600 }}>{label}</div>
                   <div style={{ fontSize: 26, fontWeight: 700, color, marginBottom: 4 }}>
-                    {ctr > 0 ? `${ctr.toFixed(1)}%` : '—'}
+                    {totalFired > 0 ? `${Math.round((count / totalFired) * 100)}%` : '—'}
                   </div>
-                  <div style={{ fontSize: 11, color: C.dim }}>{desc}</div>
+                  <div style={{ fontSize: 11, color: C.dim }}>{count}건 · {desc}</div>
                 </div>
               ))}
             </div>
 
-            {/* Per-scenario breakdown */}
-            {scenarios.map(s => (
-              <div key={s.scenario_id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderTop: `1px solid ${C.border}` }}>
+            {geminiRate !== null && (
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderTop: `1px solid ${C.border}` }}>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 2 }}>문구 생성</div>
+                  <div style={{ fontSize: 11, color: C.dim }}>
+                    Gemini {firings?.copy_source.gemini ?? 0}건 · 폴백 {firings?.copy_source.fallback ?? 0}건
+                  </div>
+                </div>
+                <div style={{ fontSize: 16, fontWeight: 700, color: geminiRate > 50 ? C.green : C.yellow }}>{geminiRate}%</div>
+              </div>
+            )}
+
+            {scenarios.map(sc => (
+              <div key={sc.scenario_id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderTop: `1px solid ${C.border}` }}>
                 <div>
                   <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 2 }}>
-                    {s.scenario_id === 'S1' ? 'S1 — coupon_modal' : 'S2 — price_match_banner'}
+                    {sc.scenario_id === 'S1' ? 'S1 — coupon_modal' : 'S2 — price_match_banner'}
                   </div>
-                  <div style={{ fontSize: 11, color: C.dim }}>{s.fired}건 발화 · {s.converted}건 전환</div>
+                  <div style={{ fontSize: 11, color: C.dim }}>표시 {sc.treatment}건 · 억제 {sc.control}건</div>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: 16, fontWeight: 700, color: s.scenario_id === 'S1' ? C.primary : C.s2 }}>
-                    {(s.ctr * 100).toFixed(1)}%
+                  <div style={{ fontSize: 16, fontWeight: 700, color: sc.scenario_id === 'S1' ? C.primary : C.s2 }}>
+                    {sc.fired}
                   </div>
-                  <div style={{ fontSize: 11, color: C.dim }}>CTR</div>
+                  <div style={{ fontSize: 11, color: C.dim }}>발화</div>
                 </div>
               </div>
             ))}
+
+            {totalFired === 0 && (
+              <div style={{ padding: '28px 0', textAlign: 'center', fontSize: 12, color: C.dim }}>
+                아직 발화한 개입이 없습니다
+              </div>
+            )}
           </div>
         </div>
       </main>

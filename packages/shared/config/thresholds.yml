@@ -49,7 +49,6 @@ booster_weights:
   scroll_depth_deep: 0.05
   idle_entered: 0.05
   focus_lost: 0.05
-  xgboost_intent_proba: 0.0
 
 # 이탈 의도가 강할수록 잃을 위험이 크므로 더 큰 혜택을 준다.
 # 파서가 리스트를 못 읽어 평평한 스칼라로 적는다.

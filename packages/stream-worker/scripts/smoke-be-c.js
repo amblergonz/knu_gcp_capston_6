@@ -77,6 +77,75 @@ async function waitForDecision(sessionId) {
   throw new Error(`No decision created for ${sessionId}`);
 }
 
+// 부스터 12종을 각각 단독으로 발동시키는 이벤트.
+// worker.js 의 updateStateFromEvent 와 데모 사이트의 applyEventToMirror 는
+// 같은 분기를 손으로 두 번 쓴 코드라, 여기서 한 종이라도 빠지면 두 구현이
+// 조용히 어긋난 채로 지나간다. 그 드리프트를 잡는 것이 이 검사의 목적이다.
+function boosterProbes(sessionId, baseTs) {
+  const at = (offset) => baseTs - offset;
+  const url = 'https://example.test/probe';
+  const mk = (suffix, type, payload, extra = {}) => ({
+    event_id: `${sessionId}-${suffix}`,
+    ts: at(extra.offset ?? 0),
+    type,
+    page_url: url,
+    referrer: extra.referrer || '',
+    payload,
+  });
+
+  return [
+    // 기대 부스터 이름 → 그것을 켜는 이벤트들
+    ['referrer_price_compare', [mk('ref', 'page_view', {}, { offset: 90000, referrer: 'https://google.com/search?q=hotel' })]],
+    ['clipboard_copy_match', [mk('copy', 'clipboard_copy', { selected_text: 'Shilla Hotel room' }, { offset: 88000 })]],
+    ['broadcast_channel_multi_tab', [mk('tabs', 'broadcast_channel', { tab_count: 2 }, { offset: 86000 })]],
+    ['external_compare', [mk('ext', 'external_link', { hostname: 'www.agoda.com' }, { offset: 84000 })]],
+    ['checkout_form_dwell', [mk('form', 'form_field', { form: 'checkout', field: 'phone', dwell_ms: 9000 }, { offset: 82000 })]],
+    ['scroll_depth_deep', [mk('scroll', 'scroll_depth', { percent: 100 }, { offset: 80000 })]],
+    ['idle_entered', [mk('idle', 'idle', { idle: true }, { offset: 78000 })]],
+    ['focus_lost', [mk('focus', 'window_focus', { focused: false }, { offset: 76000 })]],
+    ['wishlist_added', [mk('wish', 'wishlist_add', { hotel_id: 'h01', action: 'add' }, { offset: 74000 })]],
+    ['search_repeated', [
+      mk('q1', 'search_query', { q: 'a' }, { offset: 72000 }),
+      mk('q2', 'search_query', { q: 'b' }, { offset: 71000 }),
+      mk('q3', 'search_query', { q: 'c' }, { offset: 70000 }),
+    ]],
+    ['hidden_repeated', [
+      mk('h1', 'visibility_change', { hidden: true }, { offset: 68000 }),
+      mk('v1', 'visibility_change', { hidden: false }, { offset: 66000 }),
+      mk('h2', 'visibility_change', { hidden: true }, { offset: 64000 }),
+    ]],
+  ];
+}
+
+// session_length_5min 은 이벤트가 아니라 경과 시간으로 붙으므로 별도 검사한다.
+async function assertAllBoostersReachable(redis, sessionId) {
+  const probes = boosterProbes(sessionId, Date.now());
+  await postEvents(sessionId, probes.flatMap(([, events]) => events));
+
+  // 워커가 배치를 다 소화할 때까지 기다린다.
+  const deadline = Date.now() + 8000;
+  let state = {};
+  let active = [];
+  const expected = probes.map(([name]) => name);
+
+  while (Date.now() < deadline) {
+    state = await redis.hgetall(`session:${sessionId}`);
+    try {
+      active = JSON.parse(state.active_boosters || '[]');
+    } catch (_) {
+      active = [];
+    }
+    if (expected.every((name) => active.includes(name))) break;
+    await new Promise((resolve) => setTimeout(resolve, 300));
+  }
+
+  const missing = expected.filter((name) => !active.includes(name));
+  if (missing.length > 0) {
+    throw new Error(`부스터가 발동하지 않았습니다: ${missing.join(', ')} (관측: ${active.join(', ') || '없음'})`);
+  }
+  console.log(`  부스터 ${expected.length}종 전부 발동 확인`);
+}
+
 async function assertSecondReadIsEmpty(sessionId) {
   const response = await fetch(`http://localhost:${decisionPort}/decision/${sessionId}`);
   if (response.status !== 204) {
@@ -105,6 +174,7 @@ async function main() {
   const suffix = Date.now();
   const s1Session = `smoke-s1-${suffix}`;
   const s2Session = `smoke-s2-${suffix}`;
+  const probeSession = `smoke-probe-${suffix}`;
 
   startService('ingestion-api', path.join(repoRoot, 'packages/ingestion-api/src/index.js'), { PORT: ingestionPort });
   startService('decision-api', path.join(repoRoot, 'packages/decision-api/src/index.js'), { PORT: decisionPort });
@@ -216,9 +286,15 @@ async function main() {
     await assertSecondReadIsEmpty(s2Session);
     await assertInterventionStream(redis, s2Session);
 
-    console.log('BE-C smoke passed: validation, S1, S2, one-shot decision, intervention stream');
+    await assertAllBoostersReachable(redis, probeSession);
+
+    console.log('BE-C smoke passed: validation, S1, S2, one-shot decision, intervention stream, booster coverage');
   } finally {
     await redis.del(
+      `session:${probeSession}`,
+      `pending:${probeSession}`,
+      `cooldown:${probeSession}:S1`,
+      `cooldown:${probeSession}:S2`,
       `session:${s1Session}`,
       `pending:${s1Session}`,
       `cooldown:${s1Session}:S1`,
