@@ -230,6 +230,7 @@ cd packages/demo-hotel-site && pnpm type-check && pnpm build
 
 | 문서 | 내용 |
 |---|---|
+| [docs/설계문서.html](./docs/설계문서.html) | 파이프라인·ERD·스키마·유저 플로우·페르소나 (브라우저로 열기) |
 | [docs/발표자료_해설.md](./docs/발표자료_해설.md) | 설계 문서·포스터 해설, 숫자 치트시트, 예상 질문 답변 |
 | [docs/FE_HANDOFF.md](./docs/FE_HANDOFF.md) | 프론트엔드 연동 가이드 |
 | [docs/BE-C_WORK.md](./docs/BE-C_WORK.md) | 스트림 워커 작업 내역 |
